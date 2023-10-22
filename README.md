@@ -7,6 +7,15 @@
   - [ ] When creating an account, make users use only the UNCC email and check if it is a valid email.
 ---
 
+### :pushpin: Git
+  ```
+  git init
+  git remote add origin git@github.com:cesther31/ClassPlus.git
+  git branch -M main
+  git push -u origin main
+  ```
+---
+
 ### :gem: Prototype
   ```
   https://www.figma.com/file/YyUiab5Txg146ncSjd7Bn6/Virtual-Study-Group?type=design&node-id=44-349&mode=design&t=9fDjpRKriu4waUT3-0
