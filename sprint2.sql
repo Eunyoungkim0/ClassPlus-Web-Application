@@ -1,20 +1,20 @@
 /* 
-    This is queries for sprint 2.
-    Signup page, Login page, Profile page, Course page,
-    adding class list, adding friends, friend's course list, etc
+	This is queries for sprint 2.
+	Signup page, Login page, Profile page, Course page,
+	adding class list, adding friends, friend's course list, etc
 */
 
 
 /*
-	  Signup
-    Input: userPassword, unccId, lastName, firstName, email, major, minor, picture, isStudent, isInstructor
+	Signup
+	Input: userPassword, unccId, lastName, firstName, email, major, minor, picture, isStudent, isInstructor
 */
 INSERT INTO users(userPassword, unccId, lastName, firstName, email, major, minor, picture, isStudent, isInstructor, signupDate) 
      VALUES (userPassword, unccId, lastName, firstName, email, major, minor, picture, isStudent, isInstructor, now());
 
 /*
 	Login
-    Input: email, userPassword
+	Input: email, userPassword
 */
 SELECT count(*)
   FROM users
@@ -23,31 +23,31 @@ SELECT count(*)
 ;
 
 /*
-    Class information
+	Class information
 */
 SELECT * FROM courses;
 
 /*
-	  Save class list for an instructor
-    Input: userId, courseId, year, semester
+	Save class list for an instructor
+	Input: userId, courseId, year, semester
 */
 INSERT INTO instructors VALUES(userId, courseId, year, semester);
 
 /*
-	  Save class list for a student
-    Input: userId, courseId, year, semester
+	Save class list for a student
+	Input: userId, courseId, year, semester
 */
 INSERT INTO classesEnrolled VALUES(userId, courseId, year, semester);
 
 /*
-	  Assign TA for a class
-    Input: userId(ta id), courseId, year, semester, assignedBy(instructor id)
+	Assign TA for a class
+	Input: userId(ta id), courseId, year, semester, assignedBy(instructor id)
 */
 INSERT INTO tas VALUES(userId, courseId, year, semester, assignedBy);
 
 /* 
-	  input: userId, year, semester
-    output: course list of the current semester for a user
+	input: userId, year, semester
+	output: course list of the current semester for a user
 */
 SELECT c.subject, c.courseNumber, c.title
   FROM classesEnrolled e, courses c
@@ -58,14 +58,14 @@ SELECT c.subject, c.courseNumber, c.title
 ;
 
 /*
-	  user information
-    Input: userId
+	user information
+	Input: userId
 */
 SELECT * FROM users WHERE userId = 1;
 
 /*
-	  input: userId, year, semester
-    output: group information that a user is in
+	input: userId, year, semester
+	output: group information that a user is in
 */
 SELECT g.groupName, g.description,
 	   c.subject, c.courseNumber, c.title
@@ -78,15 +78,15 @@ SELECT g.groupName, g.description,
 ;
 
 /*
-	  Add friend
-    Input: userId, friendId
+	Add friend
+	Input: userId, friendId
 */
 INSERT INTO friends VALUES(userId, friendID);
 INSERT INTO friends VALUES(friendID, userId);
 
 /*
-	  Input: userId
-    Output: a user's friend list
+	Input: userId
+	Output: a user's friend list
 */
 SELECT u2.userId, u2.firstName, u2.lastName
   FROM friends f, users u1, users u2
@@ -96,8 +96,8 @@ SELECT u2.userId, u2.firstName, u2.lastName
 ;
 
 /*
-	  Input: userId, year, semester
-    Output: overlapping class lists between users and their friends
+	Input: userId, year, semester
+	Output: overlapping class lists between users and their friends
 */
 SELECT f.friendId, u.firstName, u.lastName, c.subject, c.courseNumber, c.title
   FROM friends f, classesEnrolled e, courses c, users u
@@ -113,9 +113,9 @@ SELECT f.friendId, u.firstName, u.lastName, c.subject, c.courseNumber, c.title
 ; 
 
 /*
-	  Check if a user is enrolled in the class with what kind of status
-    Input: userId, courseId, year, semester
-    Output: student/ta/instructor/null
+	Check if a user is enrolled in the class with what kind of status
+	Input: userId, courseId, year, semester
+	Output: student/ta/instructor/null
 */
 SELECT
 	(CASE WHEN (SELECT count(*)
