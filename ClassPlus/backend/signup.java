@@ -36,11 +36,11 @@ public class Signup {
      */
     public boolean unccIdExists(){
         try{
-            String unccId_test = "801232989";
+            //String unccId_test = "801232989";
 
             conn = connectDB.getConnection();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT count(*) FROM users WHERE unccID = '" + unccId_test + "'");
+            ResultSet rs = stmt.executeQuery("SELECT count(*) FROM users WHERE unccID = '" + unccId + "'");
             if(rs.next()){
                 System.out.println("This unccId is already Exists.");
                 return false;

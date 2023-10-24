@@ -29,7 +29,7 @@ public class Login {
         }
     }
 
-    public boolean checkPassworkd(){
+    public boolean checkPassword(){
         try{
             conn = connectDB.getConnection();
             Statement stmt = conn.createStatement();
