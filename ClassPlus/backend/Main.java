@@ -1,18 +1,13 @@
+import utils.connectDB;
 import java.sql.*;
 
 public class Main {
     public static void main(String[] args) {
-        // Database credentials
-        String url = "jdbc:mysql://sql9.freemysqlhosting.net:3306/sql9654993";
-        String username = "sql9654993"; // Change to your MySQL username
-        String password = "jyG6f1zdxz"; // Change to your MySQL password
-
-        // Connection object
         Connection conn = null;
 
         try {
             // Establish a connection
-            conn = DriverManager.getConnection(url, username, password);
+            conn = connectDB.getConnection();
 
             // Do something with the connection (e.g., execute queries)
             // Example: Execute a simple query
