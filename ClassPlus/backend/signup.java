@@ -28,10 +28,7 @@ public class Signup {
         this.isInstructor = isInstructor;
         this.signupDate = signupDate;
 
-        if(unccIdExists() && unccEmailExists()){
-            register();
-        }
-    
+        register();
     }
 
     /**
@@ -77,6 +74,9 @@ public class Signup {
     }
 
     public boolean register(){
+        if(!unccIdExists() || !unccEmailExists()){
+            return false;
+        }
         try{
             conn = connectDB.getConnection();
 

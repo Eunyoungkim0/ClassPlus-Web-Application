@@ -8,7 +8,8 @@ public class Login {
     private Connection conn;
 
     public Login(String email, String userPassword){
-
+        this.email = email;
+        this.userPassword = userPassword;
     }
 
     public boolean checkEmail(){
