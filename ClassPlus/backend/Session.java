@@ -13,12 +13,11 @@ public class Session {
     public void removeSession(UserSession user){
         user = null;
     }
-    
 }
 
 class UserSession extends Session{
     private String email;
-    private int userId;
+    int userId;
 
     String unccId;
     String lastName;
@@ -31,6 +30,10 @@ class UserSession extends Session{
     boolean isTA;
 
     private Connection conn;
+
+    public UserSession(){
+
+    }
 
     public UserSession(String email){
         this.email = email;
@@ -49,7 +52,6 @@ class UserSession extends Session{
         this.isInstructor = isInstructor();
         this.isTA = isTA();
     }
-
 
     public int setUserId(){
         try {
@@ -216,4 +218,13 @@ class UserSession extends Session{
             return false; // Default to false on error
         }
     }
+}
+
+class CourseUser extends UserSession{
+    boolean canWrite = true;
+
+    public void postOnBoard(){
+
+    }
+    
 }
