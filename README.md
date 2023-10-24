@@ -31,9 +31,9 @@
 - Conncetion:
   ```
   Server: sql9.freemysqlhosting.net
-  Name: sql9654993
-  Username: sql9654993
-  Password: jyG6f1zdxz
+  Name: sql9656322
+  Username: sql9656322
+  Password: 7qXDYWB5c3
   Port number: 3306
   ```
 - Database Schema:
