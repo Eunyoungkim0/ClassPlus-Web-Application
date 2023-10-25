@@ -178,142 +178,7 @@
         Hello John Doe!
       </div>
     </div>
-    <div
-      style="
-        width: 348px;
-        height: 182px;
-        left: 100px;
-        top: 200px;
-        position: absolute;
-      "
-    >
-      <div
-        style="
-          width: 348px;
-          height: 42px;
-          padding-left: 16px;
-          padding-right: 16px;
-          padding-top: 8px;
-          padding-bottom: 8px;
-          left: 0px;
-          top: 46px;
-          position: absolute;
-          background: #004f34;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: flex-start;
-          display: inline-flex;
-        "
-      >
-        <div
-          style="
-            color: white;
-            font-size: 14px;
-            font-family: Inter;
-            font-weight: 700;
-            line-height: 16px;
-            word-wrap: break-word;
-          "
-        >
-          Class Information
-        </div>
-      </div>
-      <div
-        style="
-          width: 348px;
-          height: 42px;
-          padding-left: 16px;
-          padding-right: 16px;
-          padding-top: 8px;
-          padding-bottom: 8px;
-          left: 0px;
-          top: 92px;
-          position: absolute;
-          background: white;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: flex-start;
-          display: inline-flex;
-        "
-      >
-        <div
-          style="
-            color: #343a40;
-            font-size: 14px;
-            font-family: Inter;
-            font-weight: 600;
-            line-height: 16px;
-            word-wrap: break-word;
-          "
-        >
-          Friend List
-        </div>
-      </div>
-      <div
-        style="
-          width: 348px;
-          height: 42px;
-          padding-left: 16px;
-          padding-right: 16px;
-          padding-top: 8px;
-          padding-bottom: 8px;
-          left: 0px;
-          top: 140px;
-          position: absolute;
-          background: white;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: flex-start;
-          display: inline-flex;
-        "
-      >
-        <div
-          style="
-            color: #343a40;
-            font-size: 14px;
-            font-family: Inter;
-            font-weight: 600;
-            line-height: 16px;
-            word-wrap: break-word;
-          "
-        >
-          Change Password
-        </div>
-      </div>
-      <div
-        style="
-          width: 348px;
-          height: 41px;
-          padding-left: 16px;
-          padding-right: 16px;
-          padding-top: 8px;
-          padding-bottom: 8px;
-          left: 0px;
-          top: 0px;
-          position: absolute;
-          background: white;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: flex-start;
-          display: inline-flex;
-        "
-      >
-        <div
-          style="
-            width: 111px;
-            color: #343a40;
-            font-size: 14px;
-            font-family: Inter;
-            font-weight: 600;
-            line-height: 16px;
-            word-wrap: break-word;
-          "
-        >
-          Information
-        </div>
-      </div>
-    </div>
-    <!--Back Button-->
+        <!--Back Button-->
 <div style="left: 15px; top: 124px; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
   <a href="javascript:void(0);" onclick="window.history.back();" style="text-decoration: none;">
       <div style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
@@ -321,5 +186,71 @@
       </div>
   </a>
 </div>  
-</div>
+    <!--Tabs-->
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Tab Selection</title>
+      <style>
+          /* Tab default style */
+          .tab {
+              width: 348px;
+              height: 42px;
+              padding: 8px 16px;
+              position: absolute;
+              background: white;
+              flex-direction: column;
+              justify-content: flex-start;
+              align-items: flex-start;
+              display: inline-flex;
+              text-decoration: none;
+              color: #343A40;
+          }
+  
+          /* Style for the active tab */
+          .tab.active {
+              background: #004F34;
+              color: white;
+          }
+  
+          /* Hover effect for tabs */
+          .tab:hover {
+              background: #e5e5e5;
+              cursor: pointer;
+          }
+  
+          .tab-content {
+              font-size: 14px;
+              font-family: Inter;
+              font-weight: 600;
+              line-height: 16px;
+              word-wrap: break-word;
+          }
+      </style>
+  </head>
+  
+  <body>
+      <div style="width: 348px; height: 182px; left: 100px; top: 200px; position: absolute">
+  
+          <!-- Information Tab -->
+          <a href="profile.html" class="tab" style="top: 0px;">
+              <div class="tab-content">Information</div>
+          </a>
+  
+          <!-- Class Information Tab - Active -->
+          <a href="profile_ci.html" class="tab active" style="top: 46px;">
+              <div class="tab-content">Class Information</div>
+          </a>
+  
+          <!-- Friend List Tab -->
+          <a href="profile_fl.html" class="tab" style="top: 92px;">
+              <div class="tab-content">Friend List</div>
+          </a>
+  
+          <!-- Change Password Tab -->
+          <a href="profile_cp.html" class="tab" style="top: 138px;">
+              <div class="tab-content">Change Password</div>
+          </a>
+      </div>
+  </body>
 </html>
