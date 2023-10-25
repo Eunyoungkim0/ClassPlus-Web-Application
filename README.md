@@ -30,10 +30,10 @@
 ### :computer: Database
 - Conncetion:
   ```
-  Server: sql9.freemysqlhosting.net
-  Name: sql9656322
-  Username: sql9656322
-  Password: 7qXDYWB5c3
+  Server: classplus.mysql.database.azure.com
+  Name: classplus
+  Username: classplus
+  Password: uncc4155!
   Port number: 3306
   ```
 - Database Schema:
@@ -42,17 +42,17 @@
   ```
 - Using mySQL workbench: 
   ```
-  USE sql9654993;
+  USE classplus;
 
   /* TABLE LIST and detail information */
   SELECT * 
     FROM information_schema.TABLES
-   WHERE TABLE_SCHEMA = 'sql9654993';
+   WHERE TABLE_SCHEMA = 'classplus';
  
   /* COLUMN LIST and detail information */
    SELECT *
      FROM information_schema.COLUMNS
-    WHERE TABLE_SCHEMA = 'sql9654993';
+    WHERE TABLE_SCHEMA = 'classplus';
   --   AND TABLE_NAME = 'users';
   ```
 ---
