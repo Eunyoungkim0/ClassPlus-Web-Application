@@ -1,4 +1,5 @@
-$(function () {
+
     // Load content from "navbar.html" into the "nav-placeholder" div
-    $("#nav-placeholder").load("../navbar.html");
+$.get("navbar.html", function(data){
+    $("#nav-placeholder").replaceWith(data);
 });
