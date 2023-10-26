@@ -218,6 +218,55 @@ class UserSession extends Session{
             return false; // Default to false on error
         }
     }
+
+    public void getUpdateProfileInfo(String unccId, String lastName, String firstName, String email, String major, String picture, boolean isStudent, boolean isInstructor){
+        this.unccId = unccId;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.major = major;
+        this.picture = picture;
+        this.isStudent = isStudent;
+        this.isInstructor = isInstructor;
+    }
+    
+    public boolean updateProfile(){
+        try{
+            conn = connectDB.getConnection();
+
+            // Construct the SQL query using a PreparedStatement to avoid SQL injection
+            String sql = "INSERT INTO users (unccId, lastName, firstName, email, major, minor, picture, isStudent, isInstructor) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+            // Set the parameter values for the query
+            preparedStatement.setString(2, unccId);
+            preparedStatement.setString(3, lastName);
+            preparedStatement.setString(4, firstName);
+            preparedStatement.setString(5, email);
+            preparedStatement.setString(6, major);
+            preparedStatement.setString(7, minor);
+            preparedStatement.setString(8, picture);
+            preparedStatement.setBoolean(9, isStudent);
+            preparedStatement.setBoolean(10, isInstructor);
+
+            // Execute the SQL query
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+            System.out.println("Update successful.");
+            return true;
+            } else {
+            System.out.println("Update failed.");
+            return false;
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 
 class CourseUser extends UserSession{
