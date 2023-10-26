@@ -31,7 +31,6 @@
     background-position: center;
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
     color: white;
     font-size: 32px;
@@ -55,3 +54,29 @@
     margin-top: 30%;
     position: center;
 }
+
+.coursepage-display{
+    width: 60px;
+    height: 24px;
+    left: 549px;
+    top: 586px;
+    position: absolute;
+    text-align: center;
+    color: black;
+    font-size: 28px;
+    font-family: Inter;
+    font-weight: 400;
+    line-height: 28px;
+    word-wrap: break-word;
+}
+
+.coursepage-line{
+    width: 893px;
+    height: 0px;
+    left: 86px;
+    top: 561px;
+    position: absolute;
+    border: 1px black solid;
+}
+
+.course-title
