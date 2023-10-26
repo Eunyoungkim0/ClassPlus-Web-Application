@@ -27,6 +27,41 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.post('/api/login', async(req, res) => {
+    const { userEmail, userPassword } = req.body;
+
+    connection.query(`SELECT userId, userPassword FROM users WHERE email = '${userEmail}'`, function(error, results, fields){
+        if (error) throw error;
+
+        console.log(results);
+
+        if(results.length > 0){
+            const userId = results[0].userId;
+            const password = results[0].userPassword;
+            
+            if(userPassword == password){
+                res.json({
+                    success: true,
+                    userId: userId,
+                    myContent: 'Found user!'
+                });
+            }else{
+                res.json({
+                    success: false,
+                    userId: null,
+                    myContent: 'Wrong password'
+                });
+            }
+        }else{
+            res.json({
+                success: false,
+                userId: null,
+                myContent: 'Wrong email'
+            });
+        }
+    });
+});
+
 app.get('/api/profile/:userId', async(req, res) => {
     const userId = req.params.userId;
     connection.query(`SELECT * FROM users WHERE userId = ${userId}`, function(error, results, fields){

@@ -247,7 +247,7 @@
 
         function saveButton() {
             const data = {
-                userId : 4,
+                userId : localStorage.getItem('userId'),
                 firstName: document.getElementById('firstName').value,
                 lastName: document.getElementById('lastName').value,
                 email: document.getElementById('email').value,
@@ -272,7 +272,12 @@
         function onLoad() {
             const token = localStorage.getItem('jwt');
             const exp = localStorage.getItem('exp');
-            const userId = 4;
+            const userId = localStorage.getItem('userId');
+            console.log(userId);
+
+            if(!userId || userId === undefined){
+                location.replace('login.html');
+            }
 
             isTokenValid();
             axios.get(`/api/profile/${userId}`, {

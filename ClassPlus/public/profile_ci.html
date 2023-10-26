@@ -248,7 +248,11 @@
         function onLoad() {
             const token = localStorage.getItem('jwt');
             const exp = localStorage.getItem('exp');
-            const userId = 4;
+            const userId = localStorage.getItem('userId');
+
+            if(!userId){
+                location.replace('login.html');
+            }
 
             const firstName = localStorage.getItem('firstName');
             const lastName = localStorage.getItem('lastName');
