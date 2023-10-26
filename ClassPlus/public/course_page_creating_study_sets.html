@@ -56,6 +56,10 @@
                                 Profile
                             </div>
                         </a>
+                        <a id="linkforloginout" href="">
+                            <div id="loginout" style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -157,6 +161,29 @@
                 <div style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">Back</div>
             </div>
         </a>
-    </div>    
+    </div>
+
+    <script>
+        
+        function onLoad() {
+            const userId = localStorage.getItem('userId');
+            const linkElement = document.getElementById('linkforloginout');
+            
+            if(!userId || userId === undefined){
+                document.querySelector('#loginout').innerHTML = "Login";
+                linkElement.href = 'login.html';
+                location.replace('login.html');
+            }else{
+                document.querySelector('#loginout').innerHTML = "Log out";
+                linkElement.href = '#';
+                linkElement.onclick = function() {
+                    localStorage.removeItem('userId');
+                    location.replace('index.html');
+                };
+            }
+        }
+
+        onLoad();
+    </script>
 </body>
 </html>
