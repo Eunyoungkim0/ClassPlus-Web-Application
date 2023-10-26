@@ -139,12 +139,11 @@
         Last Name</div>
     <div
         style="left: 797px; top: 787px; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-        <div
-            style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
-            <div
-                style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">
-                Save</div>
-        </div>
+        <button style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
+            <div onclick="saveButton()"
+            style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">
+            Save</div>
+        </button>
     </div>
 
 
@@ -182,7 +181,7 @@
         style="height: 38px; left: 832px; top: 407px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
         <div
             style="align-self: stretch; padding-left: 16px; padding-right: 16px; padding-top: 9px; padding-bottom: 9px; background: #D9D9D9; border-radius: 6px; border: 1px #D9D9D9 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-            <input type="text" id="email" class="userInput">
+            <input type="text" id="email" class="userInput" disabled>
         </div>
     </div>
     
@@ -239,6 +238,35 @@
                 return false;
             }
             return true;
+        }
+
+        function askYesNoQuestion(question) {
+            const userResponse = window.confirm(question);
+            return userResponse;
+        }
+
+        function saveButton() {
+            const data = {
+                userId : 4,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                major: document.getElementById('major').value,
+                minor: document.getElementById('minor').value,
+                isStudent: document.getElementById('isStudent').checked,
+                isInstructor: document.getElementById('isInstructor').checked,
+            };
+
+            const userAnswer = askYesNoQuestion("Do you want to save your data?");
+            if (userAnswer) {
+                axios.post(`/api/profile_save`, data)
+                    .then(res => {
+                        if(res && res.data && res.data.success) {
+                            console.log(res);
+                            alert("Data successfully saved!");
+                        }
+                    });
+            }
         }
 
         function onLoad() {

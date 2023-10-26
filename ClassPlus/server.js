@@ -7,6 +7,7 @@ const PORT = process.env.port || 3000;
 const app = express();
 //app.use(cors());
 app.use(express.static('public'));
+app.use(express.json());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -39,6 +40,33 @@ app.get('/api/profile/:userId', async(req, res) => {
     });
 });
 
+app.post('/api/profile_save', async(req, res) => {
+    const { userId, firstName, lastName, major, minor, isStudent, isInstructor } = req.body;
+
+    connection.query(`SELECT my_row_id FROM users WHERE userId = ${userId}`, function(error, results, fields){
+        if (error) throw error;
+        const my_row_id = results[0].my_row_id;
+        console.log(results[0].my_row_id);
+        
+        const sql = `UPDATE users
+                        SET firstName = '${firstName}',
+                        lastName = '${lastName}',
+                        major = '${major}',
+                        minor = '${minor}',
+                        isStudent = ${isStudent},
+                        isInstructor = ${isInstructor}
+                WHERE my_row_id = ${my_row_id}`;
+        
+        connection.query(sql, function(error, results, fields){
+            if (error) throw error;
+            res.json({
+                success: true,
+                myContent: 'Update completed successfully'
+            });
+        });
+    });
+});
+
 app.get('/api/profile_ci/:userId', async(req, res) => {
     const userId = req.params.userId;
     connection.query(`SELECT e.courseID, e.year, e.semester, c.subject, c.courseNumber FROM classesEnrolled e, courses c WHERE e.courseId = c.courseId AND e.userId = ${userId};`, function(error, results, fields){
@@ -55,19 +83,18 @@ app.get('/api/profile_ci/:userId', async(req, res) => {
 
 app.get('/api/profile_fl/:userId', async(req, res) => {
     const userId = req.params.userId;
-    const sql = `
-                SELECT f.friendId, u.firstName, u.lastName, c.subject, c.courseNumber, c.title, count(*) as count
-                  FROM friends f, classesEnrolled e, courses c, users u
-                 WHERE f.friendId = e.userId
-                   AND e.courseId = c.courseId
-                   AND f.friendId = u.userId
-                   AND e.courseId in (SELECT courseId
-					                	FROM classesEnrolled
-					                   WHERE year = '2023'
-						                 AND semester = 'fall'
-						                 AND userID = ${userId})
-                   AND f.userId = ${userId}
-                GROUP BY f.friendId, u.firstName, u.lastName, c.subject, c.courseNumber, c.title`;
+    const sql = `SELECT a.friendId, a.firstName, a.lastName, b.subject, b.courseNumber
+                   FROM
+                        (SELECT f.userId, f.friendId, u.firstName, u.lastName
+                           FROM friends f, users u
+                          WHERE f.userId = ${userId}
+                            AND f.friendId = u.userId) AS a
+                   LEFT JOIN (SELECT e.userId, c.subject, c.courseNumber
+                                FROM classesEnrolled e, courses c
+                               WHERE e.courseId = c.courseId 
+                                 AND e.year = '2023'
+                                 AND e.semester = 'fall') AS b
+                     ON a.friendId = b.userId`;
 
     connection.query(sql, function(error, results, fields){
         if(error) {
@@ -79,6 +106,7 @@ app.get('/api/profile_fl/:userId', async(req, res) => {
         console.log(results);
     });
 });
+
 
 app.use(function (err, req, res, next) {
     if(err.name == 'UnauthorizedError'){
