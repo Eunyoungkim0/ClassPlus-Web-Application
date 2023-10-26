@@ -1,7 +1,38 @@
 {
+  "name": "classplus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "doc": "doc"
+  },
   "dependencies": {
+    "ansi-styles": "^4.3.0",
+    "chalk": "^4.1.2",
+    "color-convert": "^2.0.1",
+    "color-name": "^1.1.4",
+    "cross-spawn": "^5.1.0",
+    "express": "^4.18.2",
     "gradle": "^1.2.4",
+    "has-flag": "^4.0.0",
+    "isexe": "^2.0.0",
+    "lru-cache": "^4.1.5",
     "maven": "^5.0.0",
-    "spring": "^0.0.0"
-  }
+    "mysql": "^2.18.1",
+    "path": "^0.12.7",
+    "pseudomap": "^1.0.2",
+    "shebang-command": "^1.2.0",
+    "shebang-regex": "^1.0.0",
+    "spring": "^0.0.0",
+    "supports-color": "^7.2.0",
+    "which": "^1.3.1",
+    "yallist": "^2.1.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

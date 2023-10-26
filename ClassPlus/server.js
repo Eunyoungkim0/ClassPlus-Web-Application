@@ -36,7 +36,6 @@ app.get('/api/profile/:userId', async(req, res) => {
             throw error;
         }
         res.json(results);
-        console.log(results);
     });
 });
 
@@ -76,7 +75,6 @@ app.get('/api/profile_ci/:userId', async(req, res) => {
             throw error;
         }
         res.json(results);
-        console.log(results);
     });
 });
 
@@ -103,7 +101,6 @@ app.get('/api/profile_fl/:userId', async(req, res) => {
             throw error;
         }
         res.json(results);
-        console.log(results);
     });
 });
 
