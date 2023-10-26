@@ -224,13 +224,25 @@
             }).then(res => {
                 console.log(res.data);
 
-                document.querySelector('#friendList').innerHTML = "";
-
+                let friends = {};
                 for(var i=0; i < res.data.length; i++){
-                  console.log(res.data[i]);
-                  document.querySelector('#friendList').innerHTML += res.data[i].firstName + " " + res.data[i].lastName + "<br><br>";
+                  var friendName = res.data[i].firstName + " " + res.data[i].lastName;
+                  if(friends[friendName] == undefined){
+                    friends[friendName] = res.data[i].subject + " " + res.data[i].courseNumber;
+                  }else{
+                    friends[friendName] += " and more"
+                  }                  
                 }
 
+                document.querySelector('#friendList').innerHTML = "";
+                for (let key in friends) {
+                  console.log(key + ": " + friends[key]);
+                  if(friends[key] == 'null null'){
+                    document.querySelector('#friendList').innerHTML += key + "<br><br>";
+                  }else{
+                    document.querySelector('#friendList').innerHTML += key + " (" + friends[key] + ")<br><br>";
+                  }
+                }
             })         
         }
 
