@@ -38,10 +38,10 @@ class UserSession extends Session{
     public UserSession(String email){
         this.email = email;
         this.userId = setUserId();
-        setProfile();
+        getProfile();
     }
 
-    public void setProfile(){
+    public void getProfile(){
         this.unccId = setUnccId();
         this.lastName = setLastName();
         this.firstName = setFirstName();
@@ -219,11 +219,10 @@ class UserSession extends Session{
         }
     }
 
-    public void getUpdateProfileInfo(String unccId, String lastName, String firstName, String email, String major, String picture, boolean isStudent, boolean isInstructor){
+    public void getUpdateProfileInfo(String unccId, String lastName, String firstName, String major, String picture, boolean isStudent, boolean isInstructor){
         this.unccId = unccId;
         this.lastName = lastName;
         this.firstName = firstName;
-        this.email = email;
         this.major = major;
         this.picture = picture;
         this.isStudent = isStudent;
@@ -235,8 +234,8 @@ class UserSession extends Session{
             conn = connectDB.getConnection();
 
             // Construct the SQL query using a PreparedStatement to avoid SQL injection
-            String sql = "INSERT INTO users (unccId, lastName, firstName, email, major, minor, picture, isStudent, isInstructor) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO users (unccId, lastName, firstName, major, minor, picture, isStudent, isInstructor) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
@@ -244,7 +243,6 @@ class UserSession extends Session{
             preparedStatement.setString(2, unccId);
             preparedStatement.setString(3, lastName);
             preparedStatement.setString(4, firstName);
-            preparedStatement.setString(5, email);
             preparedStatement.setString(6, major);
             preparedStatement.setString(7, minor);
             preparedStatement.setString(8, picture);
@@ -267,13 +265,4 @@ class UserSession extends Session{
             return false;
         }
     }
-}
-
-class CourseUser extends UserSession{
-    boolean canWrite = true;
-
-    public void postOnBoard(){
-
-    }
-    
 }

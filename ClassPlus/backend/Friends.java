@@ -1,7 +1,9 @@
 import utils.connectDB;
 import java.sql.*;
 
-public class Friends {
+public class Friends extends UserSession{
+    private String email;
+
     private String unccID;
     private String picture;
     private boolean isStudent;
@@ -13,11 +15,7 @@ public class Friends {
 
     private Connection conn;
 
-    public Friends(String unccID){
-        this.unccID = unccID;
-    }
-
-    public void getInfo(){
-        //Query SQL for info
+    public Friends(String email){
+        this.email = email;
     }
 }
