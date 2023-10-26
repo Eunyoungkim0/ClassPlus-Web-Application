@@ -13,6 +13,9 @@
     color: #F8F9FA;
     font-family: Inter;
     font-size: 13pt;
+    white-space: nowrap;
+    position: absolute;
+    top: 30%;
 }
 
 .logo{
