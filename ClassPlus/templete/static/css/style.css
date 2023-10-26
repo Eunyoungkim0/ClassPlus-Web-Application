@@ -1,0 +1,22 @@
+.navbar{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #004F34;
+}
+
+.navli{
+    list-style-type: none;
+    width: 35px;
+    height: 35px;
+    text-decoration: none;
+    color: #F8F9FA;
+    font-family: Inter;
+    font-size: 13pt;
+}
+
+.logo{
+    margin: 0;
+    width: 70px;
+    height: 70px;
+}
