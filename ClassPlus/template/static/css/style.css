@@ -23,3 +23,35 @@
     width: 70px;
     height: 70px;
 }
+
+.full-screen-image {
+    background-image: url('../images/background_image.png');
+    background-size: cover;
+    background-repeat:no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    font-size: 32px;
+    font-family: Inter;
+}
+
+.buttons {
+    background-color: #004F34;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: Inter;
+}
+
+.study-group-buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 30%;
+    position: center;
+}
