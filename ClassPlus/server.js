@@ -27,6 +27,28 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.post('/api/signup', async(req, res) => {
+    const { firstName, lastName, userPassword, unccId, email, major, minor, isStudent, isInstructor } = req.body;
+
+    connection.query("SELECT max(userId) as max FROM users;", function(error, results, fields){
+
+        const userId = results[0].max + 1;
+
+        const sql = `INSERT INTO users (userId, firstName, lastName, userPassword, unccId, email, major, minor, isStudent, isInstructor, signupDate)
+                    VALUES(${userId},'${firstName}','${lastName}','${userPassword}','${unccId}','${email}','${major}','${minor}',${isStudent},${isInstructor},now());`;
+    
+        connection.query(sql, function(error, results, fields){
+            if (error) throw error;
+            res.json({
+                success: true,
+                userName: firstName,
+                myContent: 'Register completed successfully'
+            });
+        });
+    });
+
+});
+
 app.post('/api/login', async(req, res) => {
     const { userEmail, userPassword } = req.body;
 
