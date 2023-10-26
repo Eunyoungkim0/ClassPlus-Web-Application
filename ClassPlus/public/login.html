@@ -72,7 +72,8 @@
                 <input 
                     type="text" 
                     placeholder="email@uncc.edu" 
-                    style="width: 380px; height: 28.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
+                    id="userEmail"
+                    style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
                 >
                 <label 
                     style="position: absolute; top: 0px; left: 0px; color: #757575; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;"
@@ -86,7 +87,8 @@
                 <input 
                     type="password" 
                     placeholder="**********" 
-                    style="width: 380px; height: 28.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.59px;"
+                    id="userPassword"
+                    style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.59px;"
                 >
                 <label 
                     style="position: absolute; top: 0px; left: 0px; color: #757575; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;"
@@ -125,7 +127,7 @@
     <!-- Log In Button -->
     <button 
         style="width: 153px; height: 56px; background: #004F34; box-shadow: 0px 34px 40px -8px rgba(123, 118, 241, 0.24); border-radius: 28px; border: none; color: white; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 700; cursor: pointer;"
-        onclick="window.location.href='course_page_homepage.html';"
+        onclick="login()"
     >
         LOG IN
     </button>
@@ -249,5 +251,38 @@
               </div>
           </div>
       </div>
+
+
+      <script>
+        function dataValidation() {
+
+        }
+
+        function login() {
+            const data = {
+                userEmail: document.getElementById('userEmail').value,
+                userPassword: document.getElementById('userPassword').value
+            };
+
+            console.log(data);
+            
+            axios.post(`/api/login`, data)
+                .then(res => {
+                    console.log(res);
+                    if(res && res.data && res.data.success) {
+                        localStorage.setItem('userId', res.data.userId);
+                        location.replace('index.html');
+                    }else if(!res.data.success) {
+                        alert(res.data.myContent);
+                    }
+                });
+        }
+
+        function onLoad() {
+            
+        }
+
+        onLoad();
+      </script>
     </body>
     </html>

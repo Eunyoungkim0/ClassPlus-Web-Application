@@ -111,9 +111,27 @@
         <div class="full-screen-image">
             Need a Study Group?
             <div class="study-group-buttons">
-                <button class="study-group-button" onclick="window.location.href='login.html'">Search for a course</button>
-                <button class="study-group-button" onclick="window.location.href='login.html'">Search for a group</button>
+                <button class="study-group-button" onclick="checkLogin('course')">Search for a course</button>
+                <button class="study-group-button" onclick="checkLogin('group')">Search for a group</button>
             </div>
         </div>
+
+    <script>
+        function checkLogin(locationNext) {
+            console.log(locationNext);
+            const userId = localStorage.getItem('userId');
+
+            if(!userId){
+                location.replace('login.html');
+            }else{
+                if (locationNext === "course") {
+                    location.replace('course_page_searchpage.html');
+                } else {
+                    location.replace('study_group_find.html');
+                }
+            }
+        }
+
+    </script>
     </body>
 </html>
