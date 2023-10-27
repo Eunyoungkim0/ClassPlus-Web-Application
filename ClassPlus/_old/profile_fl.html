@@ -26,7 +26,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
         integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
 </head>
-
 <body>
   
   <nav>
@@ -37,7 +36,7 @@
                     <a href="index.html"><img style="width: 70px; height: 71px" src="C_logo.png" /></a>
                 </div>
                 <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                    <a href="course_page_homepage.html">
+                    <a href="course_page_searchpage.html">
                         <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                             My Courses
                         </div>
@@ -62,12 +61,17 @@
                             Profile
                         </div>
                     </a>
+                    <a id="linkforloginout" href="">
+                        <div id="loginout" style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
     </nav>
 
+    
     <!--Back Button-->
     <div style="left: 15px; top: 124px; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
       <a href="javascript:void(0);" onclick="window.history.back();" style="text-decoration: none;">
@@ -76,8 +80,7 @@
           </div>
       </a>
     </div>  
-        
-
+    
     <div style="width: 348px; height: 182px; left: 100px; top: 200px; position: absolute">
       <div
           style="width: 348px; height: 41px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 0px; position: absolute; background: white; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
@@ -87,17 +90,17 @@
               Information</div></a>
       </div>
       <div
-          style="width: 348px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 46px; position: absolute; background: #004F34; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+          style="width: 348px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 46px; position: absolute; background: white; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
           <a href="profile_ci.html">
           <div
-              style="color: white; font-size: 14px; font-family: Inter; font-weight: 600; line-height: 16px; word-wrap: break-word">
+              style="color: #343A40; font-size: 14px; font-family: Inter; font-weight: 600; line-height: 16px; word-wrap: break-word">
               Class Information</div></a>
       </div>
       <div
-          style="width: 348px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 92px; position: absolute; background: white; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+          style="width: 348px; height: 42px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 0px; top: 92px; position: absolute; background: #004F34; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
           <a href="profile_fl.html">
           <div
-              style="color: #343A40; font-size: 14px; font-family: Inter; font-weight: 600; line-height: 16px; word-wrap: break-word">
+              style="color: white; font-size: 14px; font-family: Inter; font-weight: 600; line-height: 16px; word-wrap: break-word">
               Friend List</div></a>
       </div>
       <div
@@ -108,20 +111,36 @@
               Change Password</div></a>
       </div>
     </div>
-        
+
     <div
       style="
-        width: 691px;
-        height: 450px;
+        width: 625px;
+        height: 531px;
         left: 500px;
         top: 170px;
         position: absolute;
       "
     >
+    <div
+      style="
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        color: black;
+        font-size: 20px;
+        font-family: Inter;
+        font-weight: 400;
+        line-height: 28px;
+        word-wrap: break-word;
+      "
+    >
+      <div id="welcome"></div>
+    </div>
+
       <div
         style="
           left: 0px;
-          top: 61px;
+          top: 58px;
           position: absolute;
           color: black;
           font-size: 20px;
@@ -131,95 +150,42 @@
           word-wrap: break-word;
         "
       >
-        Enrolled Classes
+        Friend List
       </div>
-      <div
-        style="
-          width: 691px;
-          height: 352px;
-          left: 0px;
-          top: 98px;
-          position: absolute;
-          background: #d9d9d9;
-        "
-      ></div>
-      <div
-        style="
-          width: 224px;
-          height: 352px;
-          left: 0px;
-          top: 98px;
-          position: absolute;
-          background: #f1e6b2;
-        "
-      ></div>
-      <div
-        style="
-          left: 19px;
-          top: 111px;
-          position: absolute;
-          color: black;
-          font-size: 20px;
-          font-family: Inter;
-          font-weight: 600;
-          line-height: 28px;
-          word-wrap: break-word;
-        "
-      >
-        Semester
-      </div>
-      <div
-        style="
-          left: 240px;
-          top: 111px;
-          position: absolute;
-          color: black;
-          font-size: 20px;
-          font-family: Inter;
-          font-weight: 600;
-          line-height: 28px;
-          word-wrap: break-word;
-        "
-      >
-        Classes
-      </div>
-      <div style="left: 29px; top: 161px; position: absolute">
-        <div id="semesterList"></div>
-      </div>
-      <div
-        style="
-          left: 251px;
-          top: 158px;
-          position: absolute;
-          color: black;
-          font-size: 20px;
-          font-family: Inter;
-          font-weight: 400;
-          line-height: 28px;
-          word-wrap: break-word;
-        "
-      >
-        <div id="classList"></div>
-      </div>
-      <div
-        style="
-          left: 0px;
-          top: 0px;
-          position: absolute;
-          color: black;
-          font-size: 20px;
-          font-family: Inter;
-          font-weight: 400;
-          line-height: 28px;
-          word-wrap: break-word;
-        "
-      >
-        <div id="welcome"></div>
+
+      <div id="frame">
+        <div
+          style="
+            width: 625px;
+            height: 442px;
+            left: 0px;
+            top: 89px;
+            position: absolute;
+            background: #d9d9d9;
+          "
+        >
+        </div>
+
+        <div
+          style="
+            left: 117px;
+            top: 124px;
+            position: absolute;
+            color: black;
+            font-size: 20px;
+            font-family: Inter;
+            font-weight: 400;
+            line-height: 28px;
+            word-wrap: break-word;
+          "
+        >
+          <div id="friendList"></div>
+        </div>
       </div>
     </div>
 
-
-    <script>
+    
+      <script>
         function isTokenValid() {  
             const token = localStorage.getItem('jwt'); 
             const exp = localStorage.getItem('exp');
@@ -248,32 +214,57 @@
         function onLoad() {
             const token = localStorage.getItem('jwt');
             const exp = localStorage.getItem('exp');
-            const userId = 4;
+            const userId = localStorage.getItem('userId');
+            const linkElement = document.getElementById('linkforloginout');
+            
+            if(!userId || userId === undefined){
+                document.querySelector('#loginout').innerHTML = "Login";
+                linkElement.href = 'login.html';
+                location.replace('login.html');
+            }else{
+                document.querySelector('#loginout').innerHTML = "Log out";
+                linkElement.href = '#';
+                linkElement.onclick = function() {
+                    localStorage.removeItem('userId');
+                    location.replace('index.html');
+                };
+            }
 
             const firstName = localStorage.getItem('firstName');
             const lastName = localStorage.getItem('lastName');
             document.querySelector('#welcome').innerHTML = `Hello ${firstName} ${lastName}!`;
 
             isTokenValid();
-            axios.get(`/api/profile_ci/${userId}`, {
+            axios.get(`/api/profile_fl/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(res => {
                 console.log(res.data);
 
-                document.querySelector('#classList').innerHTML = "";
-                document.querySelector('#semesterList').innerHTML = "2023 Fall";
+                let friends = {};
                 for(var i=0; i < res.data.length; i++){
-                  console.log(res.data[i]);
-                  document.querySelector('#classList').innerHTML += res.data[i].subject + " " + res.data[i].courseNumber + "<br>";
+                  var friendName = res.data[i].firstName + " " + res.data[i].lastName;
+                  if(friends[friendName] == undefined){
+                    friends[friendName] = res.data[i].subject + " " + res.data[i].courseNumber;
+                  }else{
+                    friends[friendName] += " and more"
+                  }                  
                 }
-                //document.querySelector('#classList').value = res.data[0].lastName;
 
+                document.querySelector('#friendList').innerHTML = "";
+                for (let key in friends) {
+                  console.log(key + ": " + friends[key]);
+                  if(friends[key] == 'null null'){
+                    document.querySelector('#friendList').innerHTML += key + "<br><br>";
+                  }else{
+                    document.querySelector('#friendList').innerHTML += key + " (" + friends[key] + ")<br><br>";
+                  }
+                }
             })         
         }
 
         onLoad();
     </script>
-</body>
+  </body>
 </html>

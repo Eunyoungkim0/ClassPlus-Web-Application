@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassPlus - Sign Up</title>
     <style>
         /* Adding some styles to remove the default blue color and underline of the anchor tag */
         a {
@@ -12,123 +15,139 @@
             text-decoration: underline; /* Optional: underline on hover for better user experience */
         }
     </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
+        integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <div style="width: 100%; height: 100%; position: relative; background: white">
-        <div style="width: 1440px; height: 87px; left: 0px; top: 0px; position: absolute; background: #004F34; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-            <div style="width: 1430px; height: 87px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; background: #004F34; justify-content: space-between; align-items: center; display: flex">
-                <div style="width: 70px; height: 71px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                    <img style="width: 70px; height: 71px" src="C_logo.png" />
-                </div>
-                <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                    <a href="course_page_homepage.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            My Courses
-                        </div>
-                    </a>
-                    <a href="study_group_current.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            My Groups
-                        </div>
-                    </a>
-                    <a href="searching_study_session.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            Find group
-                        </div>
-                    </a>
-                    <a href="study_group_creating.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            Create Group
-                        </div>
-                    </a>
-                    <a href="profile.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            Profile
-                        </div>
-                    </a>
+    <nav>
+        <div style="width: 100%; height: 100%; position: relative; background: white">
+            <div style="width: 1440px; height: 87px; left: 0px; top: 0px; position: absolute; background: #004F34; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                <div style="width: 1430px; height: 87px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; background: #004F34; justify-content: space-between; align-items: center; display: flex">
+                    <div style="width: 70px; height: 71px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+                        <a href="index.html"><img style="width: 70px; height: 71px" src="C_logo.png" /></a>
+                    </div>
+                    <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+                        <a href="course_page_searchpage.html">
+                            <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
+                                My Courses
+                            </div>
+                        </a>
+                        <a href="study_group_current.html">
+                            <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
+                                My Groups
+                            </div>
+                        </a>
+                        <a href="study_group_find.html">
+                            <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
+                                Find group
+                            </div>
+                        </a>
+                        <a href="study_group_creating.html">
+                            <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
+                                Create Group
+                            </div>
+                        </a>
+                        <a href="profile.html">
+                            <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
+                                Profile
+                            </div>
+                        </a>
+                        <a id="linkforloginout" href="">
+                            <div id="loginout" style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
+        </nav>
+        
         <div style="width: 100%; height: 100%; position: relative; background: white">
           <div style="width: 380px; left: 899.12px; top: 114.70px; position: absolute; text-align: center; color: #242424; font-size: 31.25px; font-family: Zen Kaku Gothic Antique; font-weight: 700; line-height: 37.50px; word-wrap: break-word">Join & Connect the Fastest Growing Study Community</div>
 
-          <!--email-->
-          <div style="position: absolute; top: 347px; left: 899px; flex-direction: column; display: inline-flex; gap: 24px;">
-            <!-- Email/Username Input -->
+          <div style="position: absolute; top: 260px; left: 899px; flex-direction: column; display: inline-flex; gap: 24px;">
             <div style="position: relative; height: 65.03px;">
                 <input 
                     type="text" 
-                    placeholder="email@uncc.edu" 
-                    style="width: 380px; height: 28.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
+                    id="firstName"
+                    placeholder="First Name *"
+                    maxlength=30 
+                    style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
                 >
-                <label 
-                    style="position: absolute; top: 0px; left: 0px; color: #757575; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;"
+                
+                <input 
+                    type="text" 
+                    id="lastName"
+                    placeholder="Last Name *" 
+                    maxlength=30
+                    style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
                 >
-                    UNCC Email
-                </label>
-            </div>
-            
-            <!-- Password Input -->
-            <div style="position: relative; height: 63.09px;">
+
                 <input 
                     type="password" 
-                    placeholder="**********" 
-                    style="width: 380px; height: 28.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.59px;"
+                    id="userPassword"
+                    placeholder="Password *"
+                    maxlength=30 
+                    style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.59px;"
                 >
-                <label 
-                    style="position: absolute; top: 0px; left: 0px; color: #757575; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;"
+
+                <input 
+                    type="text" 
+                    id="unccId"
+                    placeholder="UNCC ID *"
+                    maxlength=9 
+                    onkeypress="return isNumber(event)"
+                    style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
                 >
-                    Password
-                </label>
-                <!-- Placeholder for password visibility icon -->
-                <div style="width: 16px; height: 16px; left: 364px; top: 34.09px; position: absolute;"></div>
-            </div>
-        
-            <!-- Remember Me and Log In -->
-<style>
-    /* Checkmark styling when checkbox is checked */
-    #rememberMe:checked::before {
-        content: '✔';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 18px;
-        color: #7B76F1;
-    }
-</style>
 
-<div style="display: inline-flex; gap: 62px; align-items: center;">
-    <!-- Remember Me -->
-    <div style="display: flex; gap: 5.23px; align-items: center;">
-        <input 
-            type="checkbox" 
-            id="rememberMe" 
-            style="appearance: none; width: 21.52px; height: 22px; background: rgba(123, 118, 241, 0.10); border: 1px rgba(123, 118, 241, 0.25) solid; border-radius: 2px; position: relative; cursor: pointer;"
-        >
-        <label for="rememberMe" style="color: #757575; font-size: 10.24px; font-family: Zen Kaku Gothic Antique; font-weight: 400;">Remember me</label>
-    </div>
-    
-    <!-- Sign up Button -->
-    <button 
-        style="width: 153px; height: 56px; background: #004F34; box-shadow: 0px 34px 40px -8px rgba(123, 118, 241, 0.24); border-radius: 28px; border: none; color: white; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 700; cursor: pointer;"
-        onclick="window.location.href='course_page_homepage.html';"
-    >
-        SIGN UP
-    </button>
-</div>
+                <input 
+                    type="text" 
+                    id="email"
+                    placeholder="Email (ex) email@uncc.edu *"
+                    maxlength=50 
+                    style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
+                >
+                
+                <input 
+                    type="text" 
+                    id="major"
+                    placeholder="Major *"
+                    maxlength=50 
+                    style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
+                >
+
+                
+                <input 
+                    type="text" 
+                    id="minor"
+                    placeholder="Minor"
+                    maxlength=50 
+                    style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
+                >
+
+                <br>
+                status * :
+                <input type="radio" id="isStudent" name="userStatus" value="Student">
+                <label for="isStudent">Student</label>
+
+                <input type="radio" id="isInstructor" name="userStatus" value="instructor">
+                <label for="isInstructor">Instructor</label><br>
+
+                <br>
+                <button 
+                    style="margin-top: 30px; margin-left:100px; width: 153px; height: 56px; background: #004F34; box-shadow: 0px 34px 40px -8px rgba(123, 118, 241, 0.24); border-radius: 28px; border: none; color: white; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 700; cursor: pointer;"
+                    onclick="signup()"
+                >
+                    SIGN UP
+                </button>
+            </div>            
+            
+
 </div>
 
-        
-        <div style="position: absolute; top: 630.85px; left: 1016.50px; text-align: center;">
-            <span style="color: #424242; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;">No Account yet? </span>
-            <a href="Login.html" style="text-decoration: none;">
-              <span style="color: #212121; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 700; text-decoration: underline;">
-                  START STUDYING NOW
-              </span>
-          </a>
-                  </div>
-        
           <!--the left portion of screen-->
           <div style="width: 728px; height: 813px; left: 0px; top: 87px; position: absolute; background: #004F34">
               <div style="width: 378.96px; height: 55.10px; left: 174.52px; top: 644.17px; position: absolute; text-align: center; color: #F5F5F5; font-size: 16px; font-family: Zen Kaku Gothic Antique; font-weight: 400; line-height: 28.16px; word-wrap: break-word">Lets GOOOOOOO.</div>
@@ -236,6 +255,126 @@
               </div>
           </div>
       </div>
+      
+    <script>
+        function validationCheck(){
+            
+            if(document.getElementById('firstName').value == ""){
+                alert("Please enter your first name");
+                document.getElementById('firstName').focus();
+                return false;
+            }
+            if(document.getElementById('lastName').value == ""){
+                alert("Please enter your last name");
+                document.getElementById('lastName').focus();
+                return false;
+            }
+            if(document.getElementById('userPassword').value ==""){
+                alert("Please enter your password");
+                document.getElementById('userPassword').focus();
+                return false;
+            }
+            if(document.getElementById('unccId').value == ""){
+                alert("Please enter your UNCC ID");
+                document.getElementById('unccId').focus();
+                return false;
+            }
+            if(document.getElementById('email').value == ""){
+                alert("Please enter your UNCC email address");
+                document.getElementById('email').focus();
+                return false;
+            }else if(!document.getElementById('email').value.includes("@uncc.edu")){
+                alert("Please use your UNCC email address.");
+                document.getElementById('email').focus();
+                return false;
+            }
+            if(document.getElementById('major').value == ""){
+                alert("Please enter your major");
+                document.getElementById('major').focus();
+                return false;
+            }
+            if(!(document.getElementById('isStudent').checked || document.getElementById('isInstructor').checked)){
+                alert("Please choose your status");
+                return false;
+            }
+
+            return true;
+        }
+
+        function signup() {
+            if(validationCheck()){
+                const data = {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    userPassword: document.getElementById('userPassword').value,
+                    unccId: document.getElementById('unccId').value,
+                    email: document.getElementById('email').value,
+                    major: document.getElementById('major').value,
+                    minor: document.getElementById('minor').value,
+                    isStudent: document.getElementById('isStudent').checked,
+                    isInstructor: document.getElementById('isInstructor').checked,
+                };
+
+                axios.post(`/api/signup`, data)
+                    .then(res => {
+                        if(res && res.data && res.data.success) {
+                            console.log(res);
+                            const message = "Hello " + res.data.userName + ", welcome to ClassPlus!"
+                            alert(message);
+                            location.replace('login.html');
+                        }
+                    });
+            }
+        }
+
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+
+        function onLoad() {
+            const userId = localStorage.getItem('userId');
+            const linkElement = document.getElementById('linkforloginout');
+            
+            if(!userId || userId === undefined){
+                document.querySelector('#loginout').innerHTML = "Login";
+                linkElement.href = 'login.html';
+            }else{
+                document.querySelector('#loginout').innerHTML = "Log out";
+                linkElement.href = '#';
+                linkElement.onclick = function() {
+                    localStorage.removeItem('userId');
+                    location.replace('index.html');
+                };
+            }
+
+            document.getElementById('firstName').addEventListener('keydown', function(event) {
+                if (event.key === ' ' || (event.key >= '0' && event.key <= '9') || !(event.key >= 'a' && event.key <= 'z' || event.key >= 'A' && event.key <= 'Z')) {
+                    event.preventDefault();
+                }
+            });
+            document.getElementById('lastName').addEventListener('keydown', function(event) {
+                if (event.key === ' ' || (event.key >= '0' && event.key <= '9') || !(event.key >= 'a' && event.key <= 'z' || event.key >= 'A' && event.key <= 'Z')) {
+                    event.preventDefault();
+                }
+            });
+            document.getElementById('userPassword').addEventListener('keydown', function(event) {
+                if (event.key === ' ') {
+                    event.preventDefault();
+                }
+            });
+            document.getElementById('email').addEventListener('keydown', function(event) {
+                if (event.key === ' ') {
+                    event.preventDefault();
+                }
+            });
+        }
+
+        onLoad();
+    </script>
     </body>
-        <script src="js/signup.js" type="text/javascript"></script>
 </html>
