@@ -1176,6 +1176,7 @@
             .then(res => {
                 if(res && res.data && res.data.success) {
                     alert("Successfully enrolled!");
+                    location.reload();
                 }else if(res && res.data && res.data.alreadyEnrolled) {
                     alert("You're already enrolled in this class.");
                 }
