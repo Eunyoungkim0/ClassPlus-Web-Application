@@ -76,6 +76,7 @@
                     type="text" 
                     placeholder="email@uncc.edu" 
                     id="userEmail"
+                    maxlength=50 
                     style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
                 >
                 <label 
@@ -91,6 +92,7 @@
                     type="password" 
                     placeholder="**********" 
                     id="userPassword"
+                    maxlength=30 
                     style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.59px;"
                 >
                 <label 
@@ -258,27 +260,44 @@
 
       <script>
         function dataValidation() {
+            
+            if(document.getElementById('userEmail').value == ""){
+                alert("Please enter your UNCC email address");
+                document.getElementById('userEmail').focus();
+                return false;
+            }else if(!document.getElementById('userEmail').value.includes("@uncc.edu")){
+                alert("Please use your UNCC email address.");
+                document.getElementById('userEmail').focus();
+                return false;
+            }
 
+            if(document.getElementById('userPassword').value == ""){
+                alert("Please enter your password");
+                document.getElementById('userPassword').focus();
+                return false;
+            }
         }
 
         function login() {
-            const data = {
-                userEmail: document.getElementById('userEmail').value,
-                userPassword: document.getElementById('userPassword').value
-            };
+            if(dataValidation()){
+                const data = {
+                    userEmail: document.getElementById('userEmail').value,
+                    userPassword: document.getElementById('userPassword').value
+                };
 
-            console.log(data);
-            
-            axios.post(`/api/login`, data)
-                .then(res => {
-                    console.log(res);
-                    if(res && res.data && res.data.success) {
-                        localStorage.setItem('userId', res.data.userId);
-                        location.replace('index.html');
-                    }else if(!res.data.success) {
-                        alert(res.data.myContent);
-                    }
-                });
+                console.log(data);
+                
+                axios.post(`/api/login`, data)
+                    .then(res => {
+                        console.log(res);
+                        if(res && res.data && res.data.success) {
+                            localStorage.setItem('userId', res.data.userId);
+                            location.replace('index.html');
+                        }else if(!res.data.success) {
+                            alert(res.data.myContent);
+                        }
+                    });
+            }
         }
 
         function onLoad() {
@@ -296,6 +315,17 @@
                     location.replace('index.html');
                 };
             }
+
+            document.getElementById('userPassword').addEventListener('keydown', function(event) {
+                if (event.key === ' ') {
+                    event.preventDefault();
+                }
+            });
+            document.getElementById('userEmail').addEventListener('keydown', function(event) {
+                if (event.key === ' ') {
+                    event.preventDefault();
+                }
+            });
         }
 
         onLoad();
