@@ -161,6 +161,82 @@ app.get('/api/profile_fl/:userId', async(req, res) => {
     });
 });
 
+app.get('/api/getCourseSubject', async(req, res) => {
+    connection.query(`SELECT distinct subject FROM courses ORDER BY subject;`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/api/getClasses/:selectedValue', async(req, res) => {
+    const subject = req.params.selectedValue;
+    connection.query(`SELECT courseNumber, title FROM courses WHERE subject = '${subject}' ORDER BY courseNumber;`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+
+app.post('/api/getClassInfo/', async(req, res) => {
+    const { subject, courseNumber } = req.body;
+    connection.query(`SELECT title FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}';`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/saveClass/', async(req, res) => {
+    const { userId, subject, courseNumber } = req.body;
+
+    connection.query(`SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}';`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+
+        connection.query(`SELECT count(*) as count FROM classesEnrolled WHERE userId = ${userId} AND courseId = ${courseId} AND year = '2023' AND semester = 'fall'`, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            if(results[0].count == 1){
+                res.json({
+                    success: false,
+                    alreadyEnrolled: true
+                });
+            }else{
+                const sql = `INSERT INTO classesEnrolled VALUES (${userId}, ${courseId}, '2023', 'fall')`;
+        
+                connection.query(sql, function(error, results, fields){
+                    if(error) {
+                        // Handle the error by sending an error response
+                        res.status(500).json({ error: 'Internal Server Error' });
+                        throw error;
+                    }
+                    res.json({
+                        success: true
+                    });
+                });
+            }
+        });
+
+    });
+});
 
 app.use(function (err, req, res, next) {
     if(err.name == 'UnauthorizedError'){

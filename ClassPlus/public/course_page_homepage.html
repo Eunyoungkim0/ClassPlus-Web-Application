@@ -14,6 +14,57 @@
         a:hover {
             text-decoration: underline; /* Optional: underline on hover for better user experience */
         }
+        .main-btn {
+          width: 112px;
+          height: 37px;
+          padding: 10px 16px;
+          background: #146c43;
+          border-radius: 6px;
+          border: 1px #146c43 solid;
+          display: inline-flex;
+          justify-content: flex-start;
+          align-items: flex-start;
+          gap: 8px;
+          position: absolute;
+        }
+
+        .study-box {
+          background: white;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px #28a745 solid;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: absolute;
+        }
+
+        .study-box-header {
+          align-self: stretch;
+          height: 56px;
+          padding: 16px 24px;
+          background: #f8f9fa;
+          border-bottom: 1px #dee2e6 solid;
+        }
+
+        .study-box-content {
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .plus-symbol {
+          color: black;
+          font-size: 20px;
+          font-weight: 600;
+          position: absolute;
+        }
+
+        .inter-font {
+          font-family: Inter;
+          word-wrap: break-word;
+        }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -149,14 +200,14 @@
         position: absolute;
       "
     >
-      <div
+      <div id="courseInformation"
         style="
           width: 952px;
           height: 64px;
-          left: 0px;
-          top: 0px;
+          left: 100px;
+          top: 20px;
           position: absolute;
-          text-align: center;
+          text-align: left;
           color: black;
           font-size: 40px;
           font-family: Inter;
@@ -165,7 +216,6 @@
           word-wrap: break-word;
         "
       >
-        ITCS 4155 Software Development Projects
       </div>
       <div
         style="
@@ -867,66 +917,9 @@
                   <div style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">Back</div>
               </div>
           </a>
-      </div>   
-    <html>
-      <head>
-        <style>
-          .main-btn {
-            width: 112px;
-            height: 37px;
-            padding: 10px 16px;
-            background: #146c43;
-            border-radius: 6px;
-            border: 1px #146c43 solid;
-            display: inline-flex;
-            justify-content: flex-start;
-            align-items: flex-start;
-            gap: 8px;
-            position: absolute;
-          }
+      </div>  
+      
 
-          .study-box {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px #28a745 solid;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: absolute;
-          }
-
-          .study-box-header {
-            align-self: stretch;
-            height: 56px;
-            padding: 16px 24px;
-            background: #f8f9fa;
-            border-bottom: 1px #dee2e6 solid;
-          }
-
-          .study-box-content {
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-          }
-
-          .plus-symbol {
-            color: black;
-            font-size: 20px;
-            font-weight: 600;
-            position: absolute;
-          }
-
-          .inter-font {
-            font-family: Inter;
-            word-wrap: break-word;
-          }
-        </style>
-      </head>
-
-
-      <body>
         <div>
     <!--Study Set button-->
     <div style="left: 761px; top: 206px; position: absolute;">
@@ -1028,42 +1021,6 @@
   </button>
 </div>
 
-    <script>
-      function studySetsFunction() {
-          // Redirect to the study sets html page
-          window.location.href = 'course_page_study_sets.html';
-      }
-      function navigateToPosting() {
-        // Redirect to the posting page
-        window.location.href = 'course_page_posting.html';
-    }
-
-    function navigateToEnroll() {
-        // Redirect to the search page
-        window.location.href = 'course_page_searchpage.html';
-    }
-        
-    function onLoad() {
-        const userId = localStorage.getItem('userId');
-        const linkElement = document.getElementById('linkforloginout');
-        
-        if(!userId || userId === undefined){
-            document.querySelector('#loginout').innerHTML = "Login";
-            linkElement.href = 'login.html';
-                location.replace('login.html');
-        }else{
-            document.querySelector('#loginout').innerHTML = "Log out";
-            linkElement.href = '#';
-            linkElement.onclick = function() {
-                localStorage.removeItem('userId');
-                location.replace('index.html');
-            };
-        }
-      }
-
-      onLoad();
-    </script>
-
   <!-- Study Group Box 1 -->
           <div class="study-box" style="left: 1062px; top: 204px">
             <div class="study-box-header">
@@ -1078,8 +1035,7 @@
               <div
                 class="inter-font"
                 style="color: #28a745; font-size: 20px; font-weight: 600"
-              >
-                ITSC 4155
+              >[Course Code Here]
               </div>
               <div
                 class="inter-font"
@@ -1165,7 +1121,83 @@
           </div>
           <div class="plus-symbol" style="left: 1365px; top: 635px">+</div>
         </div>
-      </body>
-    </html>
-  </div>
+
+      </div>
+
+
+    <script>
+      function studySetsFunction() {
+          // Redirect to the study sets html page
+          window.location.href = 'course_page_study_sets.html';
+      }
+      function navigateToPosting() {
+        // Redirect to the posting page
+        window.location.href = 'course_page_posting.html';
+      }
+
+      function navigateToEnroll() {
+          // Get the query string from the URL
+          const queryString = window.location.search;
+          // Create a URLSearchParams object from the query string
+          const urlParams = new URLSearchParams(queryString);
+          const data = {
+            userId : localStorage.getItem('userId'),
+            subject : urlParams.get('subject'),
+            courseNumber : urlParams.get('courseNumber')
+          };
+
+          axios.post(`/api/saveClass`, data)
+            .then(res => {
+                if(res && res.data && res.data.success) {
+                    alert("Successfully enrolled!");
+                }else if(res && res.data && res.data.alreadyEnrolled) {
+                    alert("You're already enrolled in this class.");
+                }
+          });   
+      }
+
+      function classInfo() {
+          // Get the query string from the URL
+          const queryString = window.location.search;
+          // Create a URLSearchParams object from the query string
+          const urlParams = new URLSearchParams(queryString);
+          const subject = urlParams.get('subject');
+          const courseNumber = urlParams.get('courseNumber');
+          const data = {
+            subject : subject,
+            courseNumber: courseNumber,
+          };
+          
+          axios.post(`/api/getClassInfo`, data)
+            .then(res => {
+                if(res && res.data) {
+                    console.log(res);
+                    document.getElementById('courseInformation').innerHTML = subject + " " + courseNumber + " " + res.data[0].title
+                }
+          });            
+      }
+        
+      function onLoad() {
+          const userId = localStorage.getItem('userId');
+          const linkElement = document.getElementById('linkforloginout');
+          
+          if(!userId || userId === undefined){
+              document.querySelector('#loginout').innerHTML = "Login";
+              linkElement.href = 'login.html';
+                  location.replace('login.html');
+          }else{
+              document.querySelector('#loginout').innerHTML = "Log out";
+              linkElement.href = '#';
+              linkElement.onclick = function() {
+                  localStorage.removeItem('userId');
+                  location.replace('index.html');
+              };
+          }
+
+          classInfo();
+        }
+
+        onLoad();
+    </script>
+</body>
 </html>
