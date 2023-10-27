@@ -922,7 +922,7 @@
 
         <div>
     <!--Study Set button-->
-    <div style="left: 761px; top: 206px; position: absolute;">
+    <div id="buttonForStudySets" style="left: 761px; top: 206px; position: absolute;" hidden="true">
       <button 
           style="
               width: 112px;
@@ -955,7 +955,7 @@
       </button>
     </div>
     <!--Posting button-->
-<div style="left: 933px; top: 205px; position: absolute;">
+<div id="buttonForPosting" style="left: 933px; top: 205px; position: absolute;" hidden="true">
   <button 
       style="
           width: 92px;
@@ -988,7 +988,7 @@
   </button>
 </div>
 <!--Enroll button-->
-<div style="left: 601px; top: 206px; position: absolute;">
+<div id="buttonForEnroll" style="left: 601px; top: 206px; position: absolute;" hidden="true">
   <button 
       style="
           width: 92px;
@@ -1130,9 +1130,35 @@
           // Redirect to the study sets html page
           window.location.href = 'course_page_study_sets.html';
       }
+
       function navigateToPosting() {
         // Redirect to the posting page
         window.location.href = 'course_page_posting.html';
+      }
+
+      function amIEnrolled() {
+        // Get the query string from the URL
+        const queryString = window.location.search;
+        // Create a URLSearchParams object from the query string
+        const urlParams = new URLSearchParams(queryString);
+        const data = {
+          userId : localStorage.getItem('userId'),
+          subject : urlParams.get('subject'),
+          courseNumber : urlParams.get('courseNumber')
+        };
+
+        axios.post(`/api/getPermission`, data)
+            .then(res => {
+                if(res && res.data && res.data.enrolled) {
+                    document.getElementById('buttonForEnroll').hidden = true;
+                    document.getElementById('buttonForStudySets').hidden = false;
+                    document.getElementById('buttonForPosting').hidden = false;
+                }else if(res && res.data && !res.data.enrolled){
+                    document.getElementById('buttonForEnroll').hidden = false;
+                    document.getElementById('buttonForStudySets').hidden = true;
+                    document.getElementById('buttonForPosting').hidden = true;
+                }
+          });
       }
 
       function navigateToEnroll() {
@@ -1195,6 +1221,7 @@
           }
 
           classInfo();
+          amIEnrolled();
         }
 
         onLoad();
