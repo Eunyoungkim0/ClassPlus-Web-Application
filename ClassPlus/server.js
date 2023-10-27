@@ -238,6 +238,37 @@ app.post('/api/saveClass/', async(req, res) => {
     });
 });
 
+
+app.post('/api/getPermission/', async(req, res) => {
+    const { userId, subject, courseNumber } = req.body;
+
+    connection.query(`SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}';`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+
+        connection.query(`SELECT count(*) as count FROM classesEnrolled WHERE userId = ${userId} AND courseId = ${courseId} AND year = '2023' AND semester = 'fall'`, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            if(results[0].count == 1){
+                res.json({
+                    enrolled: true
+                });
+            }else{
+                res.json({
+                    enrolled: false
+                });
+            }
+        });
+    });
+});
+
 app.use(function (err, req, res, next) {
     if(err.name == 'UnauthorizedError'){
         res.status(401).json({
