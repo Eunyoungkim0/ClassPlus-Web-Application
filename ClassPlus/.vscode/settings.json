@@ -3,5 +3,6 @@
         "lib/**/*.jar",
         "backend/drivers/mysql-connector-j-8.1.0.jar",
         "backend/drivers/ojdbc11.jar"
-    ]
+    ],
+    "git.ignoreLimitWarning": true
 }
