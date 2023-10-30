@@ -1,12 +1,14 @@
 const express = require('express');
 const mysql = require('mysql');
 const path = require('path');
-//const cors = require('cors');
 
 const PORT = process.env.port || 3000;
 const app = express();
-//app.use(cors());
+
 app.use(express.static('public'));
+app.use('/js', express.static(path.join(__dirname, 'js')));
+app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -25,6 +27,22 @@ var connection = mysql.createConnection({
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/api/checkLogin/:currentPagePath', async(req, res) => {
+    const currentPage = req.params.currentPagePath;
+    connection.query(`SELECT pageType, needsLogin FROM pages WHERE pageName = '${currentPage}';`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json({
+            success: true,
+            needsLogin: results[0].needsLogin,
+            pageType: results[0].pageType
+        });
+    });
 });
 
 app.post('/api/signup', async(req, res) => {
