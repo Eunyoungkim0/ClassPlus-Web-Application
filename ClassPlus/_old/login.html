@@ -260,7 +260,6 @@
 
       <script>
         function dataValidation() {
-            
             if(document.getElementById('userEmail').value == ""){
                 alert("Please enter your UNCC email address");
                 document.getElementById('userEmail').focus();
@@ -280,14 +279,27 @@
             return true;
         }
 
+        function inputConstraint(){
+            // User can't type space bar in the password
+            document.getElementById('userPassword').addEventListener('keydown', function(event) {
+                if (event.key === ' ') {
+                    event.preventDefault();
+                }
+            });
+            // User can't type space bar in the email
+            document.getElementById('userEmail').addEventListener('keydown', function(event) {
+                if (event.key === ' ') {
+                    event.preventDefault();
+                }
+            });
+        }
+
         function login() {
             if(dataValidation()){
                 const data = {
                     userEmail: document.getElementById('userEmail').value,
                     userPassword: document.getElementById('userPassword').value
                 };
-
-                console.log(data);
                 
                 axios.post(`/api/login`, data)
                     .then(res => {
@@ -304,30 +316,11 @@
 
         function onLoad() {
             const userId = localStorage.getItem('userId');
-            const linkElement = document.getElementById('linkforloginout');
-            
-            if(!userId || userId === undefined){
-                document.querySelector('#loginout').innerHTML = "Login";
-                linkElement.href = 'login.html';
-            }else{
-                document.querySelector('#loginout').innerHTML = "Log out";
-                linkElement.href = '#';
-                linkElement.onclick = function() {
-                    localStorage.removeItem('userId');
-                    location.replace('index.html');
-                };
-            }
+            needsLogin(userId);
+            setLoginButton(userId);
 
-            document.getElementById('userPassword').addEventListener('keydown', function(event) {
-                if (event.key === ' ') {
-                    event.preventDefault();
-                }
-            });
-            document.getElementById('userEmail').addEventListener('keydown', function(event) {
-                if (event.key === ' ') {
-                    event.preventDefault();
-                }
-            });
+            inputConstraint();
+
         }
 
         onLoad();
