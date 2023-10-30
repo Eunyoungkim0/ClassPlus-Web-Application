@@ -218,36 +218,6 @@
 
 
     <script>
-        function isTokenValid() {  
-            const token = localStorage.getItem('jwt'); 
-            const exp = localStorage.getItem('exp');
-
-            if (!token) {
-                console.log("No token");
-                return false;
-            }
-            try {
-                if (Date.now() >= exp * 1000) {
-                    console.log("Token is expired");
-                    localStorage.removeItem("jwt");
-                    localStorage.removeItem("exp");
-                    localStorage.removeItem("firstName");
-                    localStorage.removeItem("lastName");
-                    location.replace('/');
-                    return false;
-                }
-            } catch (err) {
-                console.log("Token is invalid");
-                return false;
-            }
-            return true;
-        }
-
-        function askYesNoQuestion(question) {
-            const userResponse = window.confirm(question);
-            return userResponse;
-        }
-
         function saveButton() {
             const data = {
                 userId : localStorage.getItem('userId'),
@@ -272,31 +242,9 @@
             }
         }
 
-        function onLoad() {
-            const token = localStorage.getItem('jwt');
-            const exp = localStorage.getItem('exp');
-            const userId = localStorage.getItem('userId');
-            const linkElement = document.getElementById('linkforloginout');
-            
-            if(!userId || userId === undefined){
-                document.querySelector('#loginout').innerHTML = "Login";
-                linkElement.href = 'login.html';
-                location.replace('login.html');
-            }else{
-                document.querySelector('#loginout').innerHTML = "Log out";
-                linkElement.href = '#';
-                linkElement.onclick = function() {
-                    localStorage.removeItem('userId');
-                    location.replace('index.html');
-                };
-            }
-
-            isTokenValid();
-            axios.get(`/api/profile/${userId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }).then(res => {
+        function loadData(userId) {
+            axios.get(`/api/profile/${userId}`)
+                .then(res => {
                 console.log(res.data);
 
                 document.querySelector('#firstName').value = res.data[0].firstName;
@@ -317,7 +265,15 @@
                 if(res.data[0].isTa == 1){
                     document.querySelector('#isTa').checked = true;
                 }
-            })         
+            }) 
+        }
+
+        function onLoad() {
+            const userId = localStorage.getItem('userId');
+            needsLogin(userId);
+            setLoginButton(userId);
+
+            loadData(userId);        
         }
 
         onLoad();
