@@ -17,12 +17,29 @@
       });
   </script>
   <div id="nav-placeholder"></div>
-  <div name=row>
+  
+  <div name="row">
+    <div class="col-md-8">
+      <div class="course-title">
+        ITCS 4155 Software Development Projects
+      </div>
+    </div>
+    <div class="col-md-4">
+      <script>
+        $.get("searchbar.html", function(data){
+            $("#search-placeholder").replaceWith(data);
+        });
+    </script>
+    <div id="search-placeholder"></div>
+    </div>
+  </div>
+
+    <div class="coursepage-line"></div>
+
     <div class="coursepage-display"> Post </div>
     <div class="coursepage-display"> Quiz/Note </div>
     <div
       class="coursepage-display">Question</div>
-    <div class="coursepage-line"></div>
     <div
       style="
         width: 352px;
@@ -44,9 +61,6 @@
         position: absolute;
       "
     >
-      <div class="course-title">
-        ITCS 4155 Software Development Projects
-      </div>
       <div
         style="
           width: 1398.02px;
@@ -80,36 +94,7 @@
             display: inline-flex;
           "
         >
-          <div
-            style="
-              align-self: stretch;
-              height: 36px;
-              padding: 8px;
-              background: #d9d9d9;
-              border-radius: 10px;
-              justify-content: space-between;
-              align-items: center;
-              display: inline-flex;
-              width: 100%;
-            "
-          >
-          <input type="text" style="flex: 1 1 0; color: black; font-size: 24px; font-family: Inter; font-weight: 700; line-height: 22px; word-wrap: break-word; border: none; background-color: transparent; outline: none;" placeholder="Search...">
-
-            <div
-              style="
-                width: 28px;
-                height: 28px;
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              "
-            >
-              <img
-                src="searching_study_session_maginifying_glass.png"
-                alt="Search Icon"
-                style="width: 100%; height: auto"
-              />
+          
             </div>
           </div>
         </div>

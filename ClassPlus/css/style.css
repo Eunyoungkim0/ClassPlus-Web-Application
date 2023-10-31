@@ -80,16 +80,45 @@
 }
 
 .course-title{
-    width: 952px;
-    height: 64px;
-    left: 0px;
-    top: 0px;
-    position: absolute;
-    text-align: center;
+    margin-left: 10%;
+    text-align: left;
     color: black;
     font-size: 40px;
     font-family: Inter;
     font-weight: 400;
     line-height: 28px;
     word-wrap: break-word;
+}
+
+.search-text{
+    flex: 1 1 0;
+    color:black;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 700;
+    line-height: 22px;
+    word-wrap: break-word;
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
+.search-bar{
+    height: 36px;
+    width: auto;
+    padding: 8px;
+    background: #d9d9d9;
+    border-radius: 10px;
+    justify-content: space-between;
+    align-items: center;
+    display: inline-flex;
+    width: 100%;
+}
+
+.search-pic{
+    width: 28px;
+    height: 28px;
+    margin-right: 1%; 
+    display: flex;
+    align-items: right;
 }
