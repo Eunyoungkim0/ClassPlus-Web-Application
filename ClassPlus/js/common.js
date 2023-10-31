@@ -16,15 +16,21 @@ function needsLogin(userId) {
 // If login information does not exist, it show log in button.
 function setLoginButton(userId) {
     const linkElement = document.getElementById('linkforloginout');
+    document.querySelector('#loginout').innerHTML = "Log"
     if(!userId || userId === undefined){
-        document.querySelector('#loginout').innerHTML = "Login";
+        document.querySelector('#loginout').innerHTML += "in";
         linkElement.href = 'login.html';
+        localStorage.setItem('didLogin', 'n');
     }else{
-        document.querySelector('#loginout').innerHTML = "Log out";
+        document.querySelector('#loginout').innerHTML += " out";
+        localStorage.setItem('didLogin', 'y');
         linkElement.href = '#';
         linkElement.onclick = function() {
             localStorage.removeItem('userId');
+            localStorage.removeItem('firstName');
+            localStorage.removeItem('lastName');
             location.replace('index.html');
+            localStorage.setItem('didLogin', 'n');
         };
     }
 }
@@ -34,3 +40,24 @@ function askYesNoQuestion(question) {
     const userResponse = window.confirm(question);
     return userResponse;
 }
+
+// For nav, this function checks if login information exists.
+// If login information does not exist, it direct to login page before going to the page.
+function loginCheckBeforeNav(page){
+    const didLogin = localStorage.getItem('didLogin');
+    if (didLogin == 'y'){
+        location.replace(page);
+    }else{
+        localStorage.setItem('destination', page);
+        location.replace('login.html');
+    }
+}
+
+// When the page loads, this function executes.
+function onLoad() {
+    const userId = localStorage.getItem('userId');
+    needsLogin(userId);
+    setLoginButton(userId);
+}
+
+onLoad();
