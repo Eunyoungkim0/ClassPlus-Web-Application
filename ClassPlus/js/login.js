@@ -50,7 +50,15 @@ function login() {
                 console.log(res);
                 if(res && res.data && res.data.success) {
                     localStorage.setItem('userId', res.data.userId);
-                    location.replace('index.html');
+                    localStorage.setItem('firstName', res.data.firstName);
+                    localStorage.setItem('lastName', res.data.lastName);
+                    const destination = localStorage.getItem('destination');
+                    localStorage.removeItem('destination');
+                    if(!destination){
+                        location.replace('index.html');
+                    }else{
+                        location.replace(destination);
+                    }                    
                 }else if(!res.data.success) {
                     alert(res.data.myContent);
                 }
@@ -58,14 +66,4 @@ function login() {
     }
 }
 
-// When the page loads, this function executes.
-function onLoad() {
-    const userId = localStorage.getItem('userId');
-    needsLogin(userId);
-    setLoginButton(userId);
-
-    inputConstraint();
-
-}
-
-onLoad();
+inputConstraint();
