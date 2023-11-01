@@ -8,21 +8,29 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <link rel="stylesheet" type="text/css" href="../css/style.css">
       <link rel="stylesheet" type="text/css" href="webtheme.css">
-      <title>INDEX</title>
+      <title>MyCourse</title>
 </head>
 <body>
   <div id="nav-placeholder"></div>
-  <div name="row">
-    <div class="col-md-8">
-      <div class="course-title">
-        ITCS 4155 Software Development Projects
-      </div>
-    </div>
-    <div class="col-md-4" id="search-placeholder"></div>
-    </div>
-  </div>
+  <div id="courseTop-placeholder"></div>
 
-    <div class="coursepage-line"></div>
+    <div class = "row">
+      <a href="javascript:void(0);" onclick="window.history.back();" style="text-decoration: none;">
+        <div class="course-button">
+            <div class="course-text">Back</div>
+        </div>
+      </a>
+      <button class="course-button" onclick="navigateToEnroll()">
+        <div class="course-text">Enroll</div>
+      </button>
+      <button class="course-button" onclick="studySetsFunction()">
+        <div class="course-text">Study Sets</div>
+      </button>
+      <button class="course-button" onclick="navigateToPosting()">
+        <div class="course-text">Posting</div>
+      </button>
+    </div>
+
 
     <div class="coursepage-display"> Post </div>
     <div class="coursepage-display"> Quiz/Note </div>
@@ -49,16 +57,6 @@
         position: absolute;
       "
     >
-      <div
-        style="
-          width: 1398.02px;
-          height: 0px;
-          left: 18px;
-          top: 84px;
-          position: absolute;
-          border: 2px black solid;
-        "
-      ></div>
       <div
         style="
           width: 475px;
@@ -712,15 +710,7 @@
       "
     >
       I wasn’t there due to my doctor’s appointment...
-    </div>
-        <!--Back Button-->
-        <div style="left: 15px; top: 124px; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-          <a href="javascript:void(0);" onclick="window.history.back();" style="text-decoration: none;">
-              <div style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
-                  <div style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">Back</div>
-              </div>
-          </a>
-      </div>   
+    </div>   
     <html>
       <head>
         <style>
@@ -779,105 +769,6 @@
       </head>
       <body>
         <div>
-    <!--Study Set button-->
-    <div style="left: 761px; top: 206px; position: absolute;">
-      <button 
-          style="
-              width: 112px;
-              height: 37px;
-              padding-left: 16px;
-              padding-right: 16px;
-              padding-top: 10px;
-              padding-bottom: 10px;
-              background: #146c43;
-              border-radius: 6px;
-              border: 1px #146c43 solid;
-              justify-content: center;
-              align-items: center;
-              display: inline-flex;
-              cursor: pointer;
-          " 
-          onclick="studySetsFunction()"
-      >
-          <span 
-              style="
-                  color: white;
-                  font-size: 16px;
-                  font-family: Inter;
-                  font-weight: 600;
-                  line-height: 18px;
-              "
-          >
-              Study Sets
-          </span>
-      </button>
-    </div>
-    <!--Posting button-->
-<div style="left: 933px; top: 205px; position: absolute;">
-  <button 
-      style="
-          width: 92px;
-          height: 37px;
-          padding-left: 16px;
-          padding-right: 16px;
-          padding-top: 10px;
-          padding-bottom: 10px;
-          background: #146c43;
-          border-radius: 6px;
-          border: 1px #146c43 solid;
-          justify-content: center;
-          align-items: center;
-          display: inline-flex;
-          cursor: pointer;
-      " 
-      onclick="navigateToPosting()"
-  >
-      <span 
-          style="
-              color: white;
-              font-size: 16px;
-              font-family: Inter;
-              font-weight: 600;
-              line-height: 18px;
-          "
-      >
-          Posting
-      </span>
-  </button>
-</div>
-<!--Enroll button-->
-<div style="left: 601px; top: 206px; position: absolute;">
-  <button 
-      style="
-          width: 92px;
-          height: 37px;
-          padding-left: 16px;
-          padding-right: 16px;
-          padding-top: 10px;
-          padding-bottom: 10px;
-          background: #146c43;
-          border-radius: 6px;
-          border: 1px #146c43 solid;
-          justify-content: center;
-          align-items: center;
-          display: inline-flex;
-          cursor: pointer;
-      " 
-      onclick="navigateToEnroll()"
-  >
-      <span 
-          style="
-              color: white;
-              font-size: 16px;
-              font-family: Inter;
-              font-weight: 600;
-              line-height: 18px;
-          "
-      >
-          Enroll
-      </span>
-  </button>
-</div>
     <script>
       function studySetsFunction() {
           // Redirect to the study sets html page
