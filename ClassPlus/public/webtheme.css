@@ -24,3 +24,9 @@ li a {
 li a:hover {
     background-color: #111;
 }
+footer {
+    background-color: #003B26;
+    padding: 10px;
+    text-align: left;
+    color: white;
+}
