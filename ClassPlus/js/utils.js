@@ -10,6 +10,14 @@ $.get("course_top.html", function(data){
     $("#courseTop-placeholder").replaceWith(data);
 });
 
+$.get("searchbar.html", function(data){
+    $("#searchbar-placeholder").replaceWith(data);
+});
+
+$.get("course_nav.html", function(data){
+    $("#courseNav-placeholder").replaceWith(data);
+});
+
 function navigateToCoursePage() {
     window.location.href = 'MyCourse.html';
 }

@@ -117,10 +117,8 @@
 
 .search-pic{
     width: 28px;
-    height: 28px;
-    margin-right: 1%; 
+    height: 28px; 
     display: flex;
-    align-items: right;
 }
 
 .course-button{
