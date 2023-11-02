@@ -85,6 +85,7 @@
     font-weight: 400;
     line-height: 28px;
     word-wrap: break-word;
+    text-decoration:none
 }
 
 .search-text{
@@ -194,3 +195,69 @@
     outline: none;
     word-wrap: break-word;
 }
+
+.posting-input{
+    width: 120px;
+    height: 47px;
+    left: 655px;
+    top: 581px;
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    font-family: Inter;
+    font-weight: 400;
+    line-height: 28px;
+    word-wrap: break-word;
+}
+
+.main-btn {
+    width: 112px;
+    height: 37px;
+    padding: 10px 16px;
+    background: #146c43;
+    border-radius: 6px;
+    border: 1px #146c43 solid;
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 8px;
+    position: absolute;
+  }
+
+  .study-box {
+    width: 352px;
+    height: 216px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px #28a745 solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .study-box-header {
+    align-self: stretch;
+    height: 56px;
+    padding: 16px 24px;
+    background: #f8f9fa;
+    border-bottom: 1px #dee2e6 solid;
+  }
+
+  .study-box-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .inter-font {
+    font-family: Inter;
+    word-wrap: break-word;
+    width: 302px;
+    height: 49px;
+    color: #28a745;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 28px;
+  }
