@@ -15,11 +15,9 @@
   <div id="courseTop-placeholder"></div>
 
     <div class = "row">
-      <a href="javascript:void(0);" onclick="window.history.back();" style="text-decoration: none;">
-        <div class="course-button">
+        <button class="course-button" onclick="window.history.back()">
             <div class="course-text">Back</div>
-        </div>
-      </a>
+        </button>
       <button class="course-button" onclick="navigateToEnroll()">
         <div class="course-text">Enroll</div>
       </button>
@@ -31,11 +29,31 @@
       </button>
     </div>
 
+    <!-- Implement to get the data from the database and show it -->
+    <div class="row">
+      <div class="column" style="width: 70%;">
+        <div class="row">
+          <div class="coursepage-display"> Post </div>
+          <div class="coursepage-line"></div>
+        </div>
+        <div class="row">
+          <div class="column" style="width: 35%;">
+            <div class="coursepage-display"> Quiz/Note </div>
+          </div>
+          <div class="column" style="width: 35%;">
+            <div class="coursepage-display">Question</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="column" style="width: 30%;">
+        <div class="row">
+          <div class="coursepage-display"> Study Group </div>
+        </div>
+      </div>
+    </div>
 
-    <div class="coursepage-display"> Post </div>
-    <div class="coursepage-display"> Quiz/Note </div>
-    <div
-      class="coursepage-display">Question</div>
+    <!-- hard coded data (should be removed) -->
     <div
       style="
         width: 352px;
@@ -48,15 +66,6 @@
         border: 1px black solid;
       "
     ></div>
-    <div
-      style="
-        width: 1421px;
-        height: 84px;
-        left: -4px;
-        top: 107px;
-        position: absolute;
-      "
-    >
       <div
         style="
           width: 475px;

@@ -57,12 +57,8 @@
 }
 
 .coursepage-display{  
-    width: 60px;
-    height: 24px;
-    left: 549px;
-    top: 586px;
-    position: absolute;
-    text-align: center;
+    text-align: left;
+    margin-top: 0.8%;
     color: black;
     font-size: 28px;
     font-family: Inter;
@@ -127,9 +123,10 @@
 }
 
 .course-button{
-    width: 70px;
+    width: auto;
     height: 44px;
     margin-left: 2%;
+    margin-top: 0.8%;
     padding-left: 16px;
     padding-right: 16px;
     padding-top: 10px;
