@@ -18,6 +18,10 @@ $.get("course_nav.html", function(data){
     $("#courseNav-placeholder").replaceWith(data);
 });
 
+$.get("profile_nav.html", function(data){
+    $("#profileNav-placeholder").replaceWith(data);
+});
+
 function navigateToCoursePage() {
     window.location.href = 'MyCourse.html';
 }

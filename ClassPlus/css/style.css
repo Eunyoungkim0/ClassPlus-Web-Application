@@ -126,6 +126,7 @@
     height: 44px;
     margin-left: 2%;
     margin-top: 0.8%;
+    margin-right: 2%;
     padding-left: 16px;
     padding-right: 16px;
     padding-top: 10px;
@@ -165,47 +166,29 @@
     background-color: #004F34;
 }
 
-.posting-title-bar{
-    height: 36px;
-    width: 100%;
-    margin-top: 2%;
-    margin-right: 3%;
-    padding: 8px;
-    background: #d9d9d9;
-    border-radius: 10px;
-    justify-content: space-between;
-    align-items: center;
-    display: inline-flex;
-    width: 100
-}
-
 .posting-title{
-    width: 120px;
-    height: 47px;
-    text-align: center;
+    width: 300px;
+    height: 45px;
+    text-align: left;
     color: black;
-    font-size: 30px;
+    font-size: 20px;
     font-family: Inter;
     font-weight: 400;
     line-height: 28px;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    word-wrap: break-word;
+    background-color: white;
 }
 
 .posting-input{
-    width: 120px;
-    height: 47px;
-    left: 655px;
-    top: 581px;
-    text-align: center;
+    margin-left: 30%;
+    margin-top: 4%;
+    margin-right: auto;
+    width: 800px;
+    height: 400px;
     color: black;
-    font-size: 30px;
+    font-size: 15px;
     font-family: Inter;
     font-weight: 400;
     line-height: 28px;
-    word-wrap: break-word;
 }
 
 .main-btn {

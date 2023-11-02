@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="posting-select">
-                <select name="Category" id="Category">
+                <select class ="form-select-lg mb-3" aria-label="Category" name="Category" id="Category">
                     <option value="Question">Question</option>
                     <option value="Quiz">Quiz</option>
                     <option value="Post">Post</option>
@@ -26,19 +26,23 @@
             </select>
             </div>
         </div>
-        <!-- need to be organized (Implement design) -->
+        <!-- need to be organized (impelment design) -->
         <div class="col-md-8">
-            <div class="posting-title-bar">
-                <input type="text" class="posting-title" placeholder="Title...">
+            <div class="row">
+                <form>
+                    <input type="email" class="form-control posting-title" id="title" aria-describedby="emailHelp" placeholder="Title...">
+                <form>
             </div>
         </div>
     </div>
 
     <div class = "row">
-        <input type="text" class="posting-input" placeholder="type your content...">
+        <form>
+            <textarea class="from-control posting-input" id="content" placeholder="type your content..."></textarea>
+        </form>
     </div>
 
-    <div class="row" style="align-items: right; margin-left: auto; margin-right: 0; width: 100%">
+    <div class="d-flex flex-row-reverse">
         <button class="course-button" onclick="window.history.back()">
                 <div class="course-text">Post</div>
         </button>
