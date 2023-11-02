@@ -22,6 +22,14 @@ $.get("profile_nav.html", function(data){
     $("#profileNav-placeholder").replaceWith(data);
 });
 
+$.get("study_group_nav.html", function(data){
+    $("#studyGroupNav-placeholder").replaceWith(data);
+});
+
+$.get("mycourse_top.html", function(data){
+    $("#mycourseTop-placeholder").replaceWith(data);
+});
+
 function navigateToCoursePage() {
     window.location.href = 'MyCourse.html';
 }
@@ -35,4 +43,12 @@ function navigateToPosting() {
 
 function navigateToEnroll() {
   window.location.href = 'course_page_searchpage.html';
+}
+
+function navigateToDetail() {
+    window.location.href = 'course_detail.html';
+}
+
+function navigateToSearch() {
+    window.location.href = 'course_page_searchpage.html';
 }
