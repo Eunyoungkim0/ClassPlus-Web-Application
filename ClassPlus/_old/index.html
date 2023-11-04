@@ -9,6 +9,7 @@
         a {
             color: inherit;
             text-decoration: none;
+            cursor: pointer;
         }
 
         a:hover {
@@ -75,27 +76,27 @@
                         <a href="index.html"><img style="width: 70px; height: 71px" src="C_logo.png" /></a>
                     </div>
                     <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                        <a href="course_page_searchpage.html">
+                        <a onclick="loginCheckBeforeNav('course_page_searchpage.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 My Courses
                             </div>
                         </a>
-                        <a href="study_group_current.html">
+                        <a onclick="loginCheckBeforeNav('study_group_current.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 My Groups
                             </div>
                         </a>
-                        <a href="study_group_find.html">
+                        <a onclick="loginCheckBeforeNav('study_group_find.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 Find group
                             </div>
                         </a>
-                        <a href="study_group_creating.html">
+                        <a onclick="loginCheckBeforeNav('study_group_creating.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 Create Group
                             </div>
                         </a>
-                        <a href="profile.html">
+                        <a onclick="loginCheckBeforeNav('profile.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 Profile
                             </div>
@@ -115,45 +116,11 @@
         <div class="full-screen-image">
             Need a Study Group?
             <div class="study-group-buttons">
-                <button class="study-group-button" onclick="checkLogin('course')">Search for a course</button>
-                <button class="study-group-button" onclick="checkLogin('group')">Search for a group</button>
+                <button class="study-group-button" onclick="loginCheckBeforeNav('course_page_searchpage.html')">Search for a course</button>
+                <button class="study-group-button" onclick="loginCheckBeforeNav('study_group_find.html')">Search for a group</button>
             </div>
         </div>
 
-    <script>
-        function checkLogin(locationNext) {
-            console.log(locationNext);
-            const userId = localStorage.getItem('userId');
-
-            if(!userId){
-                location.replace('login.html');
-            }else{
-                if (locationNext === "course") {
-                    location.replace('course_page_searchpage.html');
-                } else {
-                    location.replace('study_group_find.html');
-                }
-            }
-        }
-        
-        function onLoad() {
-            const userId = localStorage.getItem('userId');
-            const linkElement = document.getElementById('linkforloginout');
-            
-            if(!userId || userId === undefined){
-                document.querySelector('#loginout').innerHTML = "Login";
-                linkElement.href = 'login.html';
-            }else{
-                document.querySelector('#loginout').innerHTML = "Log out";
-                linkElement.href = '#';
-                linkElement.onclick = function() {
-                    localStorage.removeItem('userId');
-                    location.replace('index.html');
-                };
-            }
-        }
-
-        onLoad();
-    </script>
+    <script type="text/javascript" src="../js/common.js"></script>
     </body>
 </html>

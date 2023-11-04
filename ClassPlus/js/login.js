@@ -54,6 +54,8 @@ function login() {
                     localStorage.setItem('lastName', res.data.lastName);
                     const destination = localStorage.getItem('destination');
                     localStorage.removeItem('destination');
+                    const message = "Hi " + res.data.firstName + "!";
+                    alert(message);
                     if(!destination){
                         location.replace('index.html');
                     }else{

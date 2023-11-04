@@ -9,6 +9,7 @@
         a {
             color: inherit;
             text-decoration: none;
+            cursor: pointer;
         }
 
         a:hover {
@@ -30,27 +31,27 @@
                         <a href="index.html"><img style="width: 70px; height: 71px" src="C_logo.png" /></a>
                     </div>
                     <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                        <a href="course_page_searchpage.html">
+                        <a onclick="loginCheckBeforeNav('course_page_searchpage.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 My Courses
                             </div>
                         </a>
-                        <a href="study_group_current.html">
+                        <a onclick="loginCheckBeforeNav('study_group_current.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 My Groups
                             </div>
                         </a>
-                        <a href="study_group_find.html">
+                        <a onclick="loginCheckBeforeNav('study_group_find.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 Find group
                             </div>
                         </a>
-                        <a href="study_group_creating.html">
+                        <a onclick="loginCheckBeforeNav('study_group_creating.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 Create Group
                             </div>
                         </a>
-                        <a href="profile.html">
+                        <a onclick="loginCheckBeforeNav('profile.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 Profile
                             </div>
@@ -115,68 +116,7 @@
 </div>
 
     
-    <script>
-        function gotoCoursePage(){
-            const subject = document.getElementById('subjectSelect').value;
-            const courseNumber = document.getElementById('classSelect').value;
-
-            if(courseNumber == ""){
-                alert("Please select class.");
-                document.getElementById('classSelect').focus();
-                return false;
-            }
-
-            const url = `course_page_homepage.html?subject=${subject}&courseNumber=${courseNumber}`;
-            window.location.href = url;
-        }
-
-        function handleSelectChange(selectElement) {
-            const selectedValue = selectElement.value;
-            const classes = document.getElementById('classSelect');
-            for (let i = classes.options.length - 1; i >= 0; i--) {
-                classes.remove(i);
-            }
-
-            axios.get(`/api/getClasses/${selectedValue}`)
-            .then(res => {
-                for(var i=0; i < res.data.length; i++){
-                    var option = document.createElement('option');
-                    option.setAttribute('value', res.data[i].courseNumber);
-                    option.innerHTML = res.data[i].courseNumber + " " + res.data[i].title;
-                    document.querySelector('#classSelect').appendChild(option);
-                }
-            });
-        }
-
-        function onLoad() {
-            const userId = localStorage.getItem('userId');
-            const linkElement = document.getElementById('linkforloginout');
-            
-            if(!userId || userId === undefined){
-                document.querySelector('#loginout').innerHTML = "Login";
-                linkElement.href = 'login.html';
-                location.replace('login.html');
-            }else{
-                document.querySelector('#loginout').innerHTML = "Log out";
-                linkElement.href = '#';
-                linkElement.onclick = function() {
-                    localStorage.removeItem('userId');
-                    location.replace('index.html');
-                };
-            }
-
-            axios.get(`/api/getCourseSubject`)
-            .then(res => {
-                for(var i=0; i < res.data.length; i++){
-                    var option = document.createElement('option');
-                    option.setAttribute('value', res.data[i].subject);
-                    option.innerHTML = res.data[i].subject;
-                    document.querySelector('#subjectSelect').appendChild(option);
-                }
-            });     
-        }
-
-        onLoad();
-    </script>
+    <script type="text/javascript" src="../js/common.js"></script>
+    <script type="text/javascript" src="../js/course.js"></script>
 </body>
 </html>
