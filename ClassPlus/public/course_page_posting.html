@@ -17,40 +17,49 @@
     <div id="courseTop-placeholder"></div>
 
     <div class="row">
-        <div class="col-md-4">
-            <div class="posting-select">
-                <select class ="form-select-lg mb-3" aria-label="Category" name="Category" id="Category">
-                    <option value="Question">Question</option>
-                    <option value="Homework">Homework</option>
-                    <option value="Note">Note</option>
-            </select>
-            </div>
+        <div class="column" style="width: 300px; margin-top:5%">
+          <div id="courseNav-placeholder"></div>
         </div>
-        <!-- need to be organized (implement design) -->
-        <div class="col-md-8">
+
+        <div class="column" style="width: 70%">
             <div class="row">
+                <div class="col-md-4">
+                    <div class="posting-select">
+                        <select class ="form-select-lg mb-3" aria-label="Category" name="Category" id="Category">
+                            <option value="Question">Question</option>
+                            <option value="Homework">Homework</option>
+                            <option value="Note">Note</option>
+                    </select>
+                    </div>
+                </div>
+                <!-- need to be organized (implement design) -->
+                <div class="col-md-8">
+                    <div class="posting-title-box">
+                        <form>
+                            <input type="text" class="form-control posting-title" id="title" aria-describedby="emailHelp" placeholder="Title...">
+                        <form>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "row">
                 <form>
-                    <input type="text" class="form-control posting-title" id="title" aria-describedby="emailHelp" placeholder="Title...">
-                <form>
+                    <textarea class="from-control posting-input" id="content" placeholder="type your content..."></textarea>
+                </form>
+            </div>
+
+            <div class="d-flex flex-row-reverse">
+                <div class="study-group-buttons" style="margin-top: 3%">
+                    <button class="course-button" onclick="savePost()">
+                            <div class="course-text">Post</div>
+                    </button>
+                    <button class="course-button" onclick="cancelPosting()">
+                        <div class="course-text">Cancel</div>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class = "row">
-        <form>
-            <textarea class="from-control posting-input" id="content" placeholder="type your content..."></textarea>
-        </form>
-    </div>
-
-    <div class="d-flex flex-row-reverse">
-        <button class="course-button" onclick="savePost()">
-                <div class="course-text">Post</div>
-        </button>
-        <button class="course-button" onclick="cancelPosting()">
-            <div class="course-text">Cancel</div>
-        </button>
-    </div>
-
+     </div>
     <script type="text/javascript" src="../js/utils.js"></script>
   </body>
 </html>
