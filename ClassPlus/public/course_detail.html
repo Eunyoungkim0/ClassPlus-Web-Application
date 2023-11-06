@@ -18,31 +18,39 @@
 
     <!-- Implement to get the data from the database and show it -->
     <div class="row">
-      <div class="column" style="width: 15%; margin-top:5%">
+      <div class="column" style="width: 300px; margin-top:5%">
         <div id="courseNav-placeholder"></div>
       </div>
 
-      <div class="column" style="width: 55%;">
+      <div class="column" style="width: 40%;">
         <div class="wrapper">
-          <div class="coursepage-display"> Posts </div>
+          <div class="coursepage-display">Posts</div>
           <button id="buttonForPosting" class="course-button">
-            <div class="course-text">Posting</div>
+            <div class="course-text">Create Post</div>
           </button>
         </div>
+
+        <div id="divForPost"></div>
 
         <div class="coursepage-line"></div>
 
         <div class="wrapper">
-            <div class="coursepage-display"> Stduy Sets </div>
+            <div class="coursepage-display"> Study Sets </div>
             <button id="buttonForStudySets" class="course-button">
-              <div class="course-text">Study Sets</div>
+              <div class="course-text">Create Study Sets</div>
             </button>
         </div>
+
+        <div id="divForStudySet"></div>
       </div>
       
       <div class="column" style="width: 30%;">
         <div class="row">
           <div class="coursepage-display"> Study Group </div>
+          <button id="buttonForGroup" class="course-button">
+            <div class="course-text">Create Group</div>
+          </button>
+          <div id="divForGroup"></div>
         </div>
       </div>
     </div>

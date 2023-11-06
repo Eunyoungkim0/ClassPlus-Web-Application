@@ -34,17 +34,6 @@ function navigateToCoursePage() {
     window.location.href = 'mycourse.html';
 }
 
-function studySetsFunction() {
-    window.location.href = 'course_page_study_sets.html';
-}
-function navigateToPosting() {
-    window.location.href = 'course_page_posting.html';
-}
-
-function navigateToEnroll() {
-  window.location.href = 'course_page_searchpage.html';
-}
-
 function navigateToDetail() {
     window.location.href = 'course_detail.html';
 }

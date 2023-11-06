@@ -245,6 +245,90 @@ app.post('/api/getClassInfo/', async(req, res) => {
     });
 });
 
+app.post('/api/getCoursePosts/', async(req, res) => {
+    const { userId, subject, courseNumber, limit } = req.body;
+    const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    connection.query(sql, function(error, results, fields){
+        if (error) throw error;
+        const courseId = results[0].courseId;
+        var sql2 = `SELECT a.activityId, a.title, a.date, u.firstName, u.lastName FROM courseactivities a, users u 
+        WHERE a.category = 'Post' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
+        ORDER BY a.date DESC`;
+        if(limit > 0){
+            sql2 += ` LIMIT ${limit};`;
+        }else{
+            sql2 += `;`;
+        }
+        connection.query(sql2, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json(results);
+        });     
+    });
+});
+
+
+app.post('/api/getCourseStudySets/', async(req, res) => {
+    const { userId, subject, courseNumber, limit } = req.body;
+    const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    connection.query(sql, function(error, results, fields){
+        if (error) throw error;
+        const courseId = results[0].courseId;
+        var sql2 = `SELECT a.activityId, a.title, a.date, u.firstName, u.lastName FROM courseactivities a, users u 
+        WHERE a.category = 'Study set' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
+        ORDER BY a.date DESC`;
+        if(limit > 0){
+            sql2 += ` LIMIT ${limit};`;
+        }else{
+            sql2 += `;`;
+        }
+        connection.query(sql2, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json(results);
+        });     
+    });
+});
+
+
+app.post('/api/getCourseGroups/', async(req, res) => {
+    const { userId, subject, courseNumber, limit } = req.body;
+    const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    connection.query(sql, function(error, results, fields){
+        if (error) throw error;
+        const courseId = results[0].courseId;
+        var sql2 = `SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title, count(*) as member
+        FROM classplus.groups g, courses c, groupmembers gm
+       WHERE g.courseId = c.courseId
+         AND g.courseId = ${courseId}
+         AND g.courseId = gm.courseId
+         AND g.groupId = gm.groupId
+         AND g.year = '${currentYear}' AND g.semester = 'fall'
+       GROUP BY g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title
+       ORDER BY member DESC`;
+        if(limit > 0){
+            sql2 += ` LIMIT ${limit};`;
+        }else{
+            sql2 += `;`;
+        }
+
+        connection.query(sql2, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json(results);
+        });     
+    });
+});
+
 app.post('/api/saveClass/', async(req, res) => {
     const { userId, subject, courseNumber } = req.body;
 

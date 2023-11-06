@@ -7,22 +7,25 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel="stylesheet" type="text/css" href="webtheme.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
+    integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
 </head>
+
 
 <body>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="course-title" id="courseInformation"></div>
         </div>
-        <div class="col-md-4">
-            <button id="buttonForEnroll" class="course-button" hidden="true">
+        <div class="col-md-2" style="margin-top: 7px; display: flex; align-items: center; justify-content: center;">
+            <button id="buttonForEnroll" class="course-button" hidden="true" onclick="navigateToEnroll()">
                 <div class="course-text">Enroll</div>
             </button>
         </div>
     </div>
     <div class="coursepage-line"></div>
 
-    <script src="../js/utils.js"></script>
+    <script type="text/javascript" src="../js/utils.js"></script>
     <script type="text/javascript" src="../js/course.js"></script>
 </body>
 </html>

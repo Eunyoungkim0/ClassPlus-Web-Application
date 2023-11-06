@@ -1,3 +1,20 @@
+function courseCheck(page){
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+
+    if(subject == "" || courseNumber== ""){
+        alert("The wrong approach.");
+        location.replace("mycourse.html");
+    }
+
+    const url = page + "?sj=" + subject + "&cn=" + courseNumber;
+    window.location.href = url;
+}
+
 // This function changes sub-nav background color and text color depending on the page.
 function setNavColor(){
     var vPillsTab = document.getElementById('v-pills-tab');
@@ -6,6 +23,7 @@ function setNavColor(){
 
     for (var i = 0; i < navItem.length; i++) {
         navItem[i].style.backgroundColor = 'white';
+        navItem[i].style.borderBottom = '1px #004F34 solid';
     }
     for (var i = 0; i < navLink.length; i++) {
         navLink[i].style.color = '#004F34';
@@ -13,9 +31,11 @@ function setNavColor(){
 
     const currentPagePath = window.location.pathname.substring(1);
     var profileLink = document.getElementById(currentPagePath);
-    var aElement = profileLink.querySelector('a');
-    profileLink.style.backgroundColor = '#004F34';
-    aElement.style.color = 'white';
+    if(profileLink != null){
+        var aElement = profileLink.querySelector('a');
+        profileLink.style.backgroundColor = '#004F34';
+        aElement.style.color = 'white';
+    }
 }
 
 setNavColor();

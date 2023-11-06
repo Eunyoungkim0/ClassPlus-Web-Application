@@ -68,21 +68,23 @@ body {
     position: center;
 }
 
-.coursepage-display{  
-    text-align: center;
-    margin-top: 0.8%;
+.coursepage-display{
+    width: 60%;
+    text-align: left;
+    margin-top: 5%;
     color: black;
     font-size: 28px;
     font-weight: 400;
     line-height: 28px;
     word-wrap: break-word;
+    flex-grow: 1;
 }
 
 .coursepage-line{
     width: auto;
     border: 1.5px black solid;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
     margin-top: 10px;
     align-items: center;
 }
@@ -135,22 +137,22 @@ body {
     width: auto;
     height: 44px;
     margin-left: 2%;
-    margin-top: 0.8%;
-    margin-right: 2%;
+    margin-top: 4%;
+    margin-right: 5%;
     padding-left: 16px;
     padding-right: 16px;
     padding-top: 10px;
     padding-bottom: 10px;
     background: #004F34;
     border-radius: 4px;
-    align-items: center;
+    align-items: right;
     display: flex;
 }
 
 .course-text{
     text-align: center;
     color: #F5F5F5;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     word-wrap: break-word;
 }
@@ -310,6 +312,7 @@ body {
     color: gray;
     cursor: pointer;
 }
+
 .course-frame:hover{
     background-color: #004F34;
     color: white;
@@ -346,4 +349,119 @@ body {
 #classSelect{
     height: 30px;
     padding: 5px;
+}
+
+#courseInformation {
+    cursor: pointer;
+}
+
+#divForPost {
+    min-height: 80%;
+    align-items: center;
+    margin: 1%;
+
+    padding: 1%;
+}
+
+#divForStudySet {
+    min-height: 80%;
+    align-items: center;
+    margin: 1%;
+    padding: 1%;
+}
+
+#divForGroup {
+    min-height: 80%;
+    align-items: center;
+    margin: 1%;
+    padding: 1%;
+}
+
+.course-title {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 39px;
+}
+
+/* Post */
+.post-frame {
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    margin-top: 2%;
+    cursor: pointer;
+}
+
+.post-frame:hover {
+    background-color:#004F34;
+    color: white;
+}
+
+.post-title {
+    width: 65%;
+    padding-left: 2%;
+    border-bottom: 1px gray dotted;
+    justify-content: center;
+}
+
+.post-username {
+    width: 20%;
+    font-size: 13px;
+    border-bottom: 1px gray dotted;
+    justify-content: center;
+}
+
+.post-time {
+    width: 15%;
+    font-size: 13px;
+    border-bottom: 1px gray dotted;
+    justify-content: center;
+}
+
+/* Group */
+.group-frame {
+    display: flex;
+    justify-content: center;
+    padding: 5%;
+    flex-direction: column;
+    margin: 15px;
+    width: 100%;
+    box-shadow: #004F34 0px 0px 0px 1px;
+    border-radius: 5%;
+    cursor: pointer;
+}
+.group-frame:hover {
+    background-color:#004F34;
+    color: white;
+}
+
+.group-row {
+    display: flex;
+    flex-direction: row;
+}
+.group-title {
+    font-size: large;
+    display: block;
+    font-weight: bold;
+}
+
+.group-description {
+    font-size: medium;
+}
+
+.group-course {
+    font-style: italic;
+}
+
+.group-member {
+    display: block;
+    font-size: small;
+}
+
+#v-pills-tab .nav-link{
+    font-size: large;
+}
+
+#v-pills-tab .nav-link:hover{
+    background-color: #d9d9d9;
 }
