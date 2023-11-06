@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <head>
-        <meta charset="UTF-8">
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="../js/utils.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="../css/style.css">
-        <link rel="stylesheet" type="text/css" href="webtheme.css">
-        <title>MyCourse</title>
-  </head>
-  <body>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="webtheme.css">
+    <title>My course</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
+    integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
+</head>
+
+<body>
     <div id="nav-placeholder"></div>
     <div id="courseTop-placeholder"></div>
 
@@ -20,17 +21,16 @@
             <div class="posting-select">
                 <select class ="form-select-lg mb-3" aria-label="Category" name="Category" id="Category">
                     <option value="Question">Question</option>
-                    <option value="Quiz">Quiz</option>
-                    <option value="Post">Post</option>
+                    <option value="Homework">Homework</option>
                     <option value="Note">Note</option>
             </select>
             </div>
         </div>
-        <!-- need to be organized (impelment design) -->
+        <!-- need to be organized (implement design) -->
         <div class="col-md-8">
             <div class="row">
                 <form>
-                    <input type="email" class="form-control posting-title" id="title" aria-describedby="emailHelp" placeholder="Title...">
+                    <input type="text" class="form-control posting-title" id="title" aria-describedby="emailHelp" placeholder="Title...">
                 <form>
             </div>
         </div>
@@ -43,13 +43,14 @@
     </div>
 
     <div class="d-flex flex-row-reverse">
-        <button class="course-button" onclick="window.history.back()">
+        <button class="course-button" onclick="savePost()">
                 <div class="course-text">Post</div>
         </button>
-        <button class="course-button" onclick="window.history.back()">
+        <button class="course-button" onclick="cancelPosting()">
             <div class="course-text">Cancel</div>
         </button>
     </div>
 
-</body>
+    <script type="text/javascript" src="../js/utils.js"></script>
+  </body>
 </html>

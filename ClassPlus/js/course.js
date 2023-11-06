@@ -103,12 +103,14 @@ function loadCoursePosts(data) {
     axios.post(`/api/getCoursePosts`, data)
     .then(res => {
         if(res && res.data) {
+            console.log(res.data);
             if(res.data.length == 0){
                 document.getElementById('divForPost').innerHTML = "There is no post in this class yet.";
             }else{
                 for(var i=0; i < res.data.length; i++){
                     var divElement1 = document.createElement('div');
                     divElement1.setAttribute('class', 'post-frame');
+                    divElement1.setAttribute('onclick', `loadPost('Post', ${res.data[i].activityId})`);
 
                     var divElement2 = document.createElement('div');
                     divElement2.setAttribute('class', 'post-title');
@@ -301,6 +303,99 @@ function getSubject(){
 
 // END OF FUNCTIONS FOR COURSE SEARCH PAGE
 //---------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------
+// START OF FUNCTIONS FOR CREATING POST PAGE
+
+function cancelPosting() {
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');   
+    
+    const userAnswer = askYesNoQuestion("Do you want to cancel posting?\nYou might lose your data.");
+    if (userAnswer) {
+        if(subject == "" || courseNumber== ""){
+            alert("The wrong approach.");
+            location.replace("mycourse.html");
+        }
+        const url = "course_Post.html" + "?sj=" + subject + "&cn=" + courseNumber;
+        window.location.href = url;
+    }
+}
+
+function savePost() {
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+    var category = "Post";
+
+    const data = {
+        subject: subject,
+        courseNumber: courseNumber,
+        category: category,
+        subCategory: document.getElementById('Category').value,
+        title: document.getElementById('title').value,
+        content: document.getElementById('content').value,
+        userId : localStorage.getItem('userId'),
+    };
+
+    const userAnswer = askYesNoQuestion("Do you want to save your data?");
+    if (userAnswer) {
+        axios.post(`/api/createPost`, data)
+            .then(res => {
+                if(res && res.data && res.data.success) {
+                    const url = "course_Post.html" + "?sj=" + subject + "&cn=" + courseNumber;
+                    window.location.href = url;
+                }
+            });
+    }
+}
+
+// END OF FUNCTIONS FOR CREATING POST PAGE
+//---------------------------------------------------------------------------------
+
+function loadPost(category, activityId){
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+
+    if(category == 'Post'){
+        var url = `course_post_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
+        window.location.href = url;
+        getPostData();
+    }
+}
+
+function getPostData() {
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+    activityId = urlParams.get('ai');
+
+    axios.post(`/api/getPost/${activityId}`)
+        .then(res => {
+            console.log(res);
+            if(res && res.data) {
+                console.log(res.data);
+                var divForPost = document.getElementById('divForPost');
+                // document.getElementById('category').innerHTML = res.data[0].subCategory;
+                // document.getElementById('title').innerHTML = res.data[0].title;
+                // document.getElementById('content').innerHTML = res.data[0].content;
+            }
+        });
+}
 
 
 // This function loads data depending on its page name.

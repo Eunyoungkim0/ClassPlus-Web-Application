@@ -23,15 +23,17 @@
 
       <div class="column" style="width: 70%;">
         <div class="wrapper">
-          <div class="coursepage-display"> Study Group </div>
-          <button id="buttonForGroup" class="course-button" hidden="true" onclick="courseCheck('study_group_creating.html')">
-            <div class="course-text">Make a new group</div>
-          </button>
+          <div class="coursepage-display"> Posts </div>
         </div>
         <div class="coursepage-line"></div>
 
         <!-- Implement to get the data from the database and show it -->
-        <div id="divForGroup"></div>
+        <div id="divForPost">
+            <div id="category"></div>
+            <div id="title"></div>
+            <div id="content"></div>
+        </div>
+
     </div>
     <script type="text/javascript" src="../js/utils.js"></script>
   </body>

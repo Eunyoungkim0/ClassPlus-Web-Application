@@ -34,10 +34,6 @@ function navigateToCoursePage() {
     window.location.href = 'mycourse.html';
 }
 
-function navigateToDetail() {
-    window.location.href = 'course_detail.html';
-}
-
 function navigateToSearch() {
     window.location.href = 'course_page_searchpage.html';
 }

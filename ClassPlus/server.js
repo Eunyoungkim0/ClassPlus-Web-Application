@@ -251,7 +251,7 @@ app.post('/api/getCoursePosts/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT a.activityId, a.title, a.date, u.firstName, u.lastName FROM courseactivities a, users u 
+        var sql2 = `SELECT a.activityId, a.title, a.date, a.views, u.firstName, u.lastName FROM courseactivities a, users u 
         WHERE a.category = 'Post' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
         ORDER BY a.date DESC`;
         if(limit > 0){
@@ -277,7 +277,7 @@ app.post('/api/getCourseStudySets/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT a.activityId, a.title, a.date, u.firstName, u.lastName FROM courseactivities a, users u 
+        var sql2 = `SELECT a.activityId, a.title, a.date, a.views, u.firstName, u.lastName FROM courseactivities a, users u 
         WHERE a.category = 'Study set' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
         ORDER BY a.date DESC`;
         if(limit > 0){
@@ -328,6 +328,30 @@ app.post('/api/getCourseGroups/', async(req, res) => {
         });     
     });
 });
+
+app.post('/api/getPost/:activityId', async(req, res) => {
+    const activityId = req.params.activityId;
+    const insertSQL = `UPDATE courseactivities SET views = views + 1 WHERE activityId = ${activityId}`;
+    connection.query(insertSQL, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const sql = `SELECT * FROM courseactivities WHERE activityId = ${activityId}`;
+        connection.query(sql, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            console.log(results);
+            res.json(results);
+        });
+    });
+
+});
+
 
 app.post('/api/saveClass/', async(req, res) => {
     const { userId, subject, courseNumber } = req.body;
