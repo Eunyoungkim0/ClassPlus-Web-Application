@@ -59,7 +59,7 @@ function loadUserClassList(userId){
           document.querySelector('#classList').innerHTML = "";
           document.querySelector('#semesterList').innerHTML = "2023 Fall";
           for(var i=0; i < res.data.length; i++) {
-            const url = `course_page_homepage.html?sj=${res.data[i].subject}&cn=${res.data[i].courseNumber}`;
+            const url = `course_detail.html?sj=${res.data[i].subject}&cn=${res.data[i].courseNumber}`;
             var elementDiv1 = document.createElement('div');
             elementDiv1.setAttribute('class', 'course');
             elementDiv1.innerHTML = "<a href='" + url + "'>" + res.data[i].subject + " " + res.data[i].courseNumber + "</a>";

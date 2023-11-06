@@ -3,6 +3,48 @@ let subject;
 let courseNumber;
 
 //---------------------------------------------------------------------------------
+// START OF FUNCTIONS FOR MY COURSE
+function getMyCourse(){
+    const userId = localStorage.getItem('userId');
+    axios.get(`/api/getMyCourse/${userId}`)
+    .then(res => {
+        console.log(res.data);
+        for(var i=0; i < res.data.length; i++){
+            var subject = res.data[i].subject;
+            var courseNumber = res.data[i].courseNumber; 
+            var title = res.data[i].title; 
+
+            var divCourse = document.createElement('div');
+            var divCourseNumber = document.createElement('div');
+            var divTitle = document.createElement('div');
+
+            divCourse.setAttribute('class', 'course-frame');
+            divCourse.setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
+            divCourseNumber.setAttribute('class', 'course-number');
+            divTitle.setAttribute('class', 'course-name');
+
+            divCourseNumber.innerHTML = subject + courseNumber;
+            divTitle.innerHTML = title;
+
+            document.querySelector('.box').appendChild(divCourse);
+            divCourse.appendChild(divCourseNumber);
+            divCourse.appendChild(divTitle);
+        }
+    });
+}
+
+function gotoCourse(sj, cn) {
+    const subject = sj;
+    const courseNumber = cn;
+    const url = `course_detail.html?sj=${subject}&cn=${courseNumber}`;
+    window.location.href = url;
+}
+
+// END OF FUNCTIONS FOR COURSE HOMEPAGE
+//---------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------
 // START OF FUNCTIONS FOR COURSE HOMEPAGE
 
 // This function is to check if a user is enrolled in the class,
@@ -93,7 +135,7 @@ function gotoCoursePage(){
         return false;
     }
 
-    const url = `course_page_homepage.html?sj=${subject}&cn=${courseNumber}`;
+    const url = `course_detail.html?sj=${subject}&cn=${courseNumber}`;
     window.location.href = url;
 }
 
@@ -138,9 +180,11 @@ function getSubject(){
 function loadData(){
     const currentPagePath = window.location.pathname.substring(1);
 
-    if(currentPagePath == 'course_page_searchpage.html'){
+    if(currentPagePath == 'mycourse.html'){
+        getMyCourse();
+    }else if(currentPagePath == 'course_page_searchpage.html'){
         getSubject();
-    }else if(currentPagePath == 'course_page_homepage.html'){
+    }else if(currentPagePath == 'course_detail.html'){
         loadCourseHomepage();
     }
 }

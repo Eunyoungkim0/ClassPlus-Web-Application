@@ -31,7 +31,7 @@ $.get("mycourse_top.html", function(data){
 });
 
 function navigateToCoursePage() {
-    window.location.href = 'MyCourse.html';
+    window.location.href = 'mycourse.html';
 }
 
 function studySetsFunction() {

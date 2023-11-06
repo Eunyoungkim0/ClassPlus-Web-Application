@@ -1,71 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <head>
-        <meta charset="UTF-8">
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="../js/utils.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="../css/style.css">
-        <link rel="stylesheet" type="text/css" href="webtheme.css">
-  </head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="webtheme.css">
+    <title>Profile</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
+    integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
+</head>
 
 <body>
-
-    <nav>
-    <div style="width: 100%; height: 100%; position: relative; background: white">
-        <div style="width: 1440px; height: 87px; left: 0px; top: 0px; position: absolute; background: #004F34; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-            <div style="width: 1430px; height: 87px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; background: #004F34; justify-content: space-between; align-items: center; display: flex">
-                <div style="width: 70px; height: 71px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                    <a href="index.html"><img style="width: 70px; height: 71px" src="C_logo.png" /></a>
-                </div>
-                <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                    <a href="course_page_homepage.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            My Courses
-                        </div>
-                    </a>
-                    <a href="study_group_current.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            My Groups
-                        </div>
-                    </a>
-                    <a href="study_group_find.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            Find group
-                        </div>
-                    </a>
-                    <a href="study_group_creating.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            Create Group
-                        </div>
-                    </a>
-                    <a href="profile.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            Profile
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    </nav>
-    
-    <!--Back Button-->
-    <div style="left: 15px; top: 124px; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-        <a href="javascript:void(0);" onclick="window.history.back();" style="text-decoration: none;">
-            <div style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
-                <div style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">Back</div>
-            </div>
-        </a>
-    </div>  
-
+    <div id="nav-placeholder"></div>    
 
     <div style="width: 348px; height: 182px; left: 100px; top: 200px; position: absolute">
         <div id="profileNav-placeholder"></div>
     </div>
 
+    <div style="height: 112px; padding-left: 160px; padding-right: 160px; padding-top: 32px; padding-bottom: 32px; left: -5px; top: 87px; position: absolute; background: rgba(255, 255, 255, 0); border-bottom: 1px #DEE2E6 dotted; flex-direction: column; justify-content: center; align-items: flex-start; display: inline-flex">
+        <div style="flex-direction: column; justify-content: flex-start; align-items: center; display: flex">
+            <div style="color: #343A40; font-size: 40px; font-family: Inter; font-weight: 700; word-wrap: break-word">Profile</div>
+        </div>
+    </div>
 
     <div
         style="width: 270px; height: 262px; left: 500px; top: 174px; position: absolute; background: #D9D9D9; border-radius: 9999px">
@@ -96,12 +54,11 @@
         Last Name</div>
     <div
         style="left: 797px; top: 787px; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-        <div
-            style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
-            <div
-                style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">
-                Save</div>
-        </div>
+        <button style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
+            <div onclick="saveButton()"
+            style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">
+            Save</div>
+        </button>
     </div>
 
 
@@ -139,7 +96,7 @@
         style="height: 38px; left: 832px; top: 407px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
         <div
             style="align-self: stretch; padding-left: 16px; padding-right: 16px; padding-top: 9px; padding-bottom: 9px; background: #D9D9D9; border-radius: 6px; border: 1px #D9D9D9 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-            <input type="text" id="email" class="userInput">
+            <input type="text" id="email" class="userInput" disabled>
         </div>
     </div>
     
@@ -172,68 +129,8 @@
     </div>
 
 
-    <script>
-        function isTokenValid() {  
-            const token = localStorage.getItem('jwt'); 
-            const exp = localStorage.getItem('exp');
-
-            if (!token) {
-                console.log("No token");
-                return false;
-            }
-            try {
-                if (Date.now() >= exp * 1000) {
-                    console.log("Token is expired");
-                    localStorage.removeItem("jwt");
-                    localStorage.removeItem("exp");
-                    localStorage.removeItem("firstName");
-                    localStorage.removeItem("lastName");
-                    location.replace('/');
-                    return false;
-                }
-            } catch (err) {
-                console.log("Token is invalid");
-                return false;
-            }
-            return true;
-        }
-
-        function onLoad() {
-            const token = localStorage.getItem('jwt');
-            const exp = localStorage.getItem('exp');
-            const userId = 4;
-
-            isTokenValid();
-            axios.get(`/api/profile/${userId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }).then(res => {
-                console.log(res.data);
-
-                document.querySelector('#firstName').value = res.data[0].firstName;
-                document.querySelector('#lastName').value = res.data[0].lastName;
-                document.querySelector('#email').value = res.data[0].email;
-                document.querySelector('#major').value = res.data[0].major;
-                document.querySelector('#minor').value = res.data[0].minor;
-
-                localStorage.setItem('firstName', res.data[0].firstName);
-                localStorage.setItem('lastName', res.data[0].lastName);
-
-                if(res.data[0].isStudent == 1){
-                    document.querySelector('#isStudent').checked = true;
-                }
-                if(res.data[0].isInstructor == 1){
-                    document.querySelector('#isInstructor').checked = true;
-                }
-                if(res.data[0].isTa == 1){
-                    document.querySelector('#isTa').checked = true;
-                }
-            })         
-        }
-
-        onLoad();
-    </script>
+    <script type="text/javascript" src="../js/utils.js"></script>
+    <script type="text/javascript" src="../js/profile.js"></script>
 </body>
 
 </html>

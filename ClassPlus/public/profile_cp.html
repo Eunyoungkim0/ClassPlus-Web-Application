@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <head>
-        <meta charset="UTF-8">
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="../js/utils.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="../css/style.css">
-        <link rel="stylesheet" type="text/css" href="webtheme.css">
-  </head>
-<body>
-  <div id="nav-placeholder"></div>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="webtheme.css">
+    <title>Profile - Change Password</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
+    integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
+</head>
 
-    <!--Back Button-->
-    <div style="left: 15px; top: 124px; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-      <a href="javascript:void(0);" onclick="window.history.back();" style="text-decoration: none;">
-          <div style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
-              <div style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">Back</div>
-          </div>
-      </a>
-    </div>  
-    
+<body>
+      
+    <div id="nav-placeholder"></div>    
+
     <div style="width: 348px; height: 182px; left: 100px; top: 200px; position: absolute">
-      <div id="profileNav-placeholder"></div>
+        <div id="profileNav-placeholder"></div>
+    </div>
+
+    <div style="height: 112px; padding-left: 160px; padding-right: 160px; padding-top: 32px; padding-bottom: 32px; left: -5px; top: 87px; position: absolute; background: rgba(255, 255, 255, 0); border-bottom: 1px #DEE2E6 dotted; flex-direction: column; justify-content: center; align-items: flex-start; display: inline-flex">
+        <div style="flex-direction: column; justify-content: flex-start; align-items: center; display: flex">
+            <div style="color: #343A40; font-size: 40px; font-family: Inter; font-weight: 700; word-wrap: break-word">Profile</div>
+        </div>
     </div>
 
     <div
@@ -185,5 +185,7 @@
     </div>
 
 
+    <script type="text/javascript" src="../js/utils.js"></script>
+    <script type="text/javascript" src="../js/profile.js"></script>
 </body>
 </html>

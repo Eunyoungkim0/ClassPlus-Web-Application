@@ -16,13 +16,13 @@ function needsLogin(userId) {
 // If login information does not exist, it show log in button.
 function setLoginButton(userId) {
     const linkElement = document.getElementById('linkforloginout');
-    document.querySelector('#loginout').innerHTML = "Log"
+    linkElement.innerHTML = "Log"
     if(!userId || userId === undefined){
-        document.querySelector('#loginout').innerHTML += "in";
+        linkElement.innerHTML += "in";
         linkElement.href = 'login.html';
         localStorage.setItem('didLogin', 'n');
     }else{
-        document.querySelector('#loginout').innerHTML += " out";
+        linkElement.innerHTML += " out";
         localStorage.setItem('didLogin', 'y');
         linkElement.href = '#';
         linkElement.onclick = function() {
