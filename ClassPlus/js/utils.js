@@ -30,6 +30,10 @@ $.get("mycourse_top.html", function(data){
     $("#mycourseTop-placeholder").replaceWith(data);
 });
 
+$.get("mygroup_top.html", function(data){
+    $("#mygroupTop-placeholder").replaceWith(data);
+});
+
 function navigateToCoursePage() {
     window.location.href = 'mycourse.html';
 }
