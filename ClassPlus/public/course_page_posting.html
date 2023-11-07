@@ -22,31 +22,31 @@
         </div>
 
         <div class="column" style="width: 70%">
-            <div class="row">
-                <div class="col-md-4">
+
+            <div id="divForPost">
+                <div class="table-row">
+                    <div class="table-label">Title</div>
                     <div class="posting-select">
-                        <select class ="form-select-lg mb-3" aria-label="Category" name="Category" id="Category">
+                        <select class ="btn btn-secondary btn-lg dropdown-toggle" aria-label="Category" name="Category" id="Category">
                             <option value="Question">Question</option>
                             <option value="Homework">Homework</option>
                             <option value="Note">Note</option>
-                    </select>
+                        </select>
                     </div>
-                </div>
-                <!-- need to be organized (implement design) -->
-                <div class="col-md-8">
-                    <div class="posting-title-box">
+                    <div id="title" class="table-data">
                         <form>
                             <input type="text" class="form-control posting-title" id="title" aria-describedby="emailHelp" placeholder="Title...">
-                        <form>
+                        </form>
                     </div>
+                </div>
+
+                <div class="table-row">
+                    <div id="content" class="table-data"><form>
+                        <textarea class="from-control posting-input" id="content" placeholder="type your content..."></textarea>
+                    </form></div>
                 </div>
             </div>
 
-            <div class = "row">
-                <form>
-                    <textarea class="from-control posting-input" id="content" placeholder="type your content..."></textarea>
-                </form>
-            </div>
 
             <div class="d-flex flex-row-reverse">
                 <div class="study-group-buttons" style="margin-top: 3%">
