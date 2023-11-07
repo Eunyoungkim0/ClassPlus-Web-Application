@@ -251,7 +251,7 @@ app.post('/api/getCoursePosts/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT a.activityId, a.title, a.date, a.views, u.firstName, u.lastName FROM courseactivities a, users u 
+        var sql2 = `SELECT a.activityId, a.subCategory, a.title, a.date, a.views, u.firstName, u.lastName FROM courseactivities a, users u 
         WHERE a.category = 'Post' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
         ORDER BY a.date DESC`;
         if(limit > 0){
@@ -346,6 +346,51 @@ app.post('/api/getPost/:activityId', async(req, res) => {
                 throw error;
             }
             res.json(results);
+        });
+    });
+
+});
+
+app.post('/api/getStudySet/:activityId', async(req, res) => {
+    const activityId = req.params.activityId;
+    const updateSQL = `UPDATE courseactivities SET views = views + 1 WHERE activityId = ${activityId}`;
+    connection.query(updateSQL, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const sql = `SELECT c.*, u.firstName, u.lastName FROM courseactivities c, users u WHERE activityId = ${activityId} AND c.userId = u.userId;`;
+        connection.query(sql, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            const userName = results[0].firstName + " " + results[0].lastName;
+            const userId = results[0].userId;
+            const views = results[0].views;
+            const title = results[0].title;
+            const postDate = results[0].date;
+            const postUpdate = results[0].postUpdate;
+
+            const studysetSQL = `SELECT * FROM studysets WHERE activityId = ${activityId};`;
+            connection.query(studysetSQL, function(error, results, fields){
+                if(error) {
+                    // Handle the error by sending an error response
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }
+                res.json({
+                    title: title,
+                    userId: userId,
+                    userName: userName,
+                    views: views,
+                    postDate: postDate,
+                    postUpdate: postUpdate,
+                    results: results
+                });
+            });
         });
     });
 

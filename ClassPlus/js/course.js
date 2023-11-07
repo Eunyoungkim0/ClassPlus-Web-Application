@@ -17,7 +17,7 @@ function getMyCourse(){
         for(var i=0; i < res.data.length; i++){
             var subject = res.data[i].subject;
             var courseNumber = res.data[i].courseNumber; 
-            var title = res.data[i].title; 
+            var title = res.data[i].title;
 
             var divCourse = document.createElement('div');
             var divCourseNumber = document.createElement('div');
@@ -120,7 +120,7 @@ function loadCoursePosts(data) {
 
                     var divElement2 = document.createElement('div');
                     divElement2.setAttribute('class', 'post-title');
-                    divElement2.innerHTML = res.data[i].title;
+                    divElement2.innerHTML = "[" + res.data[i].subCategory + "] " + res.data[i].title;
                     var divElement3 = document.createElement('div');
                     divElement3.setAttribute('class', 'post-username');
                     divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);
@@ -151,6 +151,7 @@ function loadCourseStudySets(data) {
                 for(var i=0; i < res.data.length; i++){
                     var divElement1 = document.createElement('div');
                     divElement1.setAttribute('class', 'post-frame');
+                    divElement1.setAttribute('onclick', `loadPost('StudySet', ${res.data[i].activityId})`);
 
                     var divElement2 = document.createElement('div');
                     divElement2.setAttribute('class', 'post-title');
@@ -252,6 +253,10 @@ function loadCourseHomepage(currentPagePath){
         getPostData();
     }else if(currentPagePath == 'course_post_edit.html'){
         getPostData();
+    }else if(currentPagePath == 'course_study_set_view.html'){
+        getStudySetData();
+    }else if(currentPagePath == 'course_study_set_edit.html'){
+        getStudySetData();
     }
 }
 
@@ -408,6 +413,9 @@ function loadPost(category, activityId){
     if(category == 'Post'){
         var url = `course_post_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
         window.location.href = url;
+    }else if(category == 'StudySet'){
+        var url = `course_study_set_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
+        window.location.href = url;
     }
 }
 
@@ -441,6 +449,41 @@ function getPostData() {
                 }else if(currentPagePath == 'course_post_edit.html'){
                     document.getElementById('title').value = res.data[0].title;
                     document.getElementById('content').value = res.data[0].content;
+                }
+            }
+        });
+}
+
+function getStudySetData() {
+    // Get the query string from the URL
+    const currentPagePath = window.location.pathname.substring(1);
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    const userId = localStorage.getItem('userId');
+    activityId = urlParams.get('ai');
+    
+    const btnEdit = document.getElementById('buttonForEdit');
+    if(btnEdit != null) btnEdit.hidden = true;
+
+    axios.post(`/api/getStudySet/${activityId}`)
+        .then(res => {
+            console.log(res);
+            if(res && res.data) {
+                if(currentPagePath == 'course_study_set_view.html'){
+                    var writerId = res.data.userId;
+                    if(writerId == userId && btnEdit != null) btnEdit.hidden = false;
+                    document.getElementById('title').innerHTML = res.data.title;
+                    document.getElementById('views').innerHTML = res.data.views;
+                    document.getElementById('userName').innerHTML = res.data.userName;
+                    const date = formatDateString(res.data.postDate);
+                    document.getElementById('date').innerHTML = date;
+                    const postUpdate = formatDateString(res.data.postUpdate);
+                    document.getElementById('postUpdate').innerHTML = postUpdate;
+
+
+                    //document.getElementById('content').innerHTML = res.data.results[2].term + " " + res.data.results[2].definition;
+                }else if(currentPagePath == 'course_study_set_edit.html'){
                 }
             }
         });
