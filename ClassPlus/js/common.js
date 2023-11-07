@@ -53,6 +53,23 @@ function loginCheckBeforeNav(page){
     }
 }
 
+// This function is for formatting date
+function formatDateString(dateString) {
+    const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZone: 'America/New_York'
+    };
+  
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', options).replace(/,/g, '');
+}
+
 // When the page loads, this function executes.
 function onLoad() {
     const userId = localStorage.getItem('userId');

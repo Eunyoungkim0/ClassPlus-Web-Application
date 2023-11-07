@@ -5,13 +5,15 @@ function courseCheck(page){
     const urlParams = new URLSearchParams(queryString);
     subject = urlParams.get('sj');
     courseNumber = urlParams.get('cn');
+    activityId = urlParams.get('ai');
 
     if(subject == "" || courseNumber== ""){
         alert("The wrong approach.");
         location.replace("mycourse.html");
     }
 
-    const url = page + "?sj=" + subject + "&cn=" + courseNumber;
+    var url = page + "?sj=" + subject + "&cn=" + courseNumber;
+    if(activityId != null) url += "&ai=" + activityId;
     window.location.href = url;
 }
 

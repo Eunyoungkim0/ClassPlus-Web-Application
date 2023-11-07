@@ -243,7 +243,7 @@ body {
     gap: 12px;
   }
 
-  .inter-font {
+.inter-font {
     word-wrap: break-word;
     width: 302px;
     height: 49px;
@@ -253,11 +253,11 @@ body {
     line-height: 28px;
   }
 
-  .wrapper {
+.wrapper {
     display: flex;
   }
   
-  #friendList {
+#friendList {
     display: block;
 }
 
@@ -286,180 +286,6 @@ body {
     text-align: right;
     width: 25%;
     font-size: 14px;
-}
-
-/* Responsive layout - makes a one column layout instead of a two-column layout */
-@media (max-width: 800px) {
-    .box {
-      flex-direction: column;
-    }
-}
-
-.box {
-    display: flex;
-    flex-wrap: wrap; /* Allow items to wrap onto the next line */
-    width: 90%;
-    margin: 5%;
-    justify-content: center;
-}
-
-.course-frame {
-    display: flex;
-    justify-content: center;
-    padding: 15px;
-    flex-direction: column;
-    margin: 15px;
-    height: 250px;
-    width: 300px;
-    box-shadow: #004F34 0px 2px 10px;
-    border-radius: 5%;
-    color: gray;
-    cursor: pointer;
-}
-
-.course-frame:hover{
-    background-color: #004F34;
-    color: white;
-}
-
-.course-number {
-    font-size: 2em;
-}
-
-.course-name {
-    font-size: 1.2em;
-}
-
-.search-frame {
-    display: flex;
-    flex-direction: column;
-}
-
-.search-title {
-    border: 1px black solid;
-}
-
-.search-select {
-    border: 1px red solid;
-}
-
-#subjectSelect {
-    height: 30px;
-    padding: 5px;
-    border: 1px gray solid;
-    border-radius: 5%;
-}
-
-#classSelect{
-    height: 30px;
-    padding: 5px;
-}
-
-#courseInformation {
-    cursor: pointer;
-}
-
-#divForPost {
-    min-height: 80%;
-    align-items: center;
-    margin: 1%;
-
-    padding: 1%;
-}
-
-#divForStudySet {
-    min-height: 80%;
-    align-items: center;
-    margin: 1%;
-    padding: 1%;
-}
-
-#divForGroup {
-    min-height: 80%;
-    align-items: center;
-    margin: 1%;
-    padding: 1%;
-}
-
-.course-title {
-    margin-top: 30px;
-    margin-bottom: 20px;
-    font-size: 39px;
-}
-
-/* Post */
-.post-frame {
-    display: flex;
-    flex-direction: row;
-    height: 30px;
-    margin-top: 2%;
-    cursor: pointer;
-}
-
-.post-frame:hover {
-    background-color:#004F34;
-    color: white;
-}
-
-.post-title {
-    width: 65%;
-    padding-left: 2%;
-    border-bottom: 1px gray dotted;
-    justify-content: center;
-}
-
-.post-username {
-    width: 20%;
-    font-size: 13px;
-    border-bottom: 1px gray dotted;
-    justify-content: center;
-}
-
-.post-time {
-    width: 15%;
-    font-size: 13px;
-    border-bottom: 1px gray dotted;
-    justify-content: center;
-}
-
-/* Group */
-.group-frame {
-    display: flex;
-    justify-content: center;
-    padding: 5%;
-    flex-direction: column;
-    margin: 15px;
-    width: 100%;
-    box-shadow: #004F34 0px 0px 0px 1px;
-    border-radius: 5%;
-    cursor: pointer;
-}
-.group-frame:hover {
-    background-color:#004F34;
-    color: white;
-}
-
-.group-row {
-    display: flex;
-    flex-direction: row;
-}
-.group-title {
-    font-size: large;
-    display: block;
-    font-weight: bold;
-}
-
-.group-description {
-    font-size: medium;
-}
-
-.group-course {
-    font-style: italic;
-}
-
-.group-member {
-    display: block;
-    font-size: small;
 }
 
 #v-pills-tab .nav-link{

@@ -24,31 +24,28 @@
       <div class="column" style="width: 70%;">
         <div class="wrapper">
           <div class="coursepage-display"> Posts </div>
-          <button id="buttonForEdit" class="course-button" hidden="true" onclick="courseCheck('course_post_edit.html')">
-            <div class="course-text">Edit</div>
-          </button>
         </div>
         <div class="coursepage-line"></div>
 
         <!-- Implement to get the data from the database and show it -->
         <div id="divForPost">
             <div class="table-row">
+                
+                <select class ="table-data" aria-label="category" name="category" id="category">
+                    <option value="Question">Question</option>
+                    <option value="Homework">Homework</option>
+                    <option value="Note">Note</option>
+                </select>
                 <div class="table-label">Title</div>
-                <div id="category" class="table-data"></div>
-                <div id="title" class="table-data"></div>
-                <div class="table-label">Views</div>
-                <div id="views" class="table-data"></div>
+                <input type="text" id="title" class="table-data"></input>
             </div>
             <div class="table-row">
-                <div class="table-label">Name</div>
-                <div id="userName" class="table-data"></div>
-                <div class="table-label">Date</div>
-                <div id="date" class="table-data"></div>
-                <div class="table-label">Update</div>
-                <div id="postUpdate" class="table-data"></div>
+                <input type="textarea" id="content" class="table-data"></input>
             </div>
             <div class="table-row">
-                <div id="content" class="table-data"></div>
+              <button class="course-button" onclick="editPost()">
+                <div class="course-text">Save</div>
+              </button>
             </div>
         </div>
 

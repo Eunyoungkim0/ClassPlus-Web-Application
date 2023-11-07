@@ -242,6 +242,10 @@ function loadCourseHomepage(currentPagePath){
         loadCourseStudySets(data);
     }else if(currentPagePath == 'course_StudyGroup.html'){
         loadCourseGroups(data);
+    }else if(currentPagePath == 'course_post_view.html'){
+        getPostData();
+    }else if(currentPagePath == 'course_post_edit.html'){
+        getPostData();
     }
 }
 
@@ -360,6 +364,33 @@ function savePost() {
 // END OF FUNCTIONS FOR CREATING POST PAGE
 //---------------------------------------------------------------------------------
 
+function editPost() {
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    activityId = urlParams.get('ai');
+
+    const data = {
+        activityId: activityId,
+        subCategory: document.getElementById('category').value,
+        title: document.getElementById('title').value,
+        content: document.getElementById('content').value,
+    };
+
+    const userAnswer = askYesNoQuestion("Do you want to save your data?");
+    if (userAnswer) {
+        axios.post(`/api/editPost`, data)
+            .then(res => {
+                if(res && res.data && res.data.success) {
+                    const url = "course_Post.html" + "?sj=" + subject + "&cn=" + courseNumber;
+                    window.location.href = url;
+                }
+            });
+    }
+}
+
+
 function loadPost(category, activityId){
     // Get the query string from the URL
     const queryString = window.location.search;
@@ -371,28 +402,40 @@ function loadPost(category, activityId){
     if(category == 'Post'){
         var url = `course_post_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
         window.location.href = url;
-        getPostData();
     }
 }
 
 function getPostData() {
     // Get the query string from the URL
+    const currentPagePath = window.location.pathname.substring(1);
     const queryString = window.location.search;
     // Create a URLSearchParams object from the query string
     const urlParams = new URLSearchParams(queryString);
-    subject = urlParams.get('sj');
-    courseNumber = urlParams.get('cn');
+    const userId = localStorage.getItem('userId');
     activityId = urlParams.get('ai');
+    
+    const btnEdit = document.getElementById('buttonForEdit');
+    if(btnEdit != null) btnEdit.hidden = true;
 
     axios.post(`/api/getPost/${activityId}`)
         .then(res => {
-            console.log(res);
             if(res && res.data) {
-                console.log(res.data);
-                var divForPost = document.getElementById('divForPost');
-                // document.getElementById('category').innerHTML = res.data[0].subCategory;
-                // document.getElementById('title').innerHTML = res.data[0].title;
-                // document.getElementById('content').innerHTML = res.data[0].content;
+                if(currentPagePath == 'course_post_view.html'){
+                    var writerId = res.data[0].userId;
+                    if(writerId == userId && btnEdit != null) btnEdit.hidden = false;
+                    document.getElementById('category').innerHTML = "[" + res.data[0].subCategory + "]";
+                    document.getElementById('title').innerHTML = res.data[0].title;
+                    document.getElementById('content').innerHTML = res.data[0].content;
+                    document.getElementById('views').innerHTML = res.data[0].views;
+                    document.getElementById('userName').innerHTML = res.data[0].firstName + " " + res.data[0].lastName;
+                    const date = formatDateString(res.data[0].date);
+                    document.getElementById('date').innerHTML = date;
+                    const postUpdate = formatDateString(res.data[0].postUpdate);
+                    document.getElementById('postUpdate').innerHTML = postUpdate;
+                }else if(currentPagePath == 'course_post_edit.html'){
+                    document.getElementById('title').value = res.data[0].title;
+                    document.getElementById('content').value = res.data[0].content;
+                }
             }
         });
 }
