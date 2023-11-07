@@ -8,6 +8,12 @@ function getMyCourse(){
     const userId = localStorage.getItem('userId');
     axios.get(`/api/getMyCourse/${userId}`)
     .then(res => {
+        if(res.data.length == 0){
+            var divCourse = document.createElement('div');
+            divCourse.innerHTML = "There are no enrolled classes.";
+            document.querySelector('.box').appendChild(divCourse);
+        }
+
         for(var i=0; i < res.data.length; i++){
             var subject = res.data[i].subject;
             var courseNumber = res.data[i].courseNumber; 
