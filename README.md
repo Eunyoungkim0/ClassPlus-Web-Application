@@ -13,10 +13,10 @@
   - [ ] Student should be allowed to search for group
   - [ ] Users shall be able to create groups that focus on what they wish to study
   - [ ] Allow students to join study groups 
-  - [ ] Implement study sets function
+  - [x] Implement study sets function
   - [ ] Chat feature implemented (X)
   - [ ] Implement location/time booking system
-  - [ ] Implement a notes/hw sharing feature
+  - [x] Implement a notes/hw sharing feature
 ---
 
 ### :pushpin: Git Command
