@@ -430,6 +430,75 @@ app.post('/api/editPost', async(req, res) => {
     });
 });
 
+app.post('/api/createStudySet', async(req, res) => {
+    const { title, subject, courseNumber, userId, studySet } = req.body;
+
+    var getCourseId = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+
+    connection.query(getCourseId, function(error, results, fields){
+        if(error) throw error;
+
+        const courseId = results[0].courseId;
+        const activitySQL = `SELECT COALESCE(MAX(activityId), 0) AS max FROM courseActivities;`;
+        connection.query(activitySQL, function(error, results, fields){
+            if(error) throw error;
+            const activityId = results[0].max + 1;
+
+            var insertSQL = `INSERT INTO courseActivities (activityId, courseId, year, semester, category, title, userId, date, postUpdate) `;
+            insertSQL += ` VALUES(${activityId}, ${courseId}, '${currentYear}', 'fall', 'Study set', '${title}', ${userId}, DATE_SUB(NOW(), INTERVAL 5 HOUR), DATE_SUB(NOW(), INTERVAL 5 HOUR));`;
+            connection.query(insertSQL, function(error, results, fields){
+                if(error) throw error;
+    
+                var count = 1;
+                for (const data of studySet) {
+                    const { term, definition } = data;
+                  
+                    var studysetSQL = `INSERT INTO studySets (activityId, studySetId, term, definition)`;
+                    studysetSQL +=  `VALUES(${activityId}, ${count}, '${term}', '${definition}')`;         
+                    console.log(studysetSQL);
+                    connection.query(studysetSQL, function(error, results, fields){
+                        if(error) throw error;
+                    });
+                    count += 1;
+                    if (count > studySet.length) {
+                        res.json({
+                            success: true,
+                        });
+                    }
+                  }
+            });
+        });
+    });
+});
+
+app.post('/api/editStudySet', async(req, res) => {
+    const { activityId, title, studySet } = req.body;
+
+    const updateActivity = `UPDATE courseActivities SET title = '${title}', postUpdate = DATE_SUB(NOW(), INTERVAL 5 HOUR) WHERE activityId = ${activityId}`;
+    connection.query(updateActivity, function(error, results, fields){
+        if(error) throw error;
+        var count = 1;
+        for (const data of studySet) {
+            const { term, definition } = data;
+          
+            var sql = `UPDATE studySets SET term = '${term}', definition = '${definition}' WHERE activityId = ${activityId} AND studySetId = ${count}`;          
+            console.log(sql);
+            connection.query(sql, function(error, results, fields){
+                if (error) {
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }
+            });
+            count += 1;
+            if (count > studySet.length) {
+                res.json({
+                    success: true,
+                });
+            }
+          }
+    });
+});
+
 app.post('/api/saveClass/', async(req, res) => {
     const { userId, subject, courseNumber } = req.body;
 

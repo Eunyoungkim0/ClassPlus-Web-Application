@@ -17,6 +17,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #004F34;
+    z-index: 9999; /* To make navbar always on the top of everything */
 }
 
 .navli{

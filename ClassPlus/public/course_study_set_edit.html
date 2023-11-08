@@ -24,14 +24,26 @@
       <div class="column" style="width: 70%;">
         <div class="wrapper">
           <div class="coursepage-display"> Study Sets </div>
-          <button id="buttonForStudySets" class="course-button" hidden="true" onclick="courseCheck('course_study_set_create.html')">
-            <div class="course-text">Create Sets</div>
-          </button>
         </div>
         <div class="coursepage-line"></div>
 
         <!-- Implement to get the data from the database and show it -->
-        <div id="divForStudySet"></div>
+        <div id="divForStudySet">
+            <div class="table-row">
+                <div class="table-label">Title</div>
+                <input type="text" id="title" class="table-data"></input>
+            </div>
+            <div class="table-row">
+                <div id="content" class="table-data"></div>
+            </div>
+            <div class="table-row">
+              <div class="empty-div"></div>
+              <button class="course-button" onclick="editStudySet()">
+                <div class="course-text">Save</div>
+              </button>
+            </div>
+        </div>
+
     </div>
     <script type="text/javascript" src="../js/utils.js"></script>
   </body>

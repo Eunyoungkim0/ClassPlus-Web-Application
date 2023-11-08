@@ -481,12 +481,171 @@ function getStudySetData() {
                     const postUpdate = formatDateString(res.data.postUpdate);
                     document.getElementById('postUpdate').innerHTML = postUpdate;
 
+                    for(var i=0; i < res.data.results.length; i++){
+                        const divFrame = document.createElement('div');
+                        divFrame.setAttribute('class', 'studyset-frame');
+                        const divTerm = document.createElement('div');
+                        divTerm.setAttribute('class', 'term');
+                        const divDefinition = document.createElement('div');
+                        divDefinition.setAttribute('class', 'definition');
 
-                    //document.getElementById('content').innerHTML = res.data.results[2].term + " " + res.data.results[2].definition;
+                        divTerm.innerHTML = res.data.results[i].term;
+                        divDefinition.innerHTML = res.data.results[i].definition;
+
+                        const divContent = document.getElementById('content');
+                        divContent.appendChild(divFrame);
+                        divFrame.appendChild(divTerm);
+                        divFrame.appendChild(divDefinition);
+                    }
                 }else if(currentPagePath == 'course_study_set_edit.html'){
+                    document.getElementById('title').value = res.data.title;
+                    var count = 1;
+                    for(var i=0; i < res.data.results.length; i++){
+                        const divFrame = document.createElement('div');
+                        divFrame.setAttribute('class', 'studyset-frame');
+                        const divTerm = document.createElement('input');
+                        divTerm.setAttribute('type', 'text');
+                        divTerm.setAttribute('class', 'term');
+                        const divDefinition = document.createElement('input');
+                        divDefinition.setAttribute('type', 'textarea');
+                        divDefinition.setAttribute('class', 'definition');
+
+                        divTerm.value = res.data.results[i].term;
+                        divDefinition.value = res.data.results[i].definition;
+
+                        const divContent = document.getElementById('content');
+                        divContent.appendChild(divFrame);
+                        divFrame.appendChild(divTerm);
+                        divFrame.appendChild(divDefinition);
+                        count += 1;
+                    }
                 }
             }
         });
+}
+
+function addStudySet() {
+    const divFrame = document.createElement('div');
+    divFrame.setAttribute('class', 'studyset-frame');
+    const divTerm = document.createElement('input');
+    divTerm.setAttribute('type', 'text');
+    divTerm.setAttribute('class', 'term');
+    divTerm.setAttribute('placeholder', 'term');
+    const divDefinition = document.createElement('input');
+    divDefinition.setAttribute('type', 'textarea');
+    divDefinition.setAttribute('class', 'definition');
+    divDefinition.setAttribute('placeholder', 'definition');
+
+    const divContent = document.getElementById('content');
+    divContent.appendChild(divFrame);
+    divFrame.appendChild(divTerm);
+    divFrame.appendChild(divDefinition);
+}
+
+function dataCheck() {
+    if(document.getElementById('title').value == ""){
+        alert("Please enter title");
+        document.getElementById('title').focus();
+        return false;
+    }
+    const termInputs = document.getElementsByClassName('term');
+    const definitionInputs = document.getElementsByClassName('definition');
+    for (let i = 0; i < termInputs.length; i++) {
+      const term = termInputs[i].value;
+      const definition = definitionInputs[i].value;
+      if(term == ""){
+        alert("Please enter term.");
+        termInputs[i].focus();
+        return false;
+      }
+      if(definition == ""){
+        alert("Please enter definition.");
+        definitionInputs[i].focus();
+        return false;
+      }
+    }
+
+    return true;
+}
+
+function saveStudySet() {
+    if(dataCheck()){
+        // Get the query string from the URL
+        const queryString = window.location.search;
+        // Create a URLSearchParams object from the query string
+        const urlParams = new URLSearchParams(queryString);
+        subject = urlParams.get('sj');
+        courseNumber = urlParams.get('cn');
+        const userId = localStorage.getItem('userId');
+    
+        const termInputs = document.getElementsByClassName('term');
+        const definitionInputs = document.getElementsByClassName('definition');
+        const studySetData = [];
+        for (let i = 0; i < termInputs.length; i++) {
+          const term = termInputs[i].value;
+          const definition = definitionInputs[i].value;
+        
+          const newDataItem = { term, definition };
+          studySetData.push(newDataItem);
+        }
+    
+        const data = {
+            title: document.getElementById('title').value,
+            subject: subject,
+            courseNumber: courseNumber,
+            userId: userId,
+            studySet : studySetData,
+        };
+        
+        const userAnswer = askYesNoQuestion("Do you want to save your data?");
+        if (userAnswer) {
+            axios.post(`/api/createStudySet`, data)
+                .then(res => {
+                    if(res && res.data && res.data.success) {
+                        const url = "course_StudySet.html" + "?sj=" + subject + "&cn=" + courseNumber;
+                        window.location.href = url;
+                    }
+                });
+        }
+    }
+}
+
+function editStudySet() {
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    activityId = urlParams.get('ai');
+
+    const termInputs = document.getElementsByClassName('term');
+    const definitionInputs = document.getElementsByClassName('definition');
+    const studySetData = [];
+    for (let i = 0; i < termInputs.length; i++) {
+      const term = termInputs[i].value;
+      const definition = definitionInputs[i].value;
+    
+      const newDataItem = { term, definition };
+      studySetData.push(newDataItem);
+    }
+
+    const data = {
+        activityId: activityId,
+        title: document.getElementById('title').value,
+        studySet : studySetData,
+    };
+
+    console.log(data);
+
+    const userAnswer = askYesNoQuestion("Do you want to save your data?");
+    if (userAnswer) {
+        axios.post(`/api/editStudySet`, data)
+            .then(res => {
+                if(res && res.data && res.data.success) {
+                    const url = "course_StudySet.html" + "?sj=" + subject + "&cn=" + courseNumber;
+                    window.location.href = url;
+                }
+            });
+    }
 }
 
 

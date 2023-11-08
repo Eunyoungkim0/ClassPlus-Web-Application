@@ -200,8 +200,34 @@
     border-radius: 5%;
 }
 
+.empty-div {
+    flex-grow: 1;
+}
+
 #content {
     min-height: 300px;
     padding: 20px;
     width: 100%;
+}
+
+.studyset-frame{
+    width: 95%;
+    margin: 15px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    border: 1px gray dashed;
+    border-radius: 5%;
+}
+
+.term {
+    width: 20%;
+    padding: 10px;
+    border-right: 1px gray solid;
+}
+
+.definition {
+    width: 80%;
+    padding: 10px;
+    border-left: 1px gray solid;
 }
