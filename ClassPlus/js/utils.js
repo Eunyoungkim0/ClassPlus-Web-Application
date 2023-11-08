@@ -22,17 +22,22 @@ $.get("profile_nav.html", function(data){
     $("#profileNav-placeholder").replaceWith(data);
 });
 
+$.get("study_group_nav.html", function(data){
+    $("#studyGroupNav-placeholder").replaceWith(data);
+});
+
+$.get("mycourse_top.html", function(data){
+    $("#mycourseTop-placeholder").replaceWith(data);
+});
+
+$.get("mygroup_top.html", function(data){
+    $("#mygroupTop-placeholder").replaceWith(data);
+});
+
 function navigateToCoursePage() {
-    window.location.href = 'MyCourse.html';
+    window.location.href = 'mycourse.html';
 }
 
-function studySetsFunction() {
-    window.location.href = 'course_page_study_sets.html';
-}
-function navigateToPosting() {
-    window.location.href = 'course_page_posting.html';
-}
-
-function navigateToEnroll() {
-  window.location.href = 'course_page_searchpage.html';
+function navigateToSearch() {
+    window.location.href = 'course_page_searchpage.html';
 }

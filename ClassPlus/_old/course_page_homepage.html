@@ -9,6 +9,7 @@
         a {
             color: inherit;
             text-decoration: none;
+            cursor: pointer;
         }
 
         a:hover {
@@ -81,27 +82,27 @@
                       <a href="index.html"><img style="width: 70px; height: 71px" src="C_logo.png" /></a>
                   </div>
                   <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                      <a href="course_page_searchpage.html">
+                      <a onclick="loginCheckBeforeNav('course_page_searchpage.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               My Courses
                           </div>
                       </a>
-                      <a href="study_group_current.html">
+                      <a onclick="loginCheckBeforeNav('study_group_current.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               My Groups
                           </div>
                       </a>
-                      <a href="study_group_find.html">
+                      <a onclick="loginCheckBeforeNav('study_group_find.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               Find group
                           </div>
                       </a>
-                      <a href="study_group_creating.html">
+                      <a onclick="loginCheckBeforeNav('study_group_creating.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               Create Group
                           </div>
                       </a>
-                      <a href="profile.html">
+                      <a onclick="loginCheckBeforeNav('profile.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               Profile
                           </div>
@@ -1135,97 +1136,9 @@
         // Redirect to the posting page
         window.location.href = 'course_page_posting.html';
       }
-
-      function amIEnrolled() {
-        // Get the query string from the URL
-        const queryString = window.location.search;
-        // Create a URLSearchParams object from the query string
-        const urlParams = new URLSearchParams(queryString);
-        const data = {
-          userId : localStorage.getItem('userId'),
-          subject : urlParams.get('subject'),
-          courseNumber : urlParams.get('courseNumber')
-        };
-
-        axios.post(`/api/getPermission`, data)
-            .then(res => {
-                if(res && res.data && res.data.enrolled) {
-                    document.getElementById('buttonForEnroll').hidden = true;
-                    document.getElementById('buttonForStudySets').hidden = false;
-                    document.getElementById('buttonForPosting').hidden = false;
-                }else if(res && res.data && !res.data.enrolled){
-                    document.getElementById('buttonForEnroll').hidden = false;
-                    document.getElementById('buttonForStudySets').hidden = true;
-                    document.getElementById('buttonForPosting').hidden = true;
-                }
-          });
-      }
-
-      function navigateToEnroll() {
-          // Get the query string from the URL
-          const queryString = window.location.search;
-          // Create a URLSearchParams object from the query string
-          const urlParams = new URLSearchParams(queryString);
-          const data = {
-            userId : localStorage.getItem('userId'),
-            subject : urlParams.get('subject'),
-            courseNumber : urlParams.get('courseNumber')
-          };
-
-          axios.post(`/api/saveClass`, data)
-            .then(res => {
-                if(res && res.data && res.data.success) {
-                    alert("Successfully enrolled!");
-                    location.reload();
-                }else if(res && res.data && res.data.alreadyEnrolled) {
-                    alert("You're already enrolled in this class.");
-                }
-          });   
-      }
-
-      function classInfo() {
-          // Get the query string from the URL
-          const queryString = window.location.search;
-          // Create a URLSearchParams object from the query string
-          const urlParams = new URLSearchParams(queryString);
-          const subject = urlParams.get('subject');
-          const courseNumber = urlParams.get('courseNumber');
-          const data = {
-            subject : subject,
-            courseNumber: courseNumber,
-          };
-          
-          axios.post(`/api/getClassInfo`, data)
-            .then(res => {
-                if(res && res.data) {
-                    console.log(res);
-                    document.getElementById('courseInformation').innerHTML = subject + " " + courseNumber + " " + res.data[0].title
-                }
-          });            
-      }
-        
-      function onLoad() {
-          const userId = localStorage.getItem('userId');
-          const linkElement = document.getElementById('linkforloginout');
-          
-          if(!userId || userId === undefined){
-              document.querySelector('#loginout').innerHTML = "Login";
-              linkElement.href = 'login.html';
-                  location.replace('login.html');
-          }else{
-              document.querySelector('#loginout').innerHTML = "Log out";
-              linkElement.href = '#';
-              linkElement.onclick = function() {
-                  localStorage.removeItem('userId');
-                  location.replace('index.html');
-              };
-          }
-
-          classInfo();
-          amIEnrolled();
-        }
-
-        onLoad();
     </script>
+
+    <script type="text/javascript" src="../js/common.js"></script>
+    <script type="text/javascript" src="../js/course.js"></script>
 </body>
 </html>

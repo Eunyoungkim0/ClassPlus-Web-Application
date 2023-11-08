@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="webtheme.css">
+    <title>My course</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
+    integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="nav-placeholder"></div>
+    <div id="courseTop-placeholder"></div>
+
+    <div class="row">
+      <div class="column" style="width: 300px; margin-top:5%">
+        <div id="courseNav-placeholder"></div>
+      </div>
+
+      <div class="column" style="width: 70%;">
+        <div class="wrapper">
+          <div class="coursepage-display"> Study Sets </div>
+        </div>
+        <div class="coursepage-line"></div>
+
+        <!-- Implement to get the data from the database and show it -->
+        <div id="divForStudySet">
+            <div class="table-row">
+                <div class="table-label">Title</div>
+                <input type="text" id="title" class="table-data"></input>
+            </div>
+            <div class="table-row">
+                <div id="content" class="table-data">
+                    <div class="studyset-frame">
+                        <input type="text" class="term" placeholder="term">
+                        <input type="textarea" class="definition" placeholder="definition">
+                    </div>
+                </div>
+            </div>
+            <div class="table-row">
+              <div class="empty-div"></div>
+              <button class="course-button" onclick="addStudySet()">
+                <div class="course-text">Add Term</div>
+              </button>
+              <button class="course-button" onclick="saveStudySet()">
+                <div class="course-text">Save</div>
+              </button>
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript" src="../js/utils.js"></script>
+  </body>
+</html>

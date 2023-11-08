@@ -16,13 +16,13 @@ function needsLogin(userId) {
 // If login information does not exist, it show log in button.
 function setLoginButton(userId) {
     const linkElement = document.getElementById('linkforloginout');
-    document.querySelector('#loginout').innerHTML = "Log"
+    linkElement.innerHTML = "Log"
     if(!userId || userId === undefined){
-        document.querySelector('#loginout').innerHTML += "in";
+        linkElement.innerHTML += "in";
         linkElement.href = 'login.html';
         localStorage.setItem('didLogin', 'n');
     }else{
-        document.querySelector('#loginout').innerHTML += " out";
+        linkElement.innerHTML += " out";
         localStorage.setItem('didLogin', 'y');
         linkElement.href = '#';
         linkElement.onclick = function() {
@@ -51,6 +51,23 @@ function loginCheckBeforeNav(page){
         localStorage.setItem('destination', page);
         location.replace('login.html');
     }
+}
+
+// This function is for formatting date
+function formatDateString(dateString) {
+    const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZone: 'America/New_York'
+    };
+  
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', options).replace(/,/g, '');
 }
 
 // When the page loads, this function executes.

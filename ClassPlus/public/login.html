@@ -1,240 +1,214 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="webtheme.css">
     <style>
-        /* Adding some styles to remove the default blue color and underline of the anchor tag */
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline; /* Optional: underline on hover for better user experience */
+        /* Checkmark styling when checkbox is checked */
+        #rememberMe:checked::before {
+            content: '✔';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #7B76F1;
         }
     </style>
+    <title>ClassPlus - Log in</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
+    integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
 </head>
-<body>
-    <div style="width: 100%; height: 100%; position: relative; background: white">
-        <div style="width: 1440px; height: 87px; left: 0px; top: 0px; position: absolute; background: #004F34; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-            <div style="width: 1430px; height: 87px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; background: #004F34; justify-content: space-between; align-items: center; display: flex">
-                <div style="width: 70px; height: 71px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                    <img style="width: 70px; height: 71px" src="C_logo.png" />
-                </div>
-                <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                    <a href="course_page_homepage.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            My Courses
-                        </div>
-                    </a>
-                    <a href="study_group_current.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            My Groups
-                        </div>
-                    </a>
-                    <a href="searching_study_session.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            Find group
-                        </div>
-                    </a>
-                    <a href="study_group_creating.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            Create Group
-                        </div>
-                    </a>
-                    <a href="profile.html">
-                        <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
-                            Profile
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div style="width: 100%; height: 100%; position: relative; background: white">
-          <div style="width: 380px; left: 899.12px; top: 114.70px; position: absolute; text-align: center; color: #242424; font-size: 31.25px; font-family: Zen Kaku Gothic Antique; font-weight: 700; line-height: 37.50px; word-wrap: break-word">Join & Connect the Fastest Growing Study Community</div>
 
-          <!--email/username-->
-          <div style="position: absolute; top: 347px; left: 899px; flex-direction: column; display: inline-flex; gap: 24px;">
-            <!-- Email/Username Input -->
-            <div style="position: relative; height: 65.03px;">
-                <input 
-                    type="text" 
-                    placeholder="email@uncc.edu" 
-                    style="width: 380px; height: 28.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
-                >
-                <label 
-                    style="position: absolute; top: 0px; left: 0px; color: #757575; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;"
-                >
-                    Email
-                </label>
-            </div>
-            
-            <!-- Password Input -->
-            <div style="position: relative; height: 63.09px;">
-                <input 
-                    type="password" 
-                    placeholder="**********" 
-                    style="width: 380px; height: 28.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.59px;"
-                >
-                <label 
-                    style="position: absolute; top: 0px; left: 0px; color: #757575; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;"
-                >
-                    Password
-                </label>
-                <!-- Placeholder for password visibility icon -->
-                <div style="width: 16px; height: 16px; left: 364px; top: 34.09px; position: absolute;"></div>
-            </div>
+<body>
+      
+    <div id="nav-placeholder"></div>    
+
+    <div style="width: 100%; height: 100%; position: relative; background: white">
+        <div style="width: 380px; left: 899.12px; top: 114.70px; position: absolute; text-align: center; color: #242424; font-size: 31.25px; font-family: Zen Kaku Gothic Antique; font-weight: 700; line-height: 37.50px; word-wrap: break-word">Join & Connect the Fastest Growing Study Community</div>
+
+        <!--email/username-->
+        <div style="position: absolute; top: 347px; left: 899px; flex-direction: column; display: inline-flex; gap: 24px;">
+        <!-- Email/Username Input -->
+        <div style="position: relative; height: 65.03px;">
+            <input 
+                type="text" 
+                placeholder="email@uncc.edu" 
+                id="userEmail"
+                maxlength=50 
+                style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.53px;"
+            >
+            <label 
+                style="position: absolute; top: 0px; left: 0px; color: #757575; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;"
+            >
+                Email
+            </label>
+        </div>
+        
+        <!-- Password Input -->
+        <div style="position: relative; height: 63.09px;">
+            <input 
+                type="password" 
+                placeholder="**********" 
+                id="userPassword"
+                maxlength=30 
+                style="width: 380px; height: 58.16px; border: none; border-bottom: 1px #BDBDBD solid; font-family: Zen Kaku Gothic Antique; font-size: 16px; color: #212121; background-color: transparent; padding-top: 28.59px;"
+            >
+            <label 
+                style="position: absolute; top: 0px; left: 0px; color: #757575; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;"
+            >
+                Password
+            </label>
+            <!-- Placeholder for password visibility icon -->
+            <div style="width: 16px; height: 16px; left: 364px; top: 34.09px; position: absolute;"></div>
+        </div>
         
             <!-- Remember Me and Log In -->
-<style>
-    /* Checkmark styling when checkbox is checked */
-    #rememberMe:checked::before {
-        content: '✔';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 18px;
-        color: #7B76F1;
-    }
-</style>
 
-<div style="display: inline-flex; gap: 62px; align-items: center;">
-    <!-- Remember Me -->
-    <div style="display: flex; gap: 5.23px; align-items: center;">
-        <input 
-            type="checkbox" 
-            id="rememberMe" 
-            style="appearance: none; width: 21.52px; height: 22px; background: rgba(123, 118, 241, 0.10); border: 1px rgba(123, 118, 241, 0.25) solid; border-radius: 2px; position: relative; cursor: pointer;"
-        >
-        <label for="rememberMe" style="color: #757575; font-size: 10.24px; font-family: Zen Kaku Gothic Antique; font-weight: 400;">Remember me</label>
+        <div style="display: inline-flex; gap: 62px; align-items: center;">
+            <!-- Remember Me -->
+            <div style="display: flex; gap: 5.23px; align-items: center;">
+                <input 
+                    type="checkbox" 
+                    id="rememberMe" 
+                    style="appearance: none; width: 21.52px; height: 22px; background: rgba(123, 118, 241, 0.10); border: 1px rgba(123, 118, 241, 0.25) solid; border-radius: 2px; position: relative; cursor: pointer;"
+                >
+                <label for="rememberMe" style="color: #757575; font-size: 10.24px; font-family: Zen Kaku Gothic Antique; font-weight: 400;">Remember me</label>
+            </div>
+            
+            <!-- Log In Button -->
+            <button 
+                style="width: 153px; height: 56px; background: #004F34; box-shadow: 0px 34px 40px -8px rgba(123, 118, 241, 0.24); border-radius: 28px; border: none; color: white; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 700; cursor: pointer;"
+                onclick="login()"
+            >
+                LOG IN
+            </button>
+        </div>
     </div>
-    
-    <!-- Log In Button -->
-    <button 
-        style="width: 153px; height: 56px; background: #004F34; box-shadow: 0px 34px 40px -8px rgba(123, 118, 241, 0.24); border-radius: 28px; border: none; color: white; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 700; cursor: pointer;"
-        onclick="window.location.href='course_page_homepage.html';"
-    >
-        LOG IN
-    </button>
-</div>
-</div>
 
         
-        <div style="position: absolute; top: 630.85px; left: 1016.50px; text-align: center;">
-            <span style="color: #424242; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;">No Account yet? </span>
-            <a href="signup.html" style="text-decoration: none;">
-              <span style="color: #212121; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 700; text-decoration: underline;">
-                  SIGN UP
-              </span>
-          </a>
-                  </div>
+    <div style="position: absolute; top: 630.85px; left: 1016.50px; text-align: center;">
+        <span style="color: #424242; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 400;">No Account yet? </span>
+        <a href="signup.html" style="text-decoration: none;">
+            <span style="color: #212121; font-size: 12.80px; font-family: Zen Kaku Gothic Antique; font-weight: 700; text-decoration: underline;">
+                SIGN UP
+            </span>
+        </a>
+    </div>
         
-          <!--the left portion of screen-->
-          <div style="width: 728px; height: 813px; left: 0px; top: 87px; position: absolute; background: #004F34">
-              <div style="width: 378.96px; height: 55.10px; left: 174.52px; top: 644.17px; position: absolute; text-align: center; color: #F5F5F5; font-size: 16px; font-family: Zen Kaku Gothic Antique; font-weight: 400; line-height: 28.16px; word-wrap: break-word">Lets GOOOOOOO.</div>
-              <div style="width: 378.96px; height: 67.75px; left: 174.52px; top: 561.96px; position: absolute; text-align: center; color: white; font-size: 31.25px; font-family: Zen Kaku Gothic Antique; font-weight: 700; line-height: 37.50px; word-wrap: break-word">JOIN THE STUDY GROUP COMMUNITY!</div>
-              <div style="width: 421.95px; height: 322.17px; left: 152.58px; top: 195.12px; position: absolute">
-                  <div style="width: 421.95px; height: 322.17px; left: 0px; top: 0px; position: absolute; background: black"></div>
-                  <div style="width: 421.95px; height: 322.17px; left: 0px; top: 0px; position: absolute">
-                      <div style="width: 355.67px; height: 322.17px; left: 37.51px; top: 0px; position: absolute; background: #F1F0FF; border-radius: 9999px"></div>
-                      <div style="width: 332.67px; height: 260.38px; left: 16.58px; top: 15.63px; position: absolute">
-                          <div style="width: 109.05px; height: 152.96px; left: 188.42px; top: 75.23px; position: absolute; background: white"></div>
-                          <div style="width: 111.81px; height: 1.81px; left: 166.56px; top: 167.68px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 111.81px; height: 1.81px; left: 166.56px; top: 177.69px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 111.81px; height: 1.81px; left: 166.56px; top: 187.69px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 111.81px; height: 1.81px; left: 166.56px; top: 197.69px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 57.06px; height: 51.68px; left: 214.42px; top: 93.98px; position: absolute; background: #F2F2F2; border-radius: 9999px"></div>
-                          <div style="width: 45.09px; height: 37.93px; left: 278.37px; top: 129.62px; position: absolute; opacity: 0.70; background: #98B9F2"></div>
-                          <div style="width: 22.68px; height: 9.94px; left: 284.88px; top: 141.21px; position: absolute; color: white; font-size: 11px; font-family: Helvetica; font-weight: 400; line-height: 11px; word-wrap: break-word">< / ></div>
-                          <div style="width: 243.40px; height: 145.04px; left: 0px; top: 0px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 243.40px; height: 1.81px; left: 0px; top: 6.81px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 73.16px; height: 66.27px; left: 17.71px; top: 20.63px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 111.81px; height: 1.81px; left: 104.91px; top: 25.56px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 111.81px; height: 1.81px; left: 104.91px; top: 35.57px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 111.81px; height: 1.81px; left: 104.91px; top: 45.57px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 111.81px; height: 1.81px; left: 104.91px; top: 55.57px; position: absolute; border: 1px black solid"></div>
-                          <div style="width: 39.85px; height: 31.26px; left: 34.37px; top: 38.14px; position: absolute; opacity: 0.44; background: #918EF4"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 3.22px; top: 2.08px; position: absolute; background: #AB8DE5; border-radius: 9999px"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 10.35px; top: 2.08px; position: absolute; background: #73E5E2; border-radius: 9999px"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 17.48px; top: 2.08px; position: absolute; background: #50B89D; border-radius: 9999px"></div>
-                          <div style="width: 7.04px; height: 5.52px; left: 107.07px; top: 112.74px; position: absolute; background: #AB8DE5"></div>
-                          <div style="width: 53.37px; height: 21.26px; left: 100.31px; top: 92.11px; position: absolute; background: #AB8DE5"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 117.79px; top: 100.86px; position: absolute; background: white; border-radius: 9999px"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 124.92px; top: 100.86px; position: absolute; background: white; border-radius: 9999px"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 132.05px; top: 100.86px; position: absolute; background: white; border-radius: 9999px"></div>
-                          <div style="width: 7.04px; height: 5.52px; left: 318.86px; top: 50.22px; position: absolute; background: #98B9F2"></div>
-                          <div style="width: 53.37px; height: 21.26px; left: 279.29px; top: 29.59px; position: absolute; background: #98B9F2"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 311.04px; top: 38.34px; position: absolute; background: white; border-radius: 9999px"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 303.91px; top: 38.34px; position: absolute; background: white; border-radius: 9999px"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 296.78px; top: 38.34px; position: absolute; background: white; border-radius: 9999px"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 320.01px; top: 0.21px; position: absolute; background: #918EF4; border-radius: 9999px"></div>
-                          <div style="width: 4.14px; height: 3.75px; left: 324.38px; top: 7.92px; position: absolute; background: #918EF4; border-radius: 9999px"></div>
-                          <div style="width: 6.44px; height: 5.84px; left: 275.61px; top: 82.94px; position: absolute; background: #918EF4; border-radius: 9999px"></div>
-                          <div style="width: 6.44px; height: 5.84px; left: 294.47px; top: 92.94px; position: absolute; background: #918EF4; border-radius: 9999px"></div>
-                          <div style="width: 6.44px; height: 5.84px; left: 4.60px; top: 96.28px; position: absolute; background: #F98B67; border-radius: 9999px"></div>
-                          <div style="width: 25.80px; height: 11.18px; left: 260.48px; top: 221.28px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 31.75px; height: 55.76px; left: 260.32px; top: 176.72px; position: absolute; background: #6F9CEB"></div>
-                          <div style="width: 41.42px; height: 53.25px; left: 287.09px; top: 179.21px; position: absolute; background: #918EF4"></div>
-                          <div style="width: 25.89px; height: 49.82px; left: 293.08px; top: 181.87px; position: absolute; border: 0.40px white solid"></div>
-                          <div style="width: 4.20px; height: 10.61px; left: 290.03px; top: 212.77px; position: absolute; border: 0.40px white solid"></div>
-                          <div style="width: 25.03px; height: 50.63px; left: 263.17px; top: 180.26px; position: absolute; border: 0.40px white solid"></div>
-                          <div style="width: 38.58px; height: 27.92px; left: 270.29px; top: 232.46px; position: absolute; background: #B37361"></div>
-                          <div style="width: 15.18px; height: 3.15px; left: 263.72px; top: 223.09px; position: absolute; border: 0.40px white solid"></div>
-                      </div>
-                      <div style="width: 72.55px; height: 235.49px; left: 349.40px; top: 42.72px; position: absolute">
-                          <div style="width: 56.06px; height: 129.01px; left: 0px; top: 91.07px; position: absolute; background: #7472C1"></div>
-                          <div style="width: 45.09px; height: 130.01px; left: 16.16px; top: 97.04px; position: absolute; background: #AB8DE5"></div>
-                          <div style="width: 70.30px; height: 71.35px; left: 2.25px; top: 31.07px; position: absolute; background: #6F9CEB"></div>
-                          <div style="width: 12.98px; height: 10.09px; left: 53.28px; top: 84.65px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 11.83px; height: 14.77px; left: 31.47px; top: 21.40px; position: absolute; background: #F8CDBA"></div>
-                          <div style="width: 6.79px; height: 6.91px; left: 36.52px; top: 21.40px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 23.01px; height: 20.85px; left: 23.39px; top: 4.81px; position: absolute; background: #F8CDBA; border-radius: 9999px"></div>
-                          <div style="width: 26.77px; height: 14.47px; left: 21.42px; top: 0px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 4.03px; height: 1.90px; left: 22.13px; top: 16.43px; position: absolute; background: #FA9E9F; border-radius: 9999px"></div>
-                          <div style="width: 4.03px; height: 1.90px; left: 34.81px; top: 16.43px; position: absolute; background: #FA9E9F; border-radius: 9999px"></div>
-                          <div style="width: 1.19px; height: 3.36px; left: 27.88px; top: 15.41px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 2.03px; height: 1.30px; left: 32.86px; top: 19.86px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 5.32px; height: 4.82px; left: 42.88px; top: 14.03px; position: absolute; background: #F8CDBA; border-radius: 9999px"></div>
-                          <div style="width: 46.03px; height: 33.23px; left: 7.52px; top: 51.58px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 2.30px; height: 19.69px; left: 10.20px; top: 47.99px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 43.87px; height: 6.17px; left: 21.52px; top: 79.50px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 9.69px; height: 7.97px; left: 10.37px; top: 65.88px; position: absolute; background: #F8CDBA"></div>
-                          <div style="width: 10.52px; height: 15.55px; left: 51.43px; top: 214.05px; position: absolute; background: rgba(235, 235, 235, 0.25)"></div>
-                          <div style="width: 17.45px; height: 8.44px; left: 9.15px; top: 227.05px; position: absolute; background: rgba(235, 235, 235, 0.25)"></div>
-                      </div>
-                      <div style="width: 189.93px; height: 174.63px; left: 0px; top: 89.79px; position: absolute">
-                          <div style="width: 88.98px; height: 40.88px; left: 11.97px; top: 133.75px; position: absolute; background: #B37361"></div>
-                          <div style="width: 22.38px; height: 52.21px; left: 144.78px; top: 114.59px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 164.59px; height: 66.51px; left: 16.73px; top: 76.35px; position: absolute; background: #7472C1"></div>
-                          <div style="width: 31.86px; height: 25.78px; left: 16.73px; top: 98.94px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 90.88px; height: 72px; left: 1.14px; top: 34.74px; position: absolute; background: white"></div>
-                          <div style="width: 11.97px; height: 13.82px; left: 38.90px; top: 25.91px; position: absolute; background: #F8CDBA"></div>
-                          <div style="width: 6.40px; height: 7.93px; left: 38.90px; top: 25.01px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 33.13px; height: 19px; left: 30.67px; top: 6.91px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 24.94px; height: 18.04px; left: 35.84px; top: 12.75px; position: absolute; background: #F8CDBA"></div>
-                          <div style="width: 9.77px; height: 8.85px; left: 33.38px; top: 0px; position: absolute; background: #1F161E; border-radius: 9999px"></div>
-                          <div style="width: 1.97px; height: 3.72px; left: 38.48px; top: 17.92px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 1.10px; height: 3.36px; left: 56.11px; top: 18.16px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 1.55px; height: 2.19px; left: 49.57px; top: 22.50px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 3.79px; height: 1.78px; left: 43.67px; top: 20.84px; position: absolute; background: #FA9E9F; border-radius: 9999px"></div>
-                          <div style="width: 3.79px; height: 1.78px; left: 57.77px; top: 20.84px; position: absolute; background: #FA9E9F; border-radius: 9999px"></div>
-                          <div style="width: 20px; height: 28.02px; left: 72.49px; top: 63.97px; position: absolute; background: #F8CDBA"></div>
-                          <div style="width: 2.07px; height: 9.23px; left: 25.58px; top: 64.04px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 5.19px; height: 21.17px; left: 67.30px; top: 45.78px; position: absolute; border: 1px #1F161E solid"></div>
-                          <div style="width: 20px; height: 28.02px; left: 72.49px; top: 63.97px; position: absolute; background: #F8CDBA"></div>
-                          <div style="width: 14.63px; height: 9.76px; left: 175.30px; top: 129.07px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 11.84px; height: 9px; left: 154.94px; top: 165.09px; position: absolute; background: #1F161E"></div>
-                          <div style="width: 53.64px; height: 24.76px; left: 96.57px; top: 60.86px; position: absolute; background: #969696"></div>
-                          <div style="width: 43.33px; height: 0.93px; left: 60.47px; top: 84.69px; position: absolute; background: #969696"></div>
-                          <div style="width: 89.87px; height: 38.27px; left: 0px; top: 68.81px; position: absolute; background: #F8CDBA"></div>
-                          <div style="width: 16.80px; height: 4.34px; left: 73.08px; top: 81.10px; position: absolute; border: 1px #1F161E solid"></div>
-                      </div>
-                  </div>
-              </div>
-              <div style="width: 636px; height: 768px; left: 32px; top: 9px; position: absolute; opacity: 0.10; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-                  <img style="width: 636px; height: 768px" src="https://via.placeholder.com/636x768" />
-              </div>
-          </div>
-      </div>
-    </body>
-    </html>
+    <!--the left portion of screen-->
+    <div style="width: 728px; height: 813px; position: absolute; background: #004F34">
+        <div style="width: 378.96px; height: 55.10px; left: 174.52px; top: 644.17px; position: absolute; text-align: center; color: #F5F5F5; font-size: 16px; font-family: Zen Kaku Gothic Antique; font-weight: 400; line-height: 28.16px; word-wrap: break-word">Lets GOOOOOOO.</div>
+        <div style="width: 378.96px; height: 67.75px; left: 174.52px; top: 561.96px; position: absolute; text-align: center; color: white; font-size: 31.25px; font-family: Zen Kaku Gothic Antique; font-weight: 700; line-height: 37.50px; word-wrap: break-word">JOIN THE STUDY GROUP COMMUNITY!</div>
+        <div style="width: 421.95px; height: 322.17px; left: 152.58px; top: 195.12px; position: absolute">
+            <div style="width: 421.95px; height: 322.17px; left: 0px; top: 0px; position: absolute; background: black"></div>
+            <div style="width: 421.95px; height: 322.17px; left: 0px; top: 0px; position: absolute">
+            <div style="width: 355.67px; height: 322.17px; left: 37.51px; top: 0px; position: absolute; background: #F1F0FF; border-radius: 9999px"></div>
+            <div style="width: 332.67px; height: 260.38px; left: 16.58px; top: 15.63px; position: absolute">
+            <div style="width: 109.05px; height: 152.96px; left: 188.42px; top: 75.23px; position: absolute; background: white"></div>
+            <div style="width: 111.81px; height: 1.81px; left: 166.56px; top: 167.68px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 111.81px; height: 1.81px; left: 166.56px; top: 177.69px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 111.81px; height: 1.81px; left: 166.56px; top: 187.69px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 111.81px; height: 1.81px; left: 166.56px; top: 197.69px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 57.06px; height: 51.68px; left: 214.42px; top: 93.98px; position: absolute; background: #F2F2F2; border-radius: 9999px"></div>
+            <div style="width: 45.09px; height: 37.93px; left: 278.37px; top: 129.62px; position: absolute; opacity: 0.70; background: #98B9F2"></div>
+            <div style="width: 22.68px; height: 9.94px; left: 284.88px; top: 141.21px; position: absolute; color: white; font-size: 11px; font-family: Helvetica; font-weight: 400; line-height: 11px; word-wrap: break-word">< / ></div>
+            <div style="width: 243.40px; height: 145.04px; left: 0px; top: 0px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 243.40px; height: 1.81px; left: 0px; top: 6.81px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 73.16px; height: 66.27px; left: 17.71px; top: 20.63px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 111.81px; height: 1.81px; left: 104.91px; top: 25.56px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 111.81px; height: 1.81px; left: 104.91px; top: 35.57px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 111.81px; height: 1.81px; left: 104.91px; top: 45.57px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 111.81px; height: 1.81px; left: 104.91px; top: 55.57px; position: absolute; border: 1px black solid"></div>
+            <div style="width: 39.85px; height: 31.26px; left: 34.37px; top: 38.14px; position: absolute; opacity: 0.44; background: #918EF4"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 3.22px; top: 2.08px; position: absolute; background: #AB8DE5; border-radius: 9999px"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 10.35px; top: 2.08px; position: absolute; background: #73E5E2; border-radius: 9999px"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 17.48px; top: 2.08px; position: absolute; background: #50B89D; border-radius: 9999px"></div>
+            <div style="width: 7.04px; height: 5.52px; left: 107.07px; top: 112.74px; position: absolute; background: #AB8DE5"></div>
+            <div style="width: 53.37px; height: 21.26px; left: 100.31px; top: 92.11px; position: absolute; background: #AB8DE5"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 117.79px; top: 100.86px; position: absolute; background: white; border-radius: 9999px"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 124.92px; top: 100.86px; position: absolute; background: white; border-radius: 9999px"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 132.05px; top: 100.86px; position: absolute; background: white; border-radius: 9999px"></div>
+            <div style="width: 7.04px; height: 5.52px; left: 318.86px; top: 50.22px; position: absolute; background: #98B9F2"></div>
+            <div style="width: 53.37px; height: 21.26px; left: 279.29px; top: 29.59px; position: absolute; background: #98B9F2"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 311.04px; top: 38.34px; position: absolute; background: white; border-radius: 9999px"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 303.91px; top: 38.34px; position: absolute; background: white; border-radius: 9999px"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 296.78px; top: 38.34px; position: absolute; background: white; border-radius: 9999px"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 320.01px; top: 0.21px; position: absolute; background: #918EF4; border-radius: 9999px"></div>
+            <div style="width: 4.14px; height: 3.75px; left: 324.38px; top: 7.92px; position: absolute; background: #918EF4; border-radius: 9999px"></div>
+            <div style="width: 6.44px; height: 5.84px; left: 275.61px; top: 82.94px; position: absolute; background: #918EF4; border-radius: 9999px"></div>
+            <div style="width: 6.44px; height: 5.84px; left: 294.47px; top: 92.94px; position: absolute; background: #918EF4; border-radius: 9999px"></div>
+            <div style="width: 6.44px; height: 5.84px; left: 4.60px; top: 96.28px; position: absolute; background: #F98B67; border-radius: 9999px"></div>
+            <div style="width: 25.80px; height: 11.18px; left: 260.48px; top: 221.28px; position: absolute; background: #1F161E"></div>
+            <div style="width: 31.75px; height: 55.76px; left: 260.32px; top: 176.72px; position: absolute; background: #6F9CEB"></div>
+            <div style="width: 41.42px; height: 53.25px; left: 287.09px; top: 179.21px; position: absolute; background: #918EF4"></div>
+            <div style="width: 25.89px; height: 49.82px; left: 293.08px; top: 181.87px; position: absolute; border: 0.40px white solid"></div>
+            <div style="width: 4.20px; height: 10.61px; left: 290.03px; top: 212.77px; position: absolute; border: 0.40px white solid"></div>
+            <div style="width: 25.03px; height: 50.63px; left: 263.17px; top: 180.26px; position: absolute; border: 0.40px white solid"></div>
+            <div style="width: 38.58px; height: 27.92px; left: 270.29px; top: 232.46px; position: absolute; background: #B37361"></div>
+            <div style="width: 15.18px; height: 3.15px; left: 263.72px; top: 223.09px; position: absolute; border: 0.40px white solid"></div>
+        </div>
+        <div style="width: 72.55px; height: 235.49px; left: 349.40px; top: 42.72px; position: absolute">
+            <div style="width: 56.06px; height: 129.01px; left: 0px; top: 91.07px; position: absolute; background: #7472C1"></div>
+            <div style="width: 45.09px; height: 130.01px; left: 16.16px; top: 97.04px; position: absolute; background: #AB8DE5"></div>
+            <div style="width: 70.30px; height: 71.35px; left: 2.25px; top: 31.07px; position: absolute; background: #6F9CEB"></div>
+            <div style="width: 12.98px; height: 10.09px; left: 53.28px; top: 84.65px; position: absolute; background: #1F161E"></div>
+            <div style="width: 11.83px; height: 14.77px; left: 31.47px; top: 21.40px; position: absolute; background: #F8CDBA"></div>
+            <div style="width: 6.79px; height: 6.91px; left: 36.52px; top: 21.40px; position: absolute; background: #1F161E"></div>
+            <div style="width: 23.01px; height: 20.85px; left: 23.39px; top: 4.81px; position: absolute; background: #F8CDBA; border-radius: 9999px"></div>
+            <div style="width: 26.77px; height: 14.47px; left: 21.42px; top: 0px; position: absolute; background: #1F161E"></div>
+            <div style="width: 4.03px; height: 1.90px; left: 22.13px; top: 16.43px; position: absolute; background: #FA9E9F; border-radius: 9999px"></div>
+            <div style="width: 4.03px; height: 1.90px; left: 34.81px; top: 16.43px; position: absolute; background: #FA9E9F; border-radius: 9999px"></div>
+            <div style="width: 1.19px; height: 3.36px; left: 27.88px; top: 15.41px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 2.03px; height: 1.30px; left: 32.86px; top: 19.86px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 5.32px; height: 4.82px; left: 42.88px; top: 14.03px; position: absolute; background: #F8CDBA; border-radius: 9999px"></div>
+            <div style="width: 46.03px; height: 33.23px; left: 7.52px; top: 51.58px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 2.30px; height: 19.69px; left: 10.20px; top: 47.99px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 43.87px; height: 6.17px; left: 21.52px; top: 79.50px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 9.69px; height: 7.97px; left: 10.37px; top: 65.88px; position: absolute; background: #F8CDBA"></div>
+            <div style="width: 10.52px; height: 15.55px; left: 51.43px; top: 214.05px; position: absolute; background: rgba(235, 235, 235, 0.25)"></div>
+            <div style="width: 17.45px; height: 8.44px; left: 9.15px; top: 227.05px; position: absolute; background: rgba(235, 235, 235, 0.25)"></div>
+        </div>
+        <div style="width: 189.93px; height: 174.63px; left: 0px; top: 89.79px; position: absolute">
+            <div style="width: 88.98px; height: 40.88px; left: 11.97px; top: 133.75px; position: absolute; background: #B37361"></div>
+            <div style="width: 22.38px; height: 52.21px; left: 144.78px; top: 114.59px; position: absolute; background: #1F161E"></div>
+            <div style="width: 164.59px; height: 66.51px; left: 16.73px; top: 76.35px; position: absolute; background: #7472C1"></div>
+            <div style="width: 31.86px; height: 25.78px; left: 16.73px; top: 98.94px; position: absolute; background: #1F161E"></div>
+            <div style="width: 90.88px; height: 72px; left: 1.14px; top: 34.74px; position: absolute; background: white"></div>
+            <div style="width: 11.97px; height: 13.82px; left: 38.90px; top: 25.91px; position: absolute; background: #F8CDBA"></div>
+            <div style="width: 6.40px; height: 7.93px; left: 38.90px; top: 25.01px; position: absolute; background: #1F161E"></div>
+            <div style="width: 33.13px; height: 19px; left: 30.67px; top: 6.91px; position: absolute; background: #1F161E"></div>
+            <div style="width: 24.94px; height: 18.04px; left: 35.84px; top: 12.75px; position: absolute; background: #F8CDBA"></div>
+            <div style="width: 9.77px; height: 8.85px; left: 33.38px; top: 0px; position: absolute; background: #1F161E; border-radius: 9999px"></div>
+            <div style="width: 1.97px; height: 3.72px; left: 38.48px; top: 17.92px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 1.10px; height: 3.36px; left: 56.11px; top: 18.16px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 1.55px; height: 2.19px; left: 49.57px; top: 22.50px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 3.79px; height: 1.78px; left: 43.67px; top: 20.84px; position: absolute; background: #FA9E9F; border-radius: 9999px"></div>
+            <div style="width: 3.79px; height: 1.78px; left: 57.77px; top: 20.84px; position: absolute; background: #FA9E9F; border-radius: 9999px"></div>
+            <div style="width: 20px; height: 28.02px; left: 72.49px; top: 63.97px; position: absolute; background: #F8CDBA"></div>
+            <div style="width: 2.07px; height: 9.23px; left: 25.58px; top: 64.04px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 5.19px; height: 21.17px; left: 67.30px; top: 45.78px; position: absolute; border: 1px #1F161E solid"></div>
+            <div style="width: 20px; height: 28.02px; left: 72.49px; top: 63.97px; position: absolute; background: #F8CDBA"></div>
+            <div style="width: 14.63px; height: 9.76px; left: 175.30px; top: 129.07px; position: absolute; background: #1F161E"></div>
+            <div style="width: 11.84px; height: 9px; left: 154.94px; top: 165.09px; position: absolute; background: #1F161E"></div>
+            <div style="width: 53.64px; height: 24.76px; left: 96.57px; top: 60.86px; position: absolute; background: #969696"></div>
+            <div style="width: 43.33px; height: 0.93px; left: 60.47px; top: 84.69px; position: absolute; background: #969696"></div>
+            <div style="width: 89.87px; height: 38.27px; left: 0px; top: 68.81px; position: absolute; background: #F8CDBA"></div>
+            <div style="width: 16.80px; height: 4.34px; left: 73.08px; top: 81.10px; position: absolute; border: 1px #1F161E solid"></div>
+        </div>
+    </div>
+        </div>
+        <div style="width: 636px; height: 768px; left: 32px; top: 9px; position: absolute; opacity: 0.10; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
+        <img style="width: 636px; height: 768px" src="https://via.placeholder.com/636x768" />
+        </div>
+        </div>
+    </div>
+      
+    <script type="text/javascript" src="../js/utils.js"></script>
+    <script type="text/javascript" src="../js/login.js"></script>
+</body>
+</html>

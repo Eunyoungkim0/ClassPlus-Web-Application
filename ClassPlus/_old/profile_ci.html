@@ -9,6 +9,7 @@
         a {
             color: inherit;
             text-decoration: none;
+            cursor: pointer;
         }
 
         a:hover {
@@ -36,27 +37,27 @@
                       <a href="index.html"><img style="width: 70px; height: 71px" src="C_logo.png" /></a>
                   </div>
                   <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                      <a href="course_page_searchpage.html">
+                      <a onclick="loginCheckBeforeNav('course_page_searchpage.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               My Courses
                           </div>
                       </a>
-                      <a href="study_group_current.html">
+                      <a onclick="loginCheckBeforeNav('study_group_current.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               My Groups
                           </div>
                       </a>
-                      <a href="study_group_find.html">
+                      <a onclick="loginCheckBeforeNav('study_group_find.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               Find group
                           </div>
                       </a>
-                      <a href="study_group_creating.html">
+                      <a onclick="loginCheckBeforeNav('study_group_creating.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               Create Group
                           </div>
                       </a>
-                      <a href="profile.html">
+                      <a onclick="loginCheckBeforeNav('profile.html')">
                           <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                               Profile
                           </div>
@@ -79,7 +80,13 @@
           </div>
       </a>
     </div>  
-        
+       
+    
+    <div style="height: 112px; padding-left: 160px; padding-right: 160px; padding-top: 32px; padding-bottom: 32px; left: -5px; top: 87px; position: absolute; background: rgba(255, 255, 255, 0); border-bottom: 1px #DEE2E6 dotted; flex-direction: column; justify-content: center; align-items: flex-start; display: inline-flex">
+      <div style="flex-direction: column; justify-content: flex-start; align-items: center; display: flex">
+          <div style="color: #343A40; font-size: 40px; font-family: Inter; font-weight: 700; word-wrap: break-word">Profile</div>
+      </div>
+    </div>
 
     <div style="width: 348px; height: 182px; left: 100px; top: 200px; position: absolute">
       <div
@@ -222,92 +229,7 @@
     </div>
 
 
-    <script>
-        function isTokenValid() {  
-            const token = localStorage.getItem('jwt'); 
-            const exp = localStorage.getItem('exp');
-
-            if (!token) {
-                console.log("No token");
-                return false;
-            }
-            try {
-                if (Date.now() >= exp * 1000) {
-                    console.log("Token is expired");
-                    localStorage.removeItem("jwt");
-                    localStorage.removeItem("exp");
-                    localStorage.removeItem("firstName");
-                    localStorage.removeItem("lastName");
-                    location.replace('/');
-                    return false;
-                }
-            } catch (err) {
-                console.log("Token is invalid");
-                return false;
-            }
-            return true;
-        }
-
-        function onLoad() {
-            const userId = localStorage.getItem('userId');
-            const linkElement = document.getElementById('linkforloginout');
-            
-            if(!userId){
-                document.querySelector('#loginout').innerHTML = "Login";
-                linkElement.href = 'login.html';
-            }else{
-                document.querySelector('#loginout').innerHTML = "Log out";
-                linkElement.href = '#';
-                linkElement.onclick = function() {
-                    localStorage.removeItem('userId');
-                    location.replace('index.html');
-                };
-            }
-        }
-
-        function onLoad() {
-            const token = localStorage.getItem('jwt');
-            const exp = localStorage.getItem('exp');
-            const userId = localStorage.getItem('userId');
-            const linkElement = document.getElementById('linkforloginout');
-            
-            if(!userId || userId === undefined){
-                document.querySelector('#loginout').innerHTML = "Login";
-                linkElement.href = 'login.html';
-                location.replace('login.html');
-            }else{
-                document.querySelector('#loginout').innerHTML = "Log out";
-                linkElement.href = '#';
-                linkElement.onclick = function() {
-                    localStorage.removeItem('userId');
-                    location.replace('index.html');
-                };
-            }
-
-            const firstName = localStorage.getItem('firstName');
-            const lastName = localStorage.getItem('lastName');
-            document.querySelector('#welcome').innerHTML = `Hello ${firstName} ${lastName}!`;
-
-            isTokenValid();
-            axios.get(`/api/profile_ci/${userId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }).then(res => {
-                console.log(res.data);
-
-                document.querySelector('#classList').innerHTML = "";
-                document.querySelector('#semesterList').innerHTML = "2023 Fall";
-                for(var i=0; i < res.data.length; i++){
-                  console.log(res.data[i]);
-                  document.querySelector('#classList').innerHTML += res.data[i].subject + " " + res.data[i].courseNumber + "<br>";
-                }
-                //document.querySelector('#classList').value = res.data[0].lastName;
-
-            })         
-        }
-
-        onLoad();
-    </script>
+    <script type="text/javascript" src="../js/common.js"></script>
+    <script type="text/javascript" src="../js/profile.js"></script>
 </body>
 </html>

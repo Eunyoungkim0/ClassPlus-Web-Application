@@ -56,18 +56,27 @@ function loadUserClassList(userId){
 
       axios.get(`/api/profile_ci/${userId}`)
         .then(res => {
-          //console.log(res.data);
+          var elementDiv1 = document.createElement('div');
+          elementDiv1.setAttribute('class', 'course');
+          elementDiv1.innerHTML = "2023 Fall";
+          document.querySelector('#semesterList').appendChild(elementDiv1);
 
-          document.querySelector('#classList').innerHTML = "";
-          document.querySelector('#semesterList').innerHTML = "2023 Fall";
-          for(var i=0; i < res.data.length; i++){
-            //console.log(res.data[i]);
-            document.querySelector('#classList').innerHTML += res.data[i].subject + " " + res.data[i].courseNumber + "<br>";
+          for(var i=0; i < res.data.length; i++) {
+            var elementDiv1 = document.createElement('div');
+            elementDiv1.setAttribute('class', 'course');
+            elementDiv1.setAttribute('onclick', `gotoCourse('${res.data[i].subject}','${res.data[i].courseNumber}')`);
+            elementDiv1.innerHTML = res.data[i].subject + " " + res.data[i].courseNumber + " " + res.data[i].title;
+            document.querySelector('#classList').appendChild(elementDiv1);
           }
-          //document.querySelector('#classList').value = res.data[0].lastName;
-
       });
-  }
+}
+
+function gotoCourse(sj, cn) {
+    const subject = sj;
+    const courseNumber = cn;
+    const url = `course_detail.html?sj=${subject}&cn=${courseNumber}`;
+    window.location.href = url;
+}
 
 // This function gets user data from database and show them. - Friend List
 function loadFriendList(userId){
@@ -77,27 +86,51 @@ function loadFriendList(userId){
 
     axios.get(`/api/profile_fl/${userId}`)
         .then(res => {
-        //console.log(res.data);
 
-        let friends = {};
         for(var i=0; i < res.data.length; i++){
-            var friendName = res.data[i].firstName + " " + res.data[i].lastName;
-            if(friends[friendName] == undefined){
-            friends[friendName] = res.data[i].subject + " " + res.data[i].courseNumber;
-            }else{
-            friends[friendName] += " and more"
-            }                  
-        }
-
-        document.querySelector('#friendList').innerHTML = "";
-        for (let key in friends) {
-            //console.log(key + ": " + friends[key]);
-            if(friends[key] == 'null null'){
-            document.querySelector('#friendList').innerHTML += key + "<br><br>";
-            }else{
-            document.querySelector('#friendList').innerHTML += key + " (" + friends[key] + ")<br><br>";
+            var elementDiv1 = document.createElement('div');
+            elementDiv1.setAttribute('class', 'friend');
+            
+            var elementDiv2 = document.createElement('div');
+            elementDiv2.setAttribute('class', 'pictureFrame');
+            let picture = res.data[i].picture;
+            if(picture === null){
+                picture = "basicProfileImage.png";
             }
+            elementDiv2.innerHTML = `<img src="../images/${picture}" class="picture">`;
+
+            var elementDiv3 = document.createElement('div');
+            elementDiv3.setAttribute('class', 'name');
+            elementDiv3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName;
+
+            var elementDiv4 = document.createElement('div');
+            elementDiv4.setAttribute('class', 'classlist');
+            elementDiv4.setAttribute('id', `classlist${res.data[i].friendId}`);
+
+            document.querySelector('#friendList').appendChild(elementDiv1);
+            elementDiv1.appendChild(elementDiv2);
+            elementDiv1.appendChild(elementDiv3);
+            elementDiv1.appendChild(elementDiv4);
         }
+    });
+}
+
+// This function gets overlapping classes that friends are taking.
+function loadFriendClassList(userId) {
+    axios.get(`/api/profile_fl_class/${userId}`)
+        .then(res => {
+            let friends = {};
+            for(var i=0; i < res.data.length; i++){
+                console.log(res.data);
+                var friendId = res.data[i].friendId;
+                var elementDiv = document.getElementById(`classlist${friendId}`);
+                if(friends[friendId] == undefined){
+                  friends[friendId] = res.data[i].subject + res.data[i].courseNumber;
+                }else{
+                  friends[friendId] += " | " + res.data[i].subject + res.data[i].courseNumber;
+                }             
+                elementDiv.innerHTML = friends[friendId];
+            }
     });
 }
 
@@ -112,6 +145,7 @@ function loadData(){
         loadUserClassList(userId);
     }else if(currentPagePath == 'profile_fl.html'){
         loadFriendList(userId);
+        loadFriendClassList(userId);
     }else if(currentPagePath == 'profile_cp.html'){
 
     }

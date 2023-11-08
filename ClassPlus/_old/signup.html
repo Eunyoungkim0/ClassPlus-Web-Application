@@ -9,6 +9,7 @@
         a {
             color: inherit;
             text-decoration: none;
+            cursor: pointer;
         }
 
         a:hover {
@@ -30,27 +31,27 @@
                         <a href="index.html"><img style="width: 70px; height: 71px" src="C_logo.png" /></a>
                     </div>
                     <div style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                        <a href="course_page_searchpage.html">
+                        <a onclick="loginCheckBeforeNav('course_page_searchpage.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 My Courses
                             </div>
                         </a>
-                        <a href="study_group_current.html">
+                        <a onclick="loginCheckBeforeNav('study_group_current.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #F8F9FA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 My Groups
                             </div>
                         </a>
-                        <a href="study_group_find.html">
+                        <a onclick="loginCheckBeforeNav('study_group_find.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 Find group
                             </div>
                         </a>
-                        <a href="study_group_creating.html">
+                        <a onclick="loginCheckBeforeNav('study_group_creating.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #CED4DA; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 Create Group
                             </div>
                         </a>
-                        <a href="profile.html">
+                        <a onclick="loginCheckBeforeNav('profile.html')">
                             <div style="padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; color: #D9E4E1; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 28px; word-wrap: break-word">
                                 Profile
                             </div>
@@ -257,124 +258,8 @@
       </div>
       
     <script>
-        function validationCheck(){
-            
-            if(document.getElementById('firstName').value == ""){
-                alert("Please enter your first name");
-                document.getElementById('firstName').focus();
-                return false;
-            }
-            if(document.getElementById('lastName').value == ""){
-                alert("Please enter your last name");
-                document.getElementById('lastName').focus();
-                return false;
-            }
-            if(document.getElementById('userPassword').value ==""){
-                alert("Please enter your password");
-                document.getElementById('userPassword').focus();
-                return false;
-            }
-            if(document.getElementById('unccId').value == ""){
-                alert("Please enter your UNCC ID");
-                document.getElementById('unccId').focus();
-                return false;
-            }
-            if(document.getElementById('email').value == ""){
-                alert("Please enter your UNCC email address");
-                document.getElementById('email').focus();
-                return false;
-            }else if(!document.getElementById('email').value.includes("@uncc.edu")){
-                alert("Please use your UNCC email address.");
-                document.getElementById('email').focus();
-                return false;
-            }
-            if(document.getElementById('major').value == ""){
-                alert("Please enter your major");
-                document.getElementById('major').focus();
-                return false;
-            }
-            if(!(document.getElementById('isStudent').checked || document.getElementById('isInstructor').checked)){
-                alert("Please choose your status");
-                return false;
-            }
-
-            return true;
-        }
-
-        function signup() {
-            if(validationCheck()){
-                const data = {
-                    firstName: document.getElementById('firstName').value,
-                    lastName: document.getElementById('lastName').value,
-                    userPassword: document.getElementById('userPassword').value,
-                    unccId: document.getElementById('unccId').value,
-                    email: document.getElementById('email').value,
-                    major: document.getElementById('major').value,
-                    minor: document.getElementById('minor').value,
-                    isStudent: document.getElementById('isStudent').checked,
-                    isInstructor: document.getElementById('isInstructor').checked,
-                };
-
-                axios.post(`/api/signup`, data)
-                    .then(res => {
-                        if(res && res.data && res.data.success) {
-                            console.log(res);
-                            const message = "Hello " + res.data.userName + ", welcome to ClassPlus!"
-                            alert(message);
-                            location.replace('login.html');
-                        }
-                    });
-            }
-        }
-
-        function isNumber(evt) {
-            evt = (evt) ? evt : window.event;
-            var charCode = (evt.which) ? evt.which : evt.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-                return false;
-            }
-            return true;
-        }
-
-        function onLoad() {
-            const userId = localStorage.getItem('userId');
-            const linkElement = document.getElementById('linkforloginout');
-            
-            if(!userId || userId === undefined){
-                document.querySelector('#loginout').innerHTML = "Login";
-                linkElement.href = 'login.html';
-            }else{
-                document.querySelector('#loginout').innerHTML = "Log out";
-                linkElement.href = '#';
-                linkElement.onclick = function() {
-                    localStorage.removeItem('userId');
-                    location.replace('index.html');
-                };
-            }
-
-            document.getElementById('firstName').addEventListener('keydown', function(event) {
-                if (event.key === ' ' || (event.key >= '0' && event.key <= '9') || !(event.key >= 'a' && event.key <= 'z' || event.key >= 'A' && event.key <= 'Z')) {
-                    event.preventDefault();
-                }
-            });
-            document.getElementById('lastName').addEventListener('keydown', function(event) {
-                if (event.key === ' ' || (event.key >= '0' && event.key <= '9') || !(event.key >= 'a' && event.key <= 'z' || event.key >= 'A' && event.key <= 'Z')) {
-                    event.preventDefault();
-                }
-            });
-            document.getElementById('userPassword').addEventListener('keydown', function(event) {
-                if (event.key === ' ') {
-                    event.preventDefault();
-                }
-            });
-            document.getElementById('email').addEventListener('keydown', function(event) {
-                if (event.key === ' ') {
-                    event.preventDefault();
-                }
-            });
-        }
-
-        onLoad();
     </script>
-    </body>
+    <script type="text/javascript" src="../js/common.js"></script>
+    <script type="text/javascript" src="../js/signup.js"></script>
+</body>
 </html>

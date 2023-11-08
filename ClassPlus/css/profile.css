@@ -1,0 +1,91 @@
+.profile-right {
+    width: 60%;
+    margin-top:5%; 
+    margin-left:5%;
+}
+
+.profile-title {
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px #d9d9d9 solid;
+}
+
+.profile-title-text {
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5%;
+}
+
+#welcome {
+    font-size: larger;
+}
+
+.profile-frame {
+    width: 100%;
+    min-height: 400px;
+    margin: 2%;
+    display: flex;
+    flex-direction: row;
+    
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    border-radius: 3%;
+}
+
+#semesterList {
+    width: 20%;
+    margin: 10px;
+    padding: 20px;
+}
+
+#classList {
+    width: 70%;
+    margin: 10px;
+    padding: 20px;
+    border-left: 1px #d9d9d9 solid;
+}
+
+#friendList {
+    width: 100%;
+    margin: 10px;
+    padding: 20px;
+    display: block;
+}
+
+.course {
+    margin: 5px;
+    padding: 5px;
+    font-size: large;
+    cursor: pointer;
+}
+
+.course:hover {
+    background-color: #004F34;
+    color: white;
+}
+
+.friend {
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px #d9d9d9 solid;
+}
+
+.pictureFrame {
+    width: 15%;
+}
+
+.picture {
+    width: 60px;
+    height: 60px;
+}
+
+.name {
+    width: 60%;
+}
+
+.classlist {
+    text-align: right;
+    width: 25%;
+}
