@@ -251,37 +251,6 @@ body {
     display: flex;
   }
   
-#friendList {
-    display: block;
-}
-
-.friend {
-    margin: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.pictureFrame {
-    width: 15%;
-}
-
-.picture {
-    width: 60px;
-    height: 60px;
-}
-
-.name {
-    width: 60%;
-}
-
-.classlist {
-    text-align: right;
-    width: 25%;
-    font-size: 14px;
-}
-
 #v-pills-tab .nav-link{
     font-size: large;
 }

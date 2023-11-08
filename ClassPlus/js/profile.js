@@ -56,17 +56,27 @@ function loadUserClassList(userId){
 
       axios.get(`/api/profile_ci/${userId}`)
         .then(res => {
-          document.querySelector('#classList').innerHTML = "";
-          document.querySelector('#semesterList').innerHTML = "2023 Fall";
+          var elementDiv1 = document.createElement('div');
+          elementDiv1.setAttribute('class', 'course');
+          elementDiv1.innerHTML = "2023 Fall";
+          document.querySelector('#semesterList').appendChild(elementDiv1);
+
           for(var i=0; i < res.data.length; i++) {
-            const url = `course_detail.html?sj=${res.data[i].subject}&cn=${res.data[i].courseNumber}`;
             var elementDiv1 = document.createElement('div');
             elementDiv1.setAttribute('class', 'course');
-            elementDiv1.innerHTML = "<a href='" + url + "'>" + res.data[i].subject + " " + res.data[i].courseNumber + "</a>";
+            elementDiv1.setAttribute('onclick', `gotoCourse('${res.data[i].subject}','${res.data[i].courseNumber}')`);
+            elementDiv1.innerHTML = res.data[i].subject + " " + res.data[i].courseNumber + " " + res.data[i].title;
             document.querySelector('#classList').appendChild(elementDiv1);
           }
       });
-  }
+}
+
+function gotoCourse(sj, cn) {
+    const subject = sj;
+    const courseNumber = cn;
+    const url = `course_detail.html?sj=${subject}&cn=${courseNumber}`;
+    window.location.href = url;
+}
 
 // This function gets user data from database and show them. - Friend List
 function loadFriendList(userId){
@@ -76,7 +86,6 @@ function loadFriendList(userId){
 
     axios.get(`/api/profile_fl/${userId}`)
         .then(res => {
-        document.querySelector('#friendList').innerHTML = "";
 
         for(var i=0; i < res.data.length; i++){
             var elementDiv1 = document.createElement('div');

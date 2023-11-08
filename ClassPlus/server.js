@@ -146,7 +146,7 @@ app.post('/api/profile_save', async(req, res) => {
 
 app.get('/api/profile_ci/:userId', async(req, res) => {
     const userId = req.params.userId;
-    connection.query(`SELECT e.courseID, e.year, e.semester, c.subject, c.courseNumber FROM classesEnrolled e, courses c WHERE e.courseId = c.courseId AND e.userId = ${userId};`, function(error, results, fields){
+    connection.query(`SELECT e.courseID, e.year, e.semester, c.subject, c.courseNumber, c.title FROM classesEnrolled e, courses c WHERE e.courseId = c.courseId AND e.userId = ${userId};`, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
             res.status(500).json({ error: 'Internal Server Error' });
