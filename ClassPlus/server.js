@@ -454,8 +454,7 @@ app.post('/api/createStudySet', async(req, res) => {
                     const { term, definition } = data;
                   
                     var studysetSQL = `INSERT INTO studySets (activityId, studySetId, term, definition)`;
-                    studysetSQL +=  `VALUES(${activityId}, ${count}, '${term}', '${definition}')`;         
-                    console.log(studysetSQL);
+                    studysetSQL +=  ` VALUES(${activityId}, ${count}, '${term}', '${definition}');`;
                     connection.query(studysetSQL, function(error, results, fields){
                         if(error) throw error;
                     });

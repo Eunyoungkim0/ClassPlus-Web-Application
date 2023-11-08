@@ -33,6 +33,16 @@ function setNavColor(){
 
     const currentPagePath = window.location.pathname.substring(1);
     var profileLink = document.getElementById(currentPagePath);
+    if(profileLink == null){
+        if(currentPagePath.includes("post")){
+            profileLink = document.getElementById('course_Post.html');
+        }else if(currentPagePath.includes("study_set")){
+            profileLink = document.getElementById('course_StudySet.html');
+        }else if(currentPagePath.includes("group")){
+            profileLink = document.getElementById('course_StudyGroup.html');
+        }
+    }
+
     if(profileLink != null){
         var aElement = profileLink.querySelector('a');
         profileLink.style.backgroundColor = '#004F34';
