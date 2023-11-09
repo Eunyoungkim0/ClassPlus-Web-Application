@@ -181,12 +181,16 @@ function addTime() {
 
     const inputStart = document.createElement('input');
     inputStart.setAttribute('type', 'number');
+    inputStart.setAttribute('class', 'time-start');
+    inputStart.setAttribute('onkeypress', 'return isNumber(event)');
     inputStart.setAttribute('min', 0);
     inputStart.setAttribute('max', 23);
     const span1 = document.createElement('span');
     span1.innerHTML = ":00 - ";
     const inputEnd = document.createElement('input');
     inputEnd.setAttribute('type', 'number');
+    inputEnd.setAttribute('class', 'time-end');
+    inputEnd.setAttribute('onkeypress', 'return isNumber(event)');
     inputEnd.setAttribute('min', 0);
     inputEnd.setAttribute('max', 23);
     const span2 = document.createElement('span');
@@ -199,7 +203,7 @@ function addTime() {
 
     const deleteTime = document.createElement('img');
     deleteTime.setAttribute('src', '../images/delete.png');
-    deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer;');
+    deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
     deleteTime.setAttribute('onclick', 'deleteTime()');
     divFrame.appendChild(deleteTime);
 
@@ -219,7 +223,73 @@ function deleteTime() {
     });
 }
 
+function dataValidate() {
+    const selectInputs = document.getElementsByClassName('profile-select');
+    const startInputs = document.getElementsByClassName('time-start');
+    const endInputs = document.getElementsByClassName('time-end');
+    for (let i = 0; i < selectInputs.length; i++) {
+      const day = selectInputs[i].value;
+      const start = startInputs[i].value;
+      const end = endInputs[i].value;
+      if(day == "" || day == 0){
+        alert("Please select day");
+        selectInputs[i].focus();
+        return false;
+      }
+      if(start == ""){
+        alert("Please enter available time.");
+        startInputs[i].focus();
+        return false;
+      }
+      if(start < 0 || start > 23){
+        alert("Start time should be 0-23");
+        startInputs[i].focus();
+        return false;
+      }
+      if(end == ""){
+        alert("Please enter available time.");
+        endInputs[i].focus();
+        return false;
+      }
+      if(end < 0 || end > 23){
+        alert("End time should be 0-23");
+        startInputs[i].focus();
+        return false;
+      }
+      if(end <= start){
+        alert("End time should be greater than start time.");
+        endInputs[i].focus();
+        return false;
+      }
+    }
 
+    return true;
+}
+
+function saveTime() {
+    if(dataValidate()){
+        const selectInputs = document.getElementsByClassName('profile-select');
+        const startInputs = document.getElementsByClassName('time-start');
+        const endInputs = document.getElementsByClassName('time-end');
+        for (let i = 0; i < selectInputs.length; i++) {
+            const day = selectInputs[i].value;
+            const start = startInputs[i].value;
+            const end = endInputs[i].value;
+        }
+    }
+}
+
+
+// This function makes sure that users put only number on unccId field.
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+  }
+  
 // This function loads data depending on its page name.
 function loadData(){
     const currentPagePath = window.location.pathname.substring(1);
