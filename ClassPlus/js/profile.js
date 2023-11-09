@@ -14,6 +14,7 @@ function saveButton() {
 
     const userAnswer = askYesNoQuestion("Do you want to save your data?");
     if (userAnswer) {
+        //axios.post('/profile_picture', document.getElementById('picture'))
         axios.post(`/api/profile_save`, data)
             .then(res => {
                 if(res && res.data && res.data.success) {
@@ -35,6 +36,13 @@ function loadUserInfo(userId) {
         document.querySelector('#email').value = res.data[0].email;
         document.querySelector('#major').value = res.data[0].major;
         document.querySelector('#minor').value = res.data[0].minor;
+
+        let picture = res.data[0].picture;
+        if (picture === null) {
+            picture = "basicProfileImage.png";
+        }
+        const pictureElement = document.getElementById('picture');
+        pictureElement.innerHTML = `<img src="../images/${picture}" class="profile-picture" style="align-item:center;">`;
 
         if(res.data[0].isStudent == 1){
             document.querySelector('#isStudent').checked = true;
