@@ -134,6 +134,92 @@ function loadFriendClassList(userId) {
     });
 }
 
+function addTime() {
+    const divFrame = document.createElement('div');
+    divFrame.setAttribute('class', 'available-frame');
+    const selectDay = document.createElement('select');
+    selectDay.setAttribute('class', 'profile-select');
+    divFrame.appendChild(selectDay);
+    for(var i=0; i<8; i++){
+        var optionName = "optionDay" + i;
+        var dynamicVariable = {};
+        dynamicVariable[optionName] = document.createElement('option');
+        dynamicVariable[optionName].value = i;
+        var strDay = "";
+        switch (i) {
+            case 0:
+                strDay = "Select day";
+                break;
+            case 1:
+                strDay = "Monday";
+                break;
+            case 2:
+                strDay = "Tuesday";
+                break;
+            case 3:
+                strDay = "Wednesday";
+                break;
+            case 4:
+                strDay = "Thursday";
+                break;
+            case 5:
+                strDay = "Friday";
+                break;
+            case 6:
+                strDay = "Saturday";
+                break;
+            case 7:
+                strDay = "Sunday";
+                break;
+            default:
+                strDay = "";
+              
+        }
+        dynamicVariable[optionName].innerHTML = strDay;
+        selectDay.appendChild(dynamicVariable[optionName]);
+    }
+
+    const inputStart = document.createElement('input');
+    inputStart.setAttribute('type', 'number');
+    inputStart.setAttribute('min', 0);
+    inputStart.setAttribute('max', 23);
+    const span1 = document.createElement('span');
+    span1.innerHTML = ":00 - ";
+    const inputEnd = document.createElement('input');
+    inputEnd.setAttribute('type', 'number');
+    inputEnd.setAttribute('min', 0);
+    inputEnd.setAttribute('max', 23);
+    const span2 = document.createElement('span');
+    span2.innerHTML = ":00";
+    
+    divFrame.appendChild(inputStart);
+    divFrame.appendChild(span1);
+    divFrame.appendChild(inputEnd);
+    divFrame.appendChild(span2);
+
+    const deleteTime = document.createElement('img');
+    deleteTime.setAttribute('src', '../images/delete.png');
+    deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer;');
+    deleteTime.setAttribute('onclick', 'deleteTime()');
+    divFrame.appendChild(deleteTime);
+
+    const divContent = document.getElementById('availableTimeList');
+    divContent.appendChild(divFrame);
+}
+
+function deleteTime() {
+    const images = document.querySelectorAll('.available-frame img');
+
+    images.forEach((image, index) => {
+    image.addEventListener('click', function(event) {
+            const clickedImage = event.target;
+            const parentDiv = clickedImage.parentElement;
+            parentDiv.remove();
+        });
+    });
+}
+
+
 // This function loads data depending on its page name.
 function loadData(){
     const currentPagePath = window.location.pathname.substring(1);
@@ -148,6 +234,8 @@ function loadData(){
         loadFriendClassList(userId);
     }else if(currentPagePath == 'profile_cp.html'){
 
+    }else if(currentPagePath ==  'profile_at.html'){
+        addTime();
     }
 }
 
