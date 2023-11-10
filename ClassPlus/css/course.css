@@ -240,6 +240,25 @@
     border-left: 1px gray solid;
 }
 
+
+
+
+#groupName {
+    margin: 2%;
+}
+
+#groupDescription {
+    margin: 3%;
+}
+
+.next-meeting {
+    margin: 2%;
+}
+
+.group-members{
+    margin-top: 5%;
+}
+
 .picture {
     width: 60px;
     height: 60px;

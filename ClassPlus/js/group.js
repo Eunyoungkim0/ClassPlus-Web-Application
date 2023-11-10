@@ -117,44 +117,69 @@ function amIJoined(data) {
 }
 
 
-function loadGroupInfo(data) {
-    axios.post(`/api/getCoursePosts`, data)
+function loadGroupInfo() {
+    // Get the query string from the URL
+    const currentPagePath = window.location.pathname.substring(1);
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    const userId = localStorage.getItem('userId');
+    groupId = urlParams.get('gi');
+    
+    const btnEdit = document.getElementById('buttonForEdit');
+    if(btnEdit != null) btnEdit.hidden = true;
+    axios.post(`/api/getGroup/${groupId}`)
     .then(res => {
         if(res && res.data) {
             console.log(res.data);
-            if(res.data.length == 0){
-                document.getElementById('divForPost').innerHTML = "There is no post in this class yet.";
-            }else{
-                for(var i=0; i < res.data.length; i++){
-                    var divElement1 = document.createElement('div');
-                    divElement1.setAttribute('class', 'post-frame');
-                    divElement1.setAttribute('onclick', `loadPost('Post', ${res.data[i].activityId})`);
+            if(currentPagePath == 'group_detail.html'){
+                if(btnEdit != null) btnEdit.hidden = false;
+                document.getElementById('groupName').innerHTML = res.data[0].groupName;
+                document.getElementById('groupDescription').innerHTML = ": " + res.data[0].description;
+                document.getElementById('memberCount').innerHTML = res.data[0].members;
 
-                    var divElement2 = document.createElement('div');
-                    divElement2.setAttribute('class', 'post-title');
-                    divElement2.innerHTML = "[" + res.data[i].subCategory + "] " + res.data[i].title;
-                    var divElement3 = document.createElement('div');
-                    divElement3.setAttribute('class', 'post-username');
-                    divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);
-                    var divElement4 = document.createElement('div');
-                    divElement4.setAttribute('class', 'post-time');
-                    var fullDate = res.data[i].date;
-                    const dateObj = new Date(fullDate);
-                    const formattedDate = dateObj.toLocaleDateString();
-                    divElement4.innerHTML = formattedDate;
-                    
-                    document.getElementById('divForPost').appendChild(divElement1);
-                    divElement1.appendChild(divElement2);
-                    divElement1.appendChild(divElement3);
-                    divElement1.appendChild(divElement4);
-                }
+                axios.get(`/api/getGroupMembers/${groupId}`)
+                .then(res => {
+                    if(res && res.data) {
+                        console.log(res.data);
+                        var divMembers = document.getElementById('memberList');
+                        for(var i=0; i < res.data.length; i++){
+                            const divFrame = document.createElement('div');
+                            divFrame.setAttribute('class', 'member-frame');
+                            const divPicture = document.createElement('div');
+                            divPicture.setAttribute('class', 'picture-frame');
+                            const imgPicture = document.createElement('img');
+                            let picture = res.data[i].picture;
+                            if(picture === null){
+                                picture = "basicProfileImage.png";
+                            }
+                            imgPicture.setAttribute('src', `../images/${picture}`);
+                            imgPicture.setAttribute('class', 'picture');
+                            const divMemberName = document.createElement('div');
+                            divMemberName.setAttribute('class', 'member-name');
+                            divMemberName.innerHTML = res.data[i].firstName + " " + res.data[i].lastName;
+                            const btnFollow = document.createElement('button');
+                            btnFollow.setAttribute('class', 'follow-button');
+                            const divFollow = document.createElement('div');
+                            divFollow.setAttribute('class', 'course-text');
+                            divFollow.innerHTML = "Follow";
+                            btnFollow.appendChild(divFollow);
+
+                            divMembers.appendChild(divFrame);
+                            divFrame.appendChild(divPicture);
+                            divPicture.appendChild(imgPicture);
+                            divFrame.appendChild(divMemberName);
+                            divFrame.appendChild(btnFollow);
+                        }
+                    }
+                });
             }
         }
-    });   
+    });
 }
 
 function loadGroupMeeting(data) {
-    
+
 }
 
 // This function executes in the course homepage.
@@ -179,7 +204,7 @@ function loadGroupHomepage(currentPagePath){
     amIJoined(data);
 
     if(currentPagePath == 'group_detail.html'){
-        loadGroupInfo(data);
+        loadGroupInfo();
     }else if(currentPagePath == 'group_meeting.html'){
         loadGroupMeeting(data);
     }
@@ -194,7 +219,7 @@ function loadData(){
     }else if(currentPagePath == 'group_search.html'){
         getSubject();
     }else{
-        loadGroupHomepage();
+        loadGroupHomepage(currentPagePath);
     }
 }
 

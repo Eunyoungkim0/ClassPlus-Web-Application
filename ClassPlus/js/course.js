@@ -551,7 +551,7 @@ function getGroupData() {
             if(currentPagePath == 'course_group_view.html'){
                 if(btnEdit != null) btnEdit.hidden = false;
                 document.getElementById('groupName').innerHTML = res.data[0].groupName;
-                document.getElementById('groupDescription').innerHTML = res.data[0].description;
+                document.getElementById('groupDescription').innerHTML = ": " + res.data[0].description;
                 document.getElementById('memberCount').innerHTML = res.data[0].members;
 
                 axios.get(`/api/getGroupMembers/${groupId}`)

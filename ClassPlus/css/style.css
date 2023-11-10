@@ -254,13 +254,12 @@ body {
 }
 
 .next-meeting {
-    background-color: #ffffff;
-    padding: 20px;
-    margin-bottom: 20px;
     border: 1px solid black;
-  }
+    margin: 2%;
+    padding: 2%;
+}
   
-  .btn-outline {
+.btn-outline {
     display: inline-block;
     padding: 5px 15px;
     margin: 10px 0;
@@ -268,4 +267,55 @@ body {
     background-color: #146c43;
     cursor: pointer;
     color: #ffffff;
-  }
+}
+
+#groupName {
+    margin: 2%;
+}
+
+#groupDescription {
+    margin: 3%;
+}
+
+.group-members{
+    margin-top: 5%;
+}
+
+.picture {
+    width: 60px;
+    height: 60px;
+}
+
+#memberList {
+    display: flex;
+    flex-direction: column;
+}
+
+.member-frame {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 60px;
+    border-bottom: 1px #d9d9d9 solid;
+}
+
+.member-name {
+    flex-grow: 1;
+}
+
+.picture-frame {
+    width: 100px;
+}
+
+.follow-button {
+    width: auto;
+    height: 44px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #004F34;
+    border-radius: 4px;
+    align-items: right;
+    display: flex;
+}
