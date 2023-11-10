@@ -34,6 +34,16 @@ $.get("mygroup_top.html", function(data){
     $("#mygroupTop-placeholder").replaceWith(data);
 });
 
+$.get("group_top.html", function(data){
+    $("#groupTop-placeholder").replaceWith(data);
+});
+
+$.get("study_group_nav.html", function(data){
+    $("#groupNav-placeholder").replaceWith(data);
+});
+
+
+
 function navigateToCoursePage() {
     window.location.href = 'mycourse.html';
 }

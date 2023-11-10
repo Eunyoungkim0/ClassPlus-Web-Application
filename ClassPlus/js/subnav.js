@@ -17,6 +17,23 @@ function courseCheck(page, needsAi=0){
     window.location.href = url;
 }
 
+function groupCheck(page, needsGi=0){
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    groupId = urlParams.get('gi');
+
+    if(groupId == ""){
+        alert("The wrong approach.");
+        location.replace("mygroup.html");
+    }
+
+    var url = page;
+    if(groupId != null && needsGi == 1) url += "?gi=" + groupId;
+    window.location.href = url;
+}
+
 // This function changes sub-nav background color and text color depending on the page.
 function setNavColor(){
     var vPillsTab = document.getElementById('v-pills-tab');

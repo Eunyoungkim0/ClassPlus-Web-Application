@@ -229,7 +229,7 @@ function loadCourseHomepage(currentPagePath){
 
     if(subject == "" || courseNumber== ""){
         alert("The wrong approach.");
-        location.replace("course_search.html");
+        location.replace("mycourse.html");
     }
 
     data = {
@@ -547,21 +547,48 @@ function getGroupData() {
     axios.post(`/api/getGroup/${groupId}`)
     .then(res => {
         if(res && res.data) {
+            console.log(res.data);
             if(currentPagePath == 'course_group_view.html'){
-                var writerId = res.data[0].userId;
-                if(writerId == userId && btnEdit != null) btnEdit.hidden = false;
-                document.getElementById('category').innerHTML = "[" + res.data[0].subCategory + "]";
-                document.getElementById('title').innerHTML = res.data[0].title;
-                document.getElementById('content').innerHTML = res.data[0].content;
-                document.getElementById('views').innerHTML = res.data[0].views;
-                document.getElementById('userName').innerHTML = res.data[0].firstName + " " + res.data[0].lastName;
-                const date = formatDateString(res.data[0].date);
-                document.getElementById('date').innerHTML = date;
-                const postUpdate = formatDateString(res.data[0].postUpdate);
-                document.getElementById('postUpdate').innerHTML = postUpdate;
-            }else if(currentPagePath == 'course_post_edit.html'){
-                document.getElementById('title').value = res.data[0].title;
-                document.getElementById('content').value = res.data[0].content;
+                if(btnEdit != null) btnEdit.hidden = false;
+                document.getElementById('groupName').innerHTML = res.data[0].groupName;
+                document.getElementById('groupDescription').innerHTML = res.data[0].description;
+                document.getElementById('memberCount').innerHTML = res.data[0].members;
+
+                axios.get(`/api/getGroupMembers/${groupId}`)
+                .then(res => {
+                    if(res && res.data) {
+                        console.log(res.data);
+                        var divMembers = document.getElementById('memberList');
+                        for(var i=0; i < res.data.length; i++){
+                            const divFrame = document.createElement('div');
+                            divFrame.setAttribute('class', 'member-frame');
+                            const divPicture = document.createElement('div');
+                            divPicture.setAttribute('class', 'picture-frame');
+                            const imgPicture = document.createElement('img');
+                            let picture = res.data[i].picture;
+                            if(picture === null){
+                                picture = "basicProfileImage.png";
+                            }
+                            imgPicture.setAttribute('src', `../images/${picture}`);
+                            imgPicture.setAttribute('class', 'picture');
+                            const divMemberName = document.createElement('div');
+                            divMemberName.setAttribute('class', 'member-name');
+                            divMemberName.innerHTML = res.data[i].firstName + " " + res.data[i].lastName;
+                            const btnFollow = document.createElement('button');
+                            btnFollow.setAttribute('class', 'follow-button');
+                            const divFollow = document.createElement('div');
+                            divFollow.setAttribute('class', 'course-text');
+                            divFollow.innerHTML = "Follow";
+                            btnFollow.appendChild(divFollow);
+
+                            divMembers.appendChild(divFrame);
+                            divFrame.appendChild(divPicture);
+                            divPicture.appendChild(imgPicture);
+                            divFrame.appendChild(divMemberName);
+                            divFrame.appendChild(btnFollow);
+                        }
+                    }
+                });
             }
         }
     });
@@ -691,6 +718,16 @@ function editStudySet() {
     }
 }
 
+function gotoGroupPage() {
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    groupId = urlParams.get('gi');
+
+    const url = "group_detail.html?gi=" + groupId;
+    window.location.href = url;
+}
 
 // This function loads data depending on its page name.
 function loadData(){

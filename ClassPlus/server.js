@@ -659,7 +659,120 @@ app.get('/api/getMyGroup/:userId', async(req, res) => {
     });
 });
 
+app.post('/api/getGroup/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as members
+    FROM groupmembers gm, classplus.groups g, courses c 
+    WHERE g.year = '${currentYear}' AND g.semester = 'fall'
+    AND gm.groupId = g.groupId AND g.courseId = c.courseId
+    AND g.groupId = ${groupId}
+    GROUP BY g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title; `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
 
+app.get('/api/getGroupMembers/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT gm.groupId, u.userId, u.lastName, u.firstName, u.picture FROM groupmembers gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId`;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+
+app.post('/api/getGroupInfo/', async(req, res) => {
+    const { userId, groupId } = req.body;
+    const sql = `SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title FROM classplus.groups g, courses c WHERE g.groupId = ${groupId} AND g.courseId = c.courseId;`;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/getGroupPermission/', async(req, res) => {
+    const { userId, groupId } = req.body;
+    var sql = ` SELECT (CASE WHEN e.courseId IS NOT NULL THEN 1 ELSE 0 END) AS enrolled, 
+                       (CASE WHEN gm.groupId IS NOT NULL THEN 1 ELSE 0 END) AS joined 
+                  FROM classplus.groups g 
+                  LEFT JOIN classesenrolled e ON g.courseId = e.courseId AND g.year = e.year AND g.semester = e.semester AND e.userId = ${userId} 
+                  LEFT JOIN groupmembers gm ON g.groupId = gm.groupId AND gm.userId = ${userId} 
+                 WHERE g.groupId = ${groupId};`;
+
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        
+        if(results[0].enrolled == 1){
+            if(results[0].joined == 1){
+                res.json({
+                    enrolled: true,
+                    joined: true
+                });
+            }else{
+                res.json({
+                    enrolled: true,
+                    joined: false
+                });
+            }
+        }else{
+            res.json({
+                enrolled: false,
+                joined: false
+            });
+        }
+    });
+});
+
+app.post('/api/joinGroup/', async(req, res) => {
+    const { userId, groupId } = req.body;
+
+    connection.query(`SELECT count(*) as count FROM groupmembers WHERE userId = ${userId} AND groupId = ${groupId}`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        if(results[0].count == 1){
+            res.json({
+                success: false,
+                alreadyJoined: true
+            });
+        }else{
+            const sql = `INSERT INTO groupmembers (groupId, courseId, userId) 
+                         SELECT ${groupId}, courseId, ${userId} FROM classplus.groups g WHERE g.groupId = ${groupId};`;
+            console.log(sql);
+            connection.query(sql, function(error, results, fields){
+                if(error) {
+                    // Handle the error by sending an error response
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }
+                res.json({
+                    success: true
+                });
+            });
+        }
+    });
+
+});
 //--------------------------------------------------------------------------------------------------------
 
 
