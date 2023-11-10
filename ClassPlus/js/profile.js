@@ -129,8 +129,8 @@ function loadFriendClassList(userId) {
     axios.get(`/api/profile_fl_class/${userId}`)
         .then(res => {
             let friends = {};
+            console.log(res.data);
             for(var i=0; i < res.data.length; i++){
-                console.log(res.data);
                 var friendId = res.data[i].friendId;
                 var elementDiv = document.getElementById(`classlist${friendId}`);
                 if(friends[friendId] == undefined){

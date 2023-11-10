@@ -258,6 +258,8 @@ function loadCourseHomepage(currentPagePath){
         getStudySetData();
     }else if(currentPagePath == 'course_study_set_edit.html'){
         getStudySetData();
+    }else if(currentPagePath == 'course_group_view.html'){
+        getGroupData();
     }
 }
 
@@ -418,7 +420,7 @@ function loadPost(category, activityId){
         var url = `course_study_set_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
         window.location.href = url;
     }else if(category == 'Group'){
-        var url = `course_group_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
+        var url = `course_group_view.html?sj=${subject}&cn=${courseNumber}&gi=${activityId}`
         window.location.href = url;
     }
 }
@@ -526,6 +528,40 @@ function getStudySetData() {
                 }
             }
         });
+}
+
+function getGroupData() {
+    // Get the query string from the URL
+    const currentPagePath = window.location.pathname.substring(1);
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    const userId = localStorage.getItem('userId');
+    groupId = urlParams.get('gi');
+    
+    const btnEdit = document.getElementById('buttonForEdit');
+    if(btnEdit != null) btnEdit.hidden = true;
+    axios.post(`/api/getGroup/${groupId}`)
+    .then(res => {
+        if(res && res.data) {
+            if(currentPagePath == 'course_group_view.html'){
+                var writerId = res.data[0].userId;
+                if(writerId == userId && btnEdit != null) btnEdit.hidden = false;
+                document.getElementById('category').innerHTML = "[" + res.data[0].subCategory + "]";
+                document.getElementById('title').innerHTML = res.data[0].title;
+                document.getElementById('content').innerHTML = res.data[0].content;
+                document.getElementById('views').innerHTML = res.data[0].views;
+                document.getElementById('userName').innerHTML = res.data[0].firstName + " " + res.data[0].lastName;
+                const date = formatDateString(res.data[0].date);
+                document.getElementById('date').innerHTML = date;
+                const postUpdate = formatDateString(res.data[0].postUpdate);
+                document.getElementById('postUpdate').innerHTML = postUpdate;
+            }else if(currentPagePath == 'course_post_edit.html'){
+                document.getElementById('title').value = res.data[0].title;
+                document.getElementById('content').value = res.data[0].content;
+            }
+        }
+    });
 }
 
 function addStudySet() {

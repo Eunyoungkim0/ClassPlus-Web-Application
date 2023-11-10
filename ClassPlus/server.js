@@ -547,7 +547,6 @@ app.post('/api/editStudySet', async(req, res) => {
             const { term, definition } = data;
           
             var sql = `UPDATE studySets SET term = '${term}', definition = '${definition}' WHERE activityId = ${activityId} AND studySetId = ${count}`;          
-            console.log(sql);
             connection.query(sql, function(error, results, fields){
                 if (error) {
                     res.status(500).json({ error: 'Internal Server Error' });
