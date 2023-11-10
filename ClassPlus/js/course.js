@@ -186,6 +186,7 @@ function loadCourseGroups(data) {
                 for(var i=0; i < res.data.length; i++){
                     var divElement1 = document.createElement('div');
                     divElement1.setAttribute('class', 'group-frame');
+                    divElement1.setAttribute('onclick', `loadPost('Group', ${res.data[i].groupId})`);
 
                     var divElement2 = document.createElement('div');
                     divElement2.setAttribute('class', 'group-title');
@@ -415,6 +416,9 @@ function loadPost(category, activityId){
         window.location.href = url;
     }else if(category == 'StudySet'){
         var url = `course_study_set_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
+        window.location.href = url;
+    }else if(category == 'Group'){
+        var url = `course_group_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
         window.location.href = url;
     }
 }

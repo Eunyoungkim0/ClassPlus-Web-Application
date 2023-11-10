@@ -258,3 +258,20 @@ body {
 #v-pills-tab .nav-link:hover{
     background-color: #d9d9d9;
 }
+
+.next-meeting {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid black;
+  }
+  
+  .btn-outline {
+    display: inline-block;
+    padding: 5px 15px;
+    margin: 10px 0;
+    border: 1px solid #146c43;
+    background-color: #146c43;
+    cursor: pointer;
+    color: #ffffff;
+  }
