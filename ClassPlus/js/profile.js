@@ -15,13 +15,8 @@ function saveButton() {
 
     const userId = localStorage.getItem('userId');
 
-    if(pictureFile == NULL){
-        axios.get(`/api/profile/${userId}`)
-            .then(res => {
-                let picture = res.data[0].picture;
-                console.log(res.data);
-                pictureFile = ${picture};
-        });
+    if(pictureFile == ""){
+        pictureFile = picture;
     }
 
     formData.append('profile-picture', pictureFile);
@@ -56,6 +51,7 @@ function loadUserInfo(userId) {
         }
         const pictureElement = document.getElementById('picture');
         pictureElement.innerHTML = `<img src="../images/${picture}" class="profile-picture" style="align-item:center;">`;
+        pictureElement.value = picture;
 
         if(res.data[0].isStudent == 1){
             document.querySelector('#isStudent').checked = true;

@@ -16,166 +16,39 @@
       
     <div id="nav-placeholder"></div>    
 
-    <div style="width: 300px; margin-top:5%">
-      <div id="profileNav-placeholder"></div>
-    </div>
+    <div class="row">
+      <div class="column" style="width: 300px; margin-top:5%">
+          <div id="profileNav-placeholder"></div>
+      </div>
 
+      <div class="column profile-right">
+          <div id="welcome"></div>
+          <div class="profile-frame">
 
-    <div
-    style="
-      left: 0px;
-      top: 0px;
-      position: absolute;
-      color: black;
-      font-size: 20px;
-      font-weight: 400;
-      line-height: 28px;
-      word-wrap: break-word;
-    "
-    >
-    <div id="welcome"></div>
-    </div>
-    
-    <div
-      style="
-        left: 500px;
-        top: 228px;
-        position: absolute;
-        color: black;
-        font-size: 20px;
-        font-weight: 400;
-        line-height: 28px;
-        word-wrap: break-word;
-      "
-    >
-      Current Password
-      <div>
-          <input type="password" placeholder="Enter current password" style="margin-top: 10px; font-size: 16px; padding: 8px; width: 250px;">
-      </div>
-  </div>
-  
-  <div style="left: 500px; top: 338px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word;">
-      New Password
-      <div>
-          <input type="password" placeholder="Enter new password" style="margin-top: 10px; font-size: 16px; padding: 8px; width: 250px;">
-      </div>
-  </div>
-  
-  <div style="left: 500px; top: 448px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word;">
-      Confirm New Password
-      <div>
-          <input type="password" placeholder="Confirm new password" style="margin-top: 10px; font-size: 16px; padding: 8px; width: 250px;">
-      </div>
-  </div>
-  
-    <!--Save Button-->
-    <div style="left: 635px; top: 610px; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-      <button 
-          style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex; border: none; cursor: pointer; outline: none; color: #f5f5f5; font-size: 16px; font-weight: 600;"
-          onclick="saveData()">
-          Save
-        </div>
-      </div>
-    </div>
+            <div class="row">
 
-   
+              <div class="row">
+                <div class="col-md-4">Current Password</div>
+                <div class="col-md-8"><input type="text" id="password" class="userInput"></div>
+              </div>
+              
+              <div class="row" style="margin-top:5%">
+                <div class="col-md-4">New Password</div>
+                <div class="col-md-8"><input type="text" id="newPassword" class="userInput"></div>
+              </div>
 
-    <div
-      style="
-        height: 38px;
-        left: 500px;
-        top: 261px;
-        position: absolute;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 6px;
-        display: inline-flex;
-      "
-    >
-      <div
-        style="
-          align-self: stretch;
-          padding-left: 216px;
-          padding-right: 16px;
-          padding-top: 9px;
-          padding-bottom: 9px;
-          background: #d9d9d9;
-          border-radius: 6px;
-          border: 1px #d9d9d9 solid;
-          justify-content: flex-start;
-          align-items: center;
-          gap: 8px;
-          display: inline-flex;
-        "
-      >
-        <div style="flex: 1 1 0"></div>
+              <div class="row" style="margin-top:5%">
+                <div class="col-md-4">Confirm New Password</div>
+                <div class="col-md-8"><input type="text" id="confirmPassword" class="userInput"></div>
+              </div>
+
+            </div>
+
+          <div class="row" style="margin-top:5%;">
+            <div class="d-flex justify-content-end">
+              <button class="buttons" style="width:90px;" onclick="changePassword()">Save</button>
+          </div>
       </div>
-    </div>
-    <div
-      style="
-        height: 38px;
-        left: 500px;
-        top: 371px;
-        position: absolute;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 6px;
-        display: inline-flex;
-      "
-    >
-      <div
-        style="
-          align-self: stretch;
-          padding-left: 216px;
-          padding-right: 16px;
-          padding-top: 9px;
-          padding-bottom: 9px;
-          background: #d9d9d9;
-          border-radius: 6px;
-          border: 1px #d9d9d9 solid;
-          justify-content: flex-start;
-          align-items: center;
-          gap: 8px;
-          display: inline-flex;
-        "
-      >
-        <div style="flex: 1 1 0"></div>
-      </div>
-    </div>
-    <div
-      style="
-        height: 38px;
-        left: 500px;
-        top: 481px;
-        position: absolute;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 6px;
-        display: inline-flex;
-      "
-    >
-      <div
-        style="
-          align-self: stretch;
-          padding-left: 216px;
-          padding-right: 16px;
-          padding-top: 9px;
-          padding-bottom: 9px;
-          background: #d9d9d9;
-          border-radius: 6px;
-          border: 1px #d9d9d9 solid;
-          justify-content: flex-start;
-          align-items: center;
-          gap: 8px;
-          display: inline-flex;
-        "
-      >
-        <div style="flex: 1 1 0"></div>
-      </div>
-    </div>
 
 
     <script type="text/javascript" src="../js/utils.js"></script>
