@@ -12,6 +12,18 @@ function saveButton() {
     formData.append('isInstructor', document.getElementById('isInstructor').checked);
 
     const pictureFile = document.getElementById('profile-picture').files[0];
+
+    const userId = localStorage.getItem('userId');
+
+    if(pictureFile == NULL){
+        axios.get(`/api/profile/${userId}`)
+            .then(res => {
+                let picture = res.data[0].picture;
+                console.log(res.data);
+                pictureFile = ${picture};
+        });
+    }
+
     formData.append('profile-picture', pictureFile);
 
     const userAnswer = askYesNoQuestion("Do you want to save your data?");
