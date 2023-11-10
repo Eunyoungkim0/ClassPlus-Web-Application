@@ -11,7 +11,6 @@ app.use(express.static('public'));
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -122,7 +121,7 @@ app.get('/api/profile/:userId', async(req, res) => {
 const multer = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, 'images/');
     },
     filename: (req, file, cb) => {
         const userId = req.body.userId;
