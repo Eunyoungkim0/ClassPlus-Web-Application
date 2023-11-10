@@ -155,7 +155,7 @@ function loadFriendClassList(userId) {
     });
 }
 
-function addTime() {
+function addTime(day=0, start=0, end=0) {
     const divFrame = document.createElement('div');
     divFrame.setAttribute('class', 'available-frame');
     const selectDay = document.createElement('select');
@@ -199,6 +199,7 @@ function addTime() {
         dynamicVariable[optionName].innerHTML = strDay;
         selectDay.appendChild(dynamicVariable[optionName]);
     }
+    if(end > 0) selectDay.value = day;
 
     const inputStart = document.createElement('input');
     inputStart.setAttribute('type', 'number');
@@ -206,6 +207,7 @@ function addTime() {
     inputStart.setAttribute('onkeypress', 'return isNumber(event)');
     inputStart.setAttribute('min', 0);
     inputStart.setAttribute('max', 23);
+    if(end > 0) inputStart.value = start;
     const span1 = document.createElement('span');
     span1.innerHTML = ":00 - ";
     const inputEnd = document.createElement('input');
@@ -214,6 +216,7 @@ function addTime() {
     inputEnd.setAttribute('onkeypress', 'return isNumber(event)');
     inputEnd.setAttribute('min', 0);
     inputEnd.setAttribute('max', 23);
+    if(end > 0) inputEnd.value = end;
     const span2 = document.createElement('span');
     span2.innerHTML = ":00";
     
@@ -287,19 +290,100 @@ function dataValidate() {
     return true;
 }
 
+
 function saveTime() {
     if(dataValidate()){
-        const selectInputs = document.getElementsByClassName('profile-select');
-        const startInputs = document.getElementsByClassName('time-start');
-        const endInputs = document.getElementsByClassName('time-end');
-        for (let i = 0; i < selectInputs.length; i++) {
-            const day = selectInputs[i].value;
-            const start = startInputs[i].value;
-            const end = endInputs[i].value;
+        const userAnswer = askYesNoQuestion("Do you want to save your data?");
+        if (userAnswer) {
+            const selectInputs = document.getElementsByClassName('profile-select');
+            const startInputs = document.getElementsByClassName('time-start');
+            const endInputs = document.getElementsByClassName('time-end');
+            const days = {};
+            for (let i = 0; i < selectInputs.length; i++) {
+                const day = selectInputs[i].value;
+                const startValue = startInputs[i].value;
+                const endValue = endInputs[i].value;
+
+                days[day] = days[day] || [];
+                const gap = endValue - startValue;
+                for(let j=0; j < gap; j++){
+                    const valueToAdd = parseInt(startValue) + j;
+                    if (!days[day].includes(valueToAdd)) {
+                        days[day].push(valueToAdd);
+                    }
+                }
+            }
+
+            const userId = localStorage.getItem('userId');
+            const data = {
+                days: days,
+                userId: userId
+            }
+        
+            axios.post(`/api/profile_at_save`, data)
+                .then(res => {
+                    if(res && res.data && res.data.success) {
+                        console.log(res);
+                        alert("Available time successfully saved!");
+                        location.reload();
+                    }
+                });
         }
     }
 }
 
+
+function loadAvailableTime(userId) {
+    axios.get(`/api/profile_at/${userId}`)
+        .then(res => {
+            if(res.data.length == 0){
+                addTime();
+            }else{
+                var days = {};
+                for(var i=0; i < res.data.length; i++){
+                    const day = res.data[i].day;
+                    const time = res.data[i].time;
+                    days[day] = days[day] || [];
+                    days[day].push(time);
+                }
+
+                const transformedData = [];
+
+                for (const key in days) {
+                    const day = key;
+                    const timeSlots = days[key];
+                
+                    let start = null;
+                    let end = null;
+                
+                    timeSlots.forEach(time => {
+                        if (start === null) {
+                            start = time;
+                            end = time;
+                        } else if (time === end + 1) {
+                            end = time;
+                        } else {
+                            transformedData.push({ [day]: { start, end } });
+                            start = time;
+                            end = time;
+                        }
+                    });
+                
+                    transformedData.push({ [day]: { start, end } });
+                }
+
+                if(transformedData.length > 0){
+                    for(var k=0; k<transformedData.length; k++){
+                        const dayKey = Object.keys(transformedData[k])[0];
+                        const dayData = transformedData[k][dayKey];
+                        const start = dayData.start;
+                        const end = parseInt(dayData.end) + 1;
+                        addTime(dayKey, start, end);
+                    }
+                }
+            }
+    });
+}
 
 // This function makes sure that users put only number on unccId field.
 function isNumber(evt) {
@@ -326,7 +410,7 @@ function loadData(){
     }else if(currentPagePath == 'profile_cp.html'){
 
     }else if(currentPagePath ==  'profile_at.html'){
-        addTime();
+        loadAvailableTime(userId);
     }
 }
 
