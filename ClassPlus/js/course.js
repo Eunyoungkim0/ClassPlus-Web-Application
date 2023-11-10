@@ -12,28 +12,31 @@ function getMyCourse(){
             var divCourse = document.createElement('div');
             divCourse.innerHTML = "There are no enrolled classes.";
             document.querySelector('.box').appendChild(divCourse);
-        }
-
-        for(var i=0; i < res.data.length; i++){
-            var subject = res.data[i].subject;
-            var courseNumber = res.data[i].courseNumber; 
-            var title = res.data[i].title;
-
-            var divCourse = document.createElement('div');
-            var divCourseNumber = document.createElement('div');
-            var divTitle = document.createElement('div');
-
-            divCourse.setAttribute('class', 'course-frame');
-            divCourse.setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
-            divCourseNumber.setAttribute('class', 'course-number');
-            divTitle.setAttribute('class', 'course-name');
-
-            divCourseNumber.innerHTML = subject + courseNumber;
-            divTitle.innerHTML = title;
-
-            document.querySelector('.box').appendChild(divCourse);
-            divCourse.appendChild(divCourseNumber);
-            divCourse.appendChild(divTitle);
+        }else{
+            for(var i=0; i < res.data.length; i++){
+                var subject = res.data[i].subject;
+                var courseNumber = res.data[i].courseNumber; 
+                var title = res.data[i].title;
+    
+                var divCourse = document.createElement('div');
+                var divCourseNumber = document.createElement('div');
+                var divLine = document.createElement('div');
+                var divTitle = document.createElement('div');
+    
+                divCourse.setAttribute('class', 'course-frame');
+                divCourse.setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
+                divCourseNumber.setAttribute('class', 'course-number');
+                divLine.setAttribute('class', 'course-line');
+                divTitle.setAttribute('class', 'course-name');
+    
+                divCourseNumber.innerHTML = subject + courseNumber;
+                divTitle.innerHTML = title;
+    
+                document.querySelector('.box').appendChild(divCourse);
+                divCourse.appendChild(divCourseNumber);
+                divCourse.appendChild(divLine);
+                divCourse.appendChild(divTitle);
+            }
         }
     });
 }
@@ -45,7 +48,7 @@ function gotoCourse(sj, cn) {
     window.location.href = url;
 }
 
-// END OF FUNCTIONS FOR COURSE HOMEPAGE
+// END OF FUNCTIONS FOR MY COURSE
 //---------------------------------------------------------------------------------
 
 
@@ -226,7 +229,7 @@ function loadCourseHomepage(currentPagePath){
 
     if(subject == "" || courseNumber== ""){
         alert("The wrong approach.");
-        location.replace("course_page_searchpage.html");
+        location.replace("course_search.html");
     }
 
     data = {
@@ -695,7 +698,7 @@ function loadData(){
 
     if(currentPagePath == 'mycourse.html'){
         getMyCourse();
-    }else if(currentPagePath == 'course_page_searchpage.html'){
+    }else if(currentPagePath == 'course_search.html'){
         getSubject();
     }else{
         loadCourseHomepage(currentPagePath);

@@ -38,6 +38,12 @@
     font-size: 2em;
 }
 
+.course-line {
+    border-bottom: 1px #d9d9d9 solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .course-name {
     font-size: 1.2em;
 }
@@ -137,7 +143,7 @@
 .group-frame {
     display: flex;
     justify-content: center;
-    padding: 5%;
+    padding: 3%;
     flex-direction: column;
     margin: 15px;
     width: 100%;
@@ -155,7 +161,7 @@
     flex-direction: row;
 }
 .group-title {
-    font-size: large;
+    font-size: 1.5em;
     display: block;
     font-weight: bold;
 }
