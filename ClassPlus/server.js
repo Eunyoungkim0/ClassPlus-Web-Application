@@ -11,6 +11,7 @@ app.use(express.static('public'));
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -118,24 +119,46 @@ app.get('/api/profile/:userId', async(req, res) => {
     });
 });
 
-app.post('/api/profile_save', async(req, res) => {
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const userId = req.body.userId;
+        const pictureFileName = `${userId}_profile_picture.jpg`;
+        cb(null, pictureFileName);
+    },
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/api/profile_save', upload.single('profile-picture'), async (req, res) => {
     const { userId, firstName, lastName, major, minor, isStudent, isInstructor } = req.body;
+
+    const pictureFileName = req.file ? req.file.filename : null;
 
     connection.query(`SELECT my_row_id FROM users WHERE userId = ${userId}`, function(error, results, fields){
         if (error) throw error;
+
         const my_row_id = results[0].my_row_id;
-        
+
         const sql = `UPDATE users
                         SET firstName = '${firstName}',
                         lastName = '${lastName}',
                         major = '${major}',
                         minor = '${minor}',
+                        picture = ${pictureFileName ? `'${pictureFileName}'` : 'NULL'},
                         isStudent = ${isStudent},
                         isInstructor = ${isInstructor}
                 WHERE my_row_id = ${my_row_id}`;
-        
-        connection.query(sql, function(error, results, fields){
-            if (error) throw error;
+
+        connection.query(sql, function (error, results, fields) {
+            if (error) {
+                console.error('Error updating user:', error);
+                return res.status(500).json({ success: false, myContent: 'Error updating user' });
+            }
+
             res.json({
                 success: true,
                 myContent: 'Update completed successfully'
@@ -143,6 +166,9 @@ app.post('/api/profile_save', async(req, res) => {
         });
     });
 });
+
+
+
 
 app.get('/api/profile_ci/:userId', async(req, res) => {
     const userId = req.params.userId;

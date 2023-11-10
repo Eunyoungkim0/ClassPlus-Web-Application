@@ -1,21 +1,22 @@
 // When user clicks save button, this function executes.
 // After validation check, it sends data to API.
 function saveButton() {
-    const data = {
-        userId : localStorage.getItem('userId'),
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
-        email: document.getElementById('email').value,
-        major: document.getElementById('major').value,
-        minor: document.getElementById('minor').value,
-        isStudent: document.getElementById('isStudent').checked,
-        isInstructor: document.getElementById('isInstructor').checked,
-    };
+    const formData = new FormData();
+    formData.append('userId', localStorage.getItem('userId'));
+    formData.append('firstName', document.getElementById('firstName').value);
+    formData.append('lastName', document.getElementById('lastName').value);
+    formData.append('email', document.getElementById('email').value);
+    formData.append('major', document.getElementById('major').value);
+    formData.append('minor', document.getElementById('minor').value);
+    formData.append('isStudent', document.getElementById('isStudent').checked);
+    formData.append('isInstructor', document.getElementById('isInstructor').checked);
+
+    const pictureFile = document.getElementById('profile-picture').files[0];
+    formData.append('profile-picture', pictureFile);
 
     const userAnswer = askYesNoQuestion("Do you want to save your data?");
     if (userAnswer) {
-        //axios.post('/profile_picture', document.getElementById('picture'))
-        axios.post(`/api/profile_save`, data)
+        axios.post(`/api/profile_save`, formData)
             .then(res => {
                 if(res && res.data && res.data.success) {
                     console.log(res);
