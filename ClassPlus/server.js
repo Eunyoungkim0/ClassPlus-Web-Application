@@ -221,6 +221,47 @@ app.get('/api/profile_fl_class/:userId', async(req, res) => {
     });
 });
 
+
+app.get('/api/profile_at/:userId', async(req, res) => {
+    const userId = req.params.userId;
+    connection.query(`SELECT * FROM availableTime WHERE userId = ${userId} AND year = '${currentYear}' AND semester = 'fall' ORDER BY day, time;`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/profile_at_save', async (req, res) => {
+    const { userId, days } = req.body;
+    const deleteSQL = `DELETE FROM availableTime WHERE userId = ${userId} AND year = '${currentYear}' AND semester = 'fall';`;
+    connection.query(deleteSQL, function(error, results, fields){
+        if (error) throw error;
+
+        for (const dayKey in days) {
+            if (days.hasOwnProperty(dayKey)) {
+                const times = days[dayKey];
+                for (const time of times) {
+                const sql = `INSERT INTO availableTime (userId, year, semester, day, time) VALUES (${userId}, ${currentYear}, 'fall', ${dayKey}, ${time})`;
+                connection.query(sql, function(error, results, fields){
+                    if (error) throw error;
+                });
+                }
+            }
+        }
+        res.json({
+            success: true,
+        });
+    });
+});
+
+
+
+
+
+
 app.get('/api/getCourseSubject', async(req, res) => {
     connection.query(`SELECT distinct subject FROM courses ORDER BY subject;`, function(error, results, fields){
         if(error) {
