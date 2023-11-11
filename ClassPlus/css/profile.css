@@ -132,3 +132,18 @@
 .time-end {
     width: 50px;
 }
+
+.row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.userInput {
+    border-radius: 5%;
+    padding: 6px;
+    border: 1px #d9d9d9 solid;
+}
+
+.input-label {
+    font-weight: bold;
+}

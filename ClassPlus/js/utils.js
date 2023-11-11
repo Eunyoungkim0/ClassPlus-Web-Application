@@ -39,5 +39,9 @@ function navigateToCoursePage() {
 }
 
 function navigateToSearch() {
-    window.location.href = 'course_page_searchpage.html';
+    window.location.href = 'course_search.html';
+}
+
+function navigateToSearchGroup() {
+    window.location.href = 'group_search.html';
 }

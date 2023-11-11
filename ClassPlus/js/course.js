@@ -12,28 +12,31 @@ function getMyCourse(){
             var divCourse = document.createElement('div');
             divCourse.innerHTML = "There are no enrolled classes.";
             document.querySelector('.box').appendChild(divCourse);
-        }
-
-        for(var i=0; i < res.data.length; i++){
-            var subject = res.data[i].subject;
-            var courseNumber = res.data[i].courseNumber; 
-            var title = res.data[i].title;
-
-            var divCourse = document.createElement('div');
-            var divCourseNumber = document.createElement('div');
-            var divTitle = document.createElement('div');
-
-            divCourse.setAttribute('class', 'course-frame');
-            divCourse.setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
-            divCourseNumber.setAttribute('class', 'course-number');
-            divTitle.setAttribute('class', 'course-name');
-
-            divCourseNumber.innerHTML = subject + courseNumber;
-            divTitle.innerHTML = title;
-
-            document.querySelector('.box').appendChild(divCourse);
-            divCourse.appendChild(divCourseNumber);
-            divCourse.appendChild(divTitle);
+        }else{
+            for(var i=0; i < res.data.length; i++){
+                var subject = res.data[i].subject;
+                var courseNumber = res.data[i].courseNumber; 
+                var title = res.data[i].title;
+    
+                var divCourse = document.createElement('div');
+                var divCourseNumber = document.createElement('div');
+                var divLine = document.createElement('div');
+                var divTitle = document.createElement('div');
+    
+                divCourse.setAttribute('class', 'course-frame');
+                divCourse.setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
+                divCourseNumber.setAttribute('class', 'course-number');
+                divLine.setAttribute('class', 'course-line');
+                divTitle.setAttribute('class', 'course-name');
+    
+                divCourseNumber.innerHTML = subject + courseNumber;
+                divTitle.innerHTML = title;
+    
+                document.querySelector('.box').appendChild(divCourse);
+                divCourse.appendChild(divCourseNumber);
+                divCourse.appendChild(divLine);
+                divCourse.appendChild(divTitle);
+            }
         }
     });
 }
@@ -45,7 +48,7 @@ function gotoCourse(sj, cn) {
     window.location.href = url;
 }
 
-// END OF FUNCTIONS FOR COURSE HOMEPAGE
+// END OF FUNCTIONS FOR MY COURSE
 //---------------------------------------------------------------------------------
 
 
@@ -226,7 +229,7 @@ function loadCourseHomepage(currentPagePath){
 
     if(subject == "" || courseNumber== ""){
         alert("The wrong approach.");
-        location.replace("course_page_searchpage.html");
+        location.replace("course_search.html");
     }
 
     data = {
@@ -258,6 +261,8 @@ function loadCourseHomepage(currentPagePath){
         getStudySetData();
     }else if(currentPagePath == 'course_study_set_edit.html'){
         getStudySetData();
+    }else if(currentPagePath == 'course_group_view.html'){
+        getGroupData();
     }
 }
 
@@ -418,7 +423,7 @@ function loadPost(category, activityId){
         var url = `course_study_set_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
         window.location.href = url;
     }else if(category == 'Group'){
-        var url = `course_group_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
+        var url = `course_group_view.html?sj=${subject}&cn=${courseNumber}&gi=${activityId}`
         window.location.href = url;
     }
 }
@@ -526,6 +531,40 @@ function getStudySetData() {
                 }
             }
         });
+}
+
+function getGroupData() {
+    // Get the query string from the URL
+    const currentPagePath = window.location.pathname.substring(1);
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    const userId = localStorage.getItem('userId');
+    groupId = urlParams.get('gi');
+    
+    const btnEdit = document.getElementById('buttonForEdit');
+    if(btnEdit != null) btnEdit.hidden = true;
+    axios.post(`/api/getGroup/${groupId}`)
+    .then(res => {
+        if(res && res.data) {
+            if(currentPagePath == 'course_group_view.html'){
+                var writerId = res.data[0].userId;
+                if(writerId == userId && btnEdit != null) btnEdit.hidden = false;
+                document.getElementById('category').innerHTML = "[" + res.data[0].subCategory + "]";
+                document.getElementById('title').innerHTML = res.data[0].title;
+                document.getElementById('content').innerHTML = res.data[0].content;
+                document.getElementById('views').innerHTML = res.data[0].views;
+                document.getElementById('userName').innerHTML = res.data[0].firstName + " " + res.data[0].lastName;
+                const date = formatDateString(res.data[0].date);
+                document.getElementById('date').innerHTML = date;
+                const postUpdate = formatDateString(res.data[0].postUpdate);
+                document.getElementById('postUpdate').innerHTML = postUpdate;
+            }else if(currentPagePath == 'course_post_edit.html'){
+                document.getElementById('title').value = res.data[0].title;
+                document.getElementById('content').value = res.data[0].content;
+            }
+        }
+    });
 }
 
 function addStudySet() {
@@ -659,7 +698,7 @@ function loadData(){
 
     if(currentPagePath == 'mycourse.html'){
         getMyCourse();
-    }else if(currentPagePath == 'course_page_searchpage.html'){
+    }else if(currentPagePath == 'course_search.html'){
         getSubject();
     }else{
         loadCourseHomepage(currentPagePath);

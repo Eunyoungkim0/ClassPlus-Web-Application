@@ -1,4 +1,4 @@
-function courseCheck(page){
+function courseCheck(page, needsAi=0){
     // Get the query string from the URL
     const queryString = window.location.search;
     // Create a URLSearchParams object from the query string
@@ -13,7 +13,7 @@ function courseCheck(page){
     }
 
     var url = page + "?sj=" + subject + "&cn=" + courseNumber;
-    if(activityId != null) url += "&ai=" + activityId;
+    if(activityId != null && needsAi == 1) url += "&ai=" + activityId;
     window.location.href = url;
 }
 

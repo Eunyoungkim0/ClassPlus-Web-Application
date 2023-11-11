@@ -547,7 +547,6 @@ app.post('/api/editStudySet', async(req, res) => {
             const { term, definition } = data;
           
             var sql = `UPDATE studySets SET term = '${term}', definition = '${definition}' WHERE activityId = ${activityId} AND studySetId = ${count}`;          
-            console.log(sql);
             connection.query(sql, function(error, results, fields){
                 if (error) {
                     res.status(500).json({ error: 'Internal Server Error' });
@@ -605,7 +604,6 @@ app.post('/api/saveClass/', async(req, res) => {
     });
 });
 
-
 app.post('/api/getPermission/', async(req, res) => {
     const { userId, subject, courseNumber } = req.body;
     const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}';`
@@ -637,6 +635,35 @@ app.post('/api/getPermission/', async(req, res) => {
         });
     });
 });
+
+
+
+//--------------------------------------------------------------------------------------------------------
+// APIs FOR GROUP
+app.get('/api/getMyGroup/:userId', async(req, res) => {
+    const userId = req.params.userId;
+    var sql = `SELECT m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title, count(*) as members `;
+    sql += `FROM (SELECT gm.groupId, g.groupName, g.description, gm.courseId FROM groupmembers gm, classplus.groups g WHERE gm.userId = ${userId} AND gm.groupId = g.groupId AND g.year='${currentYear}' AND g.semester='fall') AS m, `;
+    sql += `courses c, groupmembers gm `;
+    sql += `WHERE m.courseId = c.courseId AND m.groupId = gm.groupId `;
+    sql += `GROUP BY m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title `;
+    sql += `ORDER BY c.subject, c.courseNumber;`;
+
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+
+//--------------------------------------------------------------------------------------------------------
+
+
+
 
 app.use(function (err, req, res, next) {
     if(err.name == 'UnauthorizedError'){
