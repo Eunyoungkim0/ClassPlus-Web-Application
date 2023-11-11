@@ -12,7 +12,7 @@
 ### :bell:TO-DO List for Sprint3
   - [ ] Student should be allowed to search for group
   - [ ] Users shall be able to create groups that focus on what they wish to study
-  - [ ] Allow students to join study groups 
+  - [x] Allow students to join study groups 
   - [x] Implement study sets function
   - [ ] Chat feature implemented (X)
   - [ ] Implement location/time booking system
