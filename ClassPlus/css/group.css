@@ -55,3 +55,50 @@
 .group-course {
     font-size: 1em;
 }
+
+.search-frame {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-title {
+    border: 1px black solid;
+}
+
+.search-select {
+    border: 1px red solid;
+}
+
+#subjectSelect {
+    height: 30px;
+    padding: 5px;
+    border: 1px gray solid;
+    border-radius: 5%;
+}
+
+#classSelect{
+    height: 30px;
+    padding: 5px;
+}
+
+#groupInformation {
+    cursor: pointer;
+    display: flex; 
+    flex-direction: row;
+    justify-content: center;
+}
+
+.group-title {
+    padding-top: 15px;
+    padding-left: 50px;
+    padding-bottom: 5px;
+    font-size: 40px;
+}
+
+.group-course-name {
+    padding-top: 29px;
+    padding-left: 10px;
+    padding-bottom: 19px;
+    flex-grow: 1;
+    font-size: 25px;
+}

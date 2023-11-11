@@ -7,44 +7,28 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel="stylesheet" type="text/css" href="webtheme.css">
-    <title>My course</title>
+    <title>Study Group</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
     integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div id="nav-placeholder"></div>
-    <div id="courseTop-placeholder"></div>
+    <div id="groupTop-placeholder"></div>
 
     <div class="row">
       <div class="column" style="width: 300px; margin-top:5%">
-        <div id="courseNav-placeholder"></div>
+        <div id="groupNav-placeholder"></div>
       </div>
 
       <div class="column" style="width: 70%;">
         <div class="wrapper">
-          <div class="coursepage-display"> Study Group </div>
+          <div class="coursepage-display"> Group Meeting </div>
         </div>
         <div class="coursepage-line"></div>
-      <div class="study-group-content">
-        <!-- Group title -->
-        <div class="group-details">
-          <h2 id="groupName"></h2>
-            <p id="groupDescription"></p>
-        </div>        
-        <button type="button" id="groupPageBtn" class="btn btn-outline" onclick="gotoGroupPage()">Go to group page</button>
-        <!-- Next Meeting Info -->
-        <div class="next-meeting">
-          <h4>Next meeting:</h4>
-          <p id="meetingInfo"></p>
-        </div>
-        <!-- Group members -->
-        <div class="group-members">
-          <h3>Group Members (<span id="memberCount"></span>)</h3>
-          <div id="memberList">
-            <!-- Group Member list gonna show here -->
-          </div>
+      </div>
     </div>
+
     <script type="text/javascript" src="../js/utils.js"></script>
   </body>
 </html>
