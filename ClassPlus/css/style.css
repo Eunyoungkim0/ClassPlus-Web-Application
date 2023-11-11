@@ -252,12 +252,6 @@ body {
 #v-pills-tab .nav-link:hover{
     background-color: #d9d9d9;
 }
-
-.next-meeting {
-    border: 1px solid black;
-    margin: 2%;
-    padding: 2%;
-}
   
 .btn-outline {
     display: inline-block;
@@ -289,6 +283,9 @@ body {
 #memberList {
     display: flex;
     flex-direction: column;
+    width: 90%;
+    margin: 5%;
+    border-radius: 5%;
 }
 
 .member-frame {
@@ -309,13 +306,26 @@ body {
 
 .follow-button {
     width: auto;
-    height: 44px;
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    height: 40px;
+    padding-left: 11px;
+    padding-right: 11px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     background: #004F34;
     border-radius: 4px;
     align-items: right;
     display: flex;
+}
+
+#groupDescription {
+    border: 1px #d9d9d9 solid;
+    padding: 2% 0%;
+    border-radius: 5%;
+}
+
+.next-meeting {
+    border: 1px #d9d9d9 solid;
+    margin: 2%;
+    padding: 2%;
+    border-radius: 5%;
 }

@@ -661,12 +661,18 @@ app.get('/api/getMyGroup/:userId', async(req, res) => {
 
 app.post('/api/getGroup/:groupId', async(req, res) => {
     const groupId = req.params.groupId;
-    const sql = `SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as members
-    FROM groupmembers gm, classplus.groups g, courses c 
-    WHERE g.year = '${currentYear}' AND g.semester = 'fall'
-    AND gm.groupId = g.groupId AND g.courseId = c.courseId
-    AND g.groupId = ${groupId}
-    GROUP BY g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title; `;
+    const userId = req.query.userId;
+    const sql = `SELECT a.*,
+    (CASE WHEN gm2.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIJoined,
+    (CASE WHEN e.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIEnrolled
+FROM (SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as members
+  FROM groupmembers gm, classplus.groups g, courses c 
+  WHERE g.year = '${currentYear}' AND g.semester = 'fall'
+  AND gm.groupId = g.groupId AND g.courseId = c.courseId
+  AND g.groupId = ${groupId}
+  GROUP BY g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title) AS A
+LEFT JOIN groupmembers gm2 ON a.groupId = gm2.groupId AND gm2.userId = ${userId}
+LEFT JOIN classesenrolled e ON a.courseId = e.courseId AND e.userId = ${userId} AND e.year = '${currentYear}' AND e.semester = 'fall'; `;
     connection.query(sql, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
@@ -679,7 +685,12 @@ app.post('/api/getGroup/:groupId', async(req, res) => {
 
 app.get('/api/getGroupMembers/:groupId', async(req, res) => {
     const groupId = req.params.groupId;
-    const sql = `SELECT gm.groupId, u.userId, u.lastName, u.firstName, u.picture FROM groupmembers gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId`;
+    const userId = req.query.userId;
+    const sql = `SELECT a.groupId, a.userId, a.lastName, a.firstName, a.picture,
+    (CASE WHEN f.userId IS NOT NULL THEN 1 ELSE 0 END) AS isFriend
+   FROM (SELECT gm.groupId, u.userId, u.lastName, u.firstName, u.picture FROM groupmembers gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId) AS a
+   LEFT JOIN friends f ON a.userId = f.friendId AND f.userId = ${userId};
+    `;
     connection.query(sql, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
@@ -772,6 +783,23 @@ app.post('/api/joinGroup/', async(req, res) => {
         }
     });
 
+});
+
+
+app.post('/api/followFriend/:userId', async(req, res) => {
+    const userId = req.params.userId;
+    const friendId = req.query.friendId;
+    const sql = `INSERT INTO friends VALUES(${userId}, ${friendId}); `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json({
+            success: true
+        });
+    });
 });
 //--------------------------------------------------------------------------------------------------------
 

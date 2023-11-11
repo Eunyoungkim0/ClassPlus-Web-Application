@@ -24,27 +24,32 @@
       <div class="column" style="width: 70%;">
         <div class="wrapper">
           <div class="coursepage-display"> Study Group </div>
+          <button hidden="true" id="buttonForGroup" class="course-button">
+            <div id="buttonTextForGroup" class="course-text"></div>
+          </button>
         </div>
         <div class="coursepage-line"></div>
-      <div class="study-group-content">
-        <!-- Group title -->
-        <div class="group-details">
-          <h2 id="groupName"></h2>
-            <p id="groupDescription"></p>
-        </div>        
-        <button type="button" id="groupPageBtn" class="btn btn-outline" onclick="gotoGroupPage()">Go to group page</button>
-        <!-- Next Meeting Info -->
-        <div class="next-meeting">
-          <h4>Next meeting:</h4>
-          <p id="meetingInfo"></p>
-        </div>
-        <!-- Group members -->
-        <div class="group-members">
-          <h3>Group Members (<span id="memberCount"></span>)</h3>
-          <div id="memberList">
-            <!-- Group Member list gonna show here -->
+
+        <div class="study-group-content">
+          <!-- Group title -->
+          <div class="group-details">
+            <h2 id="groupName"></h2>
+              <p id="groupDescription"></p>
           </div>
-    </div>
+          <div style="align-items: center; padding: 0% 40%;">
+            <button type="button" id="groupPageBtn" class="btn btn-outline" onclick="gotoGroupPage()">Go to group page</button>
+          </div>
+          <!-- Next Meeting Info -->
+          <div class="next-meeting">
+            <h4>Next meeting:</h4>
+            <p id="meetingInfo"></p>
+          </div>
+          <!-- Group members -->
+          <div class="group-members">
+            <h3>Group Members (<span id="memberCount"></span>)</h3>
+            <div id="memberList"></div>
+        </div>
+      </div>
     <script type="text/javascript" src="../js/utils.js"></script>
   </body>
 </html>

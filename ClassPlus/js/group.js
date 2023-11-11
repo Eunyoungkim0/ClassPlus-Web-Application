@@ -9,7 +9,7 @@ function getMyGroup(){
     .then(res => {
         if(res.data.length == 0){
             var divCourse = document.createElement('div');
-            divCourse.innerHTML = "There are no groups.";
+            divCourse.innerHTML = "You are not part of any groups.";
             document.querySelector('.box').appendChild(divCourse);
         }else{
             for(var i=0; i < res.data.length; i++){
@@ -78,11 +78,11 @@ function navigateToJoin() {
     axios.post(`/api/joinGroup`, data)
     .then(res => {
         if(res && res.data && res.data.success) {
-            const message = "Successfully joined in " + subject + " " + courseNumber;
+            const message = "Successfully joined";
             alert(message);
             location.reload();
         }else if(res && res.data && res.data.alreadyJoined) {
-            const message = "You're already joined in " + subject + " " + courseNumber;
+            const message = "You're already joined in this group.";
             alert(message);
         }
     });   
@@ -125,55 +125,60 @@ function loadGroupInfo() {
     const urlParams = new URLSearchParams(queryString);
     const userId = localStorage.getItem('userId');
     groupId = urlParams.get('gi');
-    
-    const btnEdit = document.getElementById('buttonForEdit');
-    if(btnEdit != null) btnEdit.hidden = true;
-    axios.post(`/api/getGroup/${groupId}`)
+
+    axios.post(`/api/getGroup/${groupId}?userId=${userId}`)
     .then(res => {
         if(res && res.data) {
             console.log(res.data);
-            if(currentPagePath == 'group_detail.html'){
-                if(btnEdit != null) btnEdit.hidden = false;
-                document.getElementById('groupName').innerHTML = res.data[0].groupName;
-                document.getElementById('groupDescription').innerHTML = ": " + res.data[0].description;
-                document.getElementById('memberCount').innerHTML = res.data[0].members;
+            console.log(res.data);
+            const amIJoined = res.data[0].amIJoined;
+            const amIEnrolled = res.data[0].amIEnrolled;
+            document.getElementById('groupName').innerHTML = res.data[0].groupName;
+            document.getElementById('groupDescription').innerHTML = ": " + res.data[0].description;
+            document.getElementById('memberCount').innerHTML = res.data[0].members;
 
-                axios.get(`/api/getGroupMembers/${groupId}`)
-                .then(res => {
-                    if(res && res.data) {
-                        console.log(res.data);
-                        var divMembers = document.getElementById('memberList');
-                        for(var i=0; i < res.data.length; i++){
-                            const divFrame = document.createElement('div');
-                            divFrame.setAttribute('class', 'member-frame');
-                            const divPicture = document.createElement('div');
-                            divPicture.setAttribute('class', 'picture-frame');
-                            const imgPicture = document.createElement('img');
-                            let picture = res.data[i].picture;
-                            if(picture === null){
-                                picture = "basicProfileImage.png";
-                            }
-                            imgPicture.setAttribute('src', `../images/${picture}`);
-                            imgPicture.setAttribute('class', 'picture');
-                            const divMemberName = document.createElement('div');
-                            divMemberName.setAttribute('class', 'member-name');
-                            divMemberName.innerHTML = res.data[i].firstName + " " + res.data[i].lastName;
+            axios.get(`/api/getGroupMembers/${groupId}?userId=${userId}`)
+            .then(res => {
+                if(res && res.data) {
+                    console.log(res.data);
+                    var divMembers = document.getElementById('memberList');
+                    for(var i=0; i < res.data.length; i++){
+                        const isFriend = res.data[i].isFriend;
+                        const friendId = res.data[i].userId;
+
+                        const divFrame = document.createElement('div');
+                        divFrame.setAttribute('class', 'member-frame');
+                        const divPicture = document.createElement('div');
+                        divPicture.setAttribute('class', 'picture-frame');
+                        const imgPicture = document.createElement('img');
+                        let picture = res.data[i].picture;
+                        if(picture === null){
+                            picture = "basicProfileImage.png";
+                        }
+                        imgPicture.setAttribute('src', `../images/${picture}`);
+                        imgPicture.setAttribute('class', 'picture');
+                        const divMemberName = document.createElement('div');
+                        divMemberName.setAttribute('class', 'member-name');
+                        divMemberName.innerHTML = res.data[i].firstName + " " + res.data[i].lastName;
+
+                        divMembers.appendChild(divFrame);
+                        divFrame.appendChild(divPicture);
+                        divPicture.appendChild(imgPicture);
+                        divFrame.appendChild(divMemberName);
+                        
+                        if(amIJoined == 1 && friendId != userId && isFriend == 0){
                             const btnFollow = document.createElement('button');
                             btnFollow.setAttribute('class', 'follow-button');
+                            btnFollow.setAttribute('onclick', `followFriend(${userId}, ${friendId})`);
                             const divFollow = document.createElement('div');
                             divFollow.setAttribute('class', 'course-text');
                             divFollow.innerHTML = "Follow";
                             btnFollow.appendChild(divFollow);
-
-                            divMembers.appendChild(divFrame);
-                            divFrame.appendChild(divPicture);
-                            divPicture.appendChild(imgPicture);
-                            divFrame.appendChild(divMemberName);
                             divFrame.appendChild(btnFollow);
                         }
                     }
-                });
-            }
+                }
+            });
         }
     });
 }
