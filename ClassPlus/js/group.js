@@ -183,9 +183,122 @@ function loadGroupInfo() {
     });
 }
 
-function loadGroupMeeting(data) {
-
+function loadGroupMeeting(groupId) {
+    axios.get(`/api/getGroupAvailableTime/${groupId}`)
+    .then(res => {
+        console.log(res.data);
+        const divTimeList = document.getElementById('timeList');
+        if(res.data.length == 0){
+            divTimeList.innerHTML = "There are no available time.";
+        }else{
+            for(var i=0; i < res.data.length; i++){
+                addTime(res.data[i].day, res.data[i].time, res.data[i].count);
+            }
+        }
+    });   
 }
+
+function addTime(day=0, time=0, count=0){
+    const divTimeList = document.getElementById('timeList');
+
+    const divFrame = document.createElement('div');
+    divFrame.setAttribute('class', 'available-frame');
+    const selectDay = document.createElement('select');
+    selectDay.setAttribute('class', 'meeting-select');
+    divFrame.appendChild(selectDay);
+    for(var i=0; i<8; i++){
+        var optionName = "optionDay" + i;
+        var dynamicVariable = {};
+        dynamicVariable[optionName] = document.createElement('option');
+        dynamicVariable[optionName].value = i;
+        var strDay = "";
+        switch (i) {
+            case 0:
+                strDay = "Select day";
+                break;
+            case 1:
+                strDay = "Monday";
+                break;
+            case 2:
+                strDay = "Tuesday";
+                break;
+            case 3:
+                strDay = "Wednesday";
+                break;
+            case 4:
+                strDay = "Thursday";
+                break;
+            case 5:
+                strDay = "Friday";
+                break;
+            case 6:
+                strDay = "Saturday";
+                break;
+            case 7:
+                strDay = "Sunday";
+                break;
+            default:
+                strDay = "";
+              
+        }
+        dynamicVariable[optionName].innerHTML = strDay;
+        selectDay.appendChild(dynamicVariable[optionName]);
+    }
+    if(day > 0) {
+        selectDay.value = day;
+        selectDay.disabled = true;
+    }
+
+    const inputStart = document.createElement('input');
+    inputStart.setAttribute('type', 'number');
+    inputStart.setAttribute('class', 'time-start');
+    inputStart.setAttribute('onkeypress', 'return isNumber(event)');
+    inputStart.setAttribute('min', 0);
+    inputStart.setAttribute('max', 23);
+    if(day > 0) {
+        inputStart.value = time;
+        inputStart.disabled = true;
+    }
+    const span1 = document.createElement('span');
+    span1.innerHTML = ":00 - ";
+    const inputEnd = document.createElement('input');
+    inputEnd.setAttribute('type', 'number');
+    inputEnd.setAttribute('class', 'time-end');
+    inputEnd.setAttribute('onkeypress', 'return isNumber(event)');
+    inputEnd.setAttribute('min', 0);
+    inputEnd.setAttribute('max', 23);
+    if(day > 0) {
+        inputEnd.value = time + 1;
+        inputEnd.disabled = true;
+    }
+    const span2 = document.createElement('span');
+    span2.innerHTML = ":00";
+
+    
+    divTimeList.appendChild(divFrame);
+    divFrame.appendChild(selectDay);
+
+    divFrame.appendChild(inputStart);
+    divFrame.appendChild(span1);
+    divFrame.appendChild(inputEnd);
+    divFrame.appendChild(span2);
+
+    const btnPick = document.createElement('button');
+    const divPick = document.createElement('div');
+    divPick.innerHTML = "Pick";
+    btnPick.setAttribute('class', 'pick-button');
+    divPick.setAttribute('class', 'course-text');
+    btnPick.appendChild(divPick);
+    divFrame.appendChild(btnPick);
+
+    if(day > 0){
+        const spanCount = document.createElement('span');
+        spanCount.setAttribute('class', 'available-people');
+        spanCount.innerHTML = count + " people are available at this time."
+        divFrame.appendChild(spanCount);
+    }
+}
+
 
 // This function executes in the course homepage.
 function loadGroupHomepage(currentPagePath){
@@ -211,7 +324,7 @@ function loadGroupHomepage(currentPagePath){
     if(currentPagePath == 'group_detail.html'){
         loadGroupInfo();
     }else if(currentPagePath == 'group_meeting.html'){
-        loadGroupMeeting(data);
+        loadGroupMeeting(groupId);
     }
 }
 

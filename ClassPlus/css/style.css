@@ -320,12 +320,51 @@ body {
 #groupDescription {
     border: 1px #d9d9d9 solid;
     padding: 2% 0%;
-    border-radius: 5%;
+    border-radius: 10px;
 }
 
 .next-meeting {
     border: 1px #d9d9d9 solid;
     margin: 2%;
     padding: 2%;
-    border-radius: 5%;
+    border-radius: 10px;
+}
+
+.table-data {
+    margin: 5px;
+    padding: 5px;
+    border: 1px gray solid;
+    border-radius: 10px;
+}
+
+.empty-div {
+    flex-grow: 1;
+}
+
+.table-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.table-label {
+    margin: 5px;
+    padding: 5px;
+    width: 70px;
+    border: 1px gray solid;
+    border-radius: 10px;
+    background-color: #d9d9d9;
+}
+
+.available-frame {
+    margin: 5px;
+    padding: 5px;
+}
+
+.time-start {
+    margin-left: 20px;
+    width: 50px;
+}
+
+.time-end {
+    width: 50px;
 }

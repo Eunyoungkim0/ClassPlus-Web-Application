@@ -70,6 +70,15 @@ function formatDateString(dateString) {
     return date.toLocaleString('en-US', options).replace(/,/g, '');
 }
 
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
 // When the page loads, this function executes.
 function onLoad() {
     const userId = localStorage.getItem('userId');
