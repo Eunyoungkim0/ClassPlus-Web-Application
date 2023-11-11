@@ -643,6 +643,38 @@ function followFriend(userId, friendId) {
     });   
 }
 
+function dataCheckForGroup() {
+    if(document.getElementById('title').value == ""){
+        alert("Please enter group name.");
+        document.getElementById('title').focus();
+        return false;
+    }
+    return true;
+}
+
+function saveGroup() {
+    if(dataCheckForGroup()){
+        const groupInformation = {
+            groupName : document.getElementById('title').value,
+            groupDescription : document.getElementById('description').value,
+            subject : subject,
+            courseNumber : courseNumber,
+            userId : localStorage.getItem('userId'),
+        }
+        
+        const userAnswer = askYesNoQuestion("Do you want to save your data?");
+        if (userAnswer) {
+            axios.post(`/api/createGroup`, groupInformation)
+                .then(res => {
+                    if(res && res.data && res.data.success) {
+                        const url = "course_StudyGroup.html" + "?sj=" + subject + "&cn=" + courseNumber;
+                        window.location.href = url;
+                    }
+                });
+        }
+    }
+}
+
 function addStudySet() {
     const divFrame = document.createElement('div');
     divFrame.setAttribute('class', 'studyset-frame');
@@ -661,7 +693,7 @@ function addStudySet() {
     divFrame.appendChild(divDefinition);
 }
 
-function dataCheck() {
+function dataCheckForStudySet() {
     if(document.getElementById('title').value == ""){
         alert("Please enter title");
         document.getElementById('title').focus();
@@ -688,7 +720,7 @@ function dataCheck() {
 }
 
 function saveStudySet() {
-    if(dataCheck()){
+    if(dataCheckForStudySet()){
         // Get the query string from the URL
         const queryString = window.location.search;
         // Create a URLSearchParams object from the query string

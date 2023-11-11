@@ -197,6 +197,10 @@
     flex-grow: 1;
 }
 
+#description {
+    flex-grow: 1;
+}
+
 #userName {
     flex-grow: 1;
 }

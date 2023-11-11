@@ -801,6 +801,41 @@ app.post('/api/followFriend/:userId', async(req, res) => {
         });
     });
 });
+
+app.post('/api/createGroup', async(req, res) => {
+    const { groupName, groupDescription, subject, courseNumber, userId } = req.body;
+    
+    const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+        var insertGroup = `INSERT INTO classplus.groups (groupId, groupName, description, courseId, year, semester, createrId) `;
+        insertGroup += `SELECT COALESCE(MAX(groupId), 0) + 1, '${groupName}', '${groupDescription}', ${courseId}, '${currentYear}', 'fall', ${userId} FROM classplus.groups;`;
+        connection.query(insertGroup, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            var insertGroupMember = `INSERT INTO groupmembers (groupId, courseId, userId) `;
+            insertGroupMember += `SELECT COALESCE(MAX(groupId), 0), ${courseId}, ${userId} FROM classplus.groups; `;
+            connection.query(insertGroupMember, function(error, results, fields){
+                if(error) {
+                    // Handle the error by sending an error response
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }            
+                res.json({
+                    success: true
+                });
+            });
+        });
+    });
+});
 //--------------------------------------------------------------------------------------------------------
 
 

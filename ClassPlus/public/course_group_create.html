@@ -24,14 +24,27 @@
       <div class="column" style="width: 70%;">
         <div class="wrapper">
           <div class="coursepage-display"> Study Group </div>
-          <button id="buttonForGroup" class="course-button" hidden="true" onclick="courseCheck('course_group_create.html')">
-            <div class="course-text">Make a new group</div>
-          </button>
         </div>
         <div class="coursepage-line"></div>
 
         <!-- Implement to get the data from the database and show it -->
-        <div id="divForGroup"></div>
+        <div id="divForGroup">
+            <div class="table-row">
+                <div class="table-label" style="width: 150px;">Group Name</div>
+                <input type="text" id="title" class="table-data"></input>
+            </div>
+            <div class="table-row">
+                <div class="table-label" style="width: 150px;">Group Description</div>
+                <input type="text" id="description" class="table-data"></input>
+            </div>
+            <div class="table-row">
+              <div class="empty-div"></div>
+              <button class="course-button" onclick="saveGroup()">
+                <div class="course-text">Save</div>
+              </button>
+            </div>
+        </div>
+
     </div>
     <script type="text/javascript" src="../js/utils.js"></script>
   </body>
