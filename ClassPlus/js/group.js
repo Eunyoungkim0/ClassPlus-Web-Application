@@ -203,6 +203,19 @@ function addTime(day=0, time=0, count=0){
 
     const divFrame = document.createElement('div');
     divFrame.setAttribute('class', 'available-frame');
+
+    const labelRadio = document.createElement('label');
+    labelRadio.setAttribute('class', 'radio-container');
+    const radio = document.createElement('input');
+    radio.setAttribute('type', 'radio');
+    radio.setAttribute('name', 'time');
+    radio.setAttribute('class', 'meeting-radio');
+    const spanRadio = document.createElement('span');
+    spanRadio.setAttribute('class', 'checkmark');
+
+    labelRadio.appendChild(radio);
+    labelRadio.appendChild(spanRadio);
+
     const selectDay = document.createElement('select');
     selectDay.setAttribute('class', 'meeting-select');
     divFrame.appendChild(selectDay);
@@ -276,6 +289,7 @@ function addTime(day=0, time=0, count=0){
 
     
     divTimeList.appendChild(divFrame);
+    divFrame.appendChild(labelRadio);
     divFrame.appendChild(selectDay);
 
     divFrame.appendChild(inputStart);
@@ -283,22 +297,117 @@ function addTime(day=0, time=0, count=0){
     divFrame.appendChild(inputEnd);
     divFrame.appendChild(span2);
 
-    const btnPick = document.createElement('button');
-    const divPick = document.createElement('div');
-    divPick.innerHTML = "Pick";
-    btnPick.setAttribute('class', 'pick-button');
-    divPick.setAttribute('class', 'course-text');
-    btnPick.appendChild(divPick);
-    divFrame.appendChild(btnPick);
-
+    
     if(day > 0){
         const spanCount = document.createElement('span');
         spanCount.setAttribute('class', 'available-people');
         spanCount.innerHTML = count + " people are available at this time."
         divFrame.appendChild(spanCount);
+    }else if(day == 0){
+        const deleteTime = document.createElement('img');
+        deleteTime.setAttribute('src', '../images/delete.png');
+        deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
+        deleteTime.setAttribute('onclick', 'deleteTime()');
+        divFrame.appendChild(deleteTime);
     }
 }
 
+function pickTime() {
+    var buttons = document.querySelectorAll('.pick-button');
+
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            var selectDay = this.parentElement.querySelector('.meeting-select');
+            var day = selectDay.value;
+            var timeStart = this.parentElement.querySelector('.time-start');
+            var start = timeStart.value;
+            var timeEnd = this.parentElement.querySelector('.time-end');
+            var end = timeEnd.value;
+
+            if(day == 0){
+                alert("Please select day");
+                selectDay.focus();
+                return false;
+            }
+            if(start == ""){
+                alert("Please enter available time.");
+                timeStart.focus();
+                return false;
+            }
+            if(start < 0 || start > 23){
+                alert("Start time should be 0-23");
+                timeStart.focus();
+                return false;
+            }
+            if(end == ""){
+                alert("Please enter available time.");
+                timeEnd.focus();
+                return false;
+            }
+            if(end < 0 || end > 23){
+                alert("End time should be 0-23");
+                timeEnd.focus();
+                return false;
+            }
+            if(end <= start){
+                alert("End time should be greater than start time.");
+                timeEnd.focus();
+                return false;
+            }
+
+
+        });
+    });
+}
+
+
+function deleteTime() {
+    const images = document.querySelectorAll('.available-frame img');
+
+    images.forEach((image, index) => {
+    image.addEventListener('click', function(event) {
+            const clickedImage = event.target;
+            const parentDiv = clickedImage.parentElement;
+            parentDiv.remove();
+        });
+    });
+}
+
+function addLocation() {
+    const divLocationList = document.getElementById('locationList');
+
+    const divFrame = document.createElement('div');
+    divFrame.setAttribute('class', 'available-frame');
+
+    const labelRadio = document.createElement('label');
+    labelRadio.setAttribute('class', 'radio-container');
+    const radio = document.createElement('input');
+    radio.setAttribute('type', 'radio');
+    radio.setAttribute('name', 'location');
+    radio.setAttribute('class', 'meeting-radio');
+    const spanRadio = document.createElement('span');
+    spanRadio.setAttribute('class', 'checkmark');
+
+    labelRadio.appendChild(radio);
+    labelRadio.appendChild(spanRadio);
+
+
+    const inputLocation = document.createElement('input');
+    inputLocation.setAttribute('type', 'text');
+    inputLocation.setAttribute('class', 'location');
+    
+    
+    divLocationList.appendChild(divFrame);
+    divFrame.appendChild(labelRadio);
+    divFrame.appendChild(inputLocation);
+
+    
+    const deleteTime = document.createElement('img');
+    deleteTime.setAttribute('src', '../images/delete.png');
+    deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
+    deleteTime.setAttribute('onclick', 'deleteTime()');
+    divFrame.appendChild(deleteTime);
+}
 
 // This function executes in the course homepage.
 function loadGroupHomepage(currentPagePath){

@@ -203,19 +203,18 @@
     padding: 10px;
     display: flex;
     flex-direction: row;
-    border: 1px gray dashed;
+    border: 1px gray dotted;
     border-radius: 10px;
 }
 
 .term {
     width: 20%;
     padding: 10px;
-    border-right: 1px gray solid;
+    
 }
 
 .definition {
     width: 80%;
     padding: 10px;
-    border-left: 1px gray solid;
+    border-left: 1px #d9d9d9 solid;
 }
-

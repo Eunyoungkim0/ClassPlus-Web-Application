@@ -267,10 +267,6 @@ body {
     margin: 2%;
 }
 
-#groupDescription {
-    margin: 3%;
-}
-
 .group-members{
     margin-top: 5%;
 }
@@ -319,8 +315,9 @@ body {
 
 #groupDescription {
     border: 1px #d9d9d9 solid;
-    padding: 2% 0%;
+    padding: 2%;
     border-radius: 10px;
+    margin: 2%;
 }
 
 .next-meeting {
@@ -331,10 +328,10 @@ body {
 }
 
 .table-data {
-    margin: 5px;
+    margin: 6px 3px;
     padding: 5px;
-    border: 1px gray solid;
-    border-radius: 10px;
+    border: 1px #d9d9d9 solid;
+    border-radius: 5px;
 }
 
 .empty-div {
@@ -347,12 +344,13 @@ body {
 }
 
 .table-label {
-    margin: 5px;
+    margin: 6px 3px;
     padding: 5px;
     width: 70px;
     border: 1px gray solid;
-    border-radius: 10px;
+    border-radius: 5px;
     background-color: #d9d9d9;
+    font-weight: bold;
 }
 
 .available-frame {
@@ -367,4 +365,28 @@ body {
 
 .time-end {
     width: 50px;
+}
+
+.save-button{
+    width: auto;
+    height: 44px;
+    margin-left: 2%;
+    margin-top: 4%;
+    margin-right: 2.2%;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #FEBE00;
+    border-radius: 4px;
+    align-items: right;
+    display: flex;
+}
+
+.save-text{
+    text-align: center;
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+    word-wrap: break-word;
 }

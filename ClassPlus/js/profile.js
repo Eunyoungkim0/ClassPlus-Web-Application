@@ -265,7 +265,7 @@ function dataValidate() {
       }
       if(end < 0 || end > 23){
         alert("End time should be 0-23");
-        startInputs[i].focus();
+        endInputs[i].focus();
         return false;
       }
       if(end <= start){
