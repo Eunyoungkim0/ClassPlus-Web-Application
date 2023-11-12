@@ -142,6 +142,7 @@ body {
     border-radius: 4px;
     align-items: right;
     display: flex;
+    border: 1px #d9d9d9 solid;
 }
 
 .course-text{
@@ -360,11 +361,11 @@ body {
 
 .time-start {
     margin-left: 20px;
-    width: 50px;
+    width: 45px;
 }
 
 .time-end {
-    width: 50px;
+    width: 45px;
 }
 
 .save-button{
@@ -381,6 +382,7 @@ body {
     border-radius: 4px;
     align-items: right;
     display: flex;
+    border: 1px #d9d9d9 solid;
 }
 
 .save-text{

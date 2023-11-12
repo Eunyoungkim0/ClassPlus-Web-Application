@@ -209,7 +209,7 @@ function addTime(day=0, time=0, count=0){
     const radio = document.createElement('input');
     radio.setAttribute('type', 'radio');
     radio.setAttribute('name', 'time');
-    radio.setAttribute('class', 'meeting-radio');
+    radio.setAttribute('class', 'meeting-radio-time');
     const spanRadio = document.createElement('span');
     spanRadio.setAttribute('class', 'checkmark');
 
@@ -298,12 +298,19 @@ function addTime(day=0, time=0, count=0){
     divFrame.appendChild(span2);
 
     
-    if(day > 0){
+    if(count > 0) {
         const spanCount = document.createElement('span');
         spanCount.setAttribute('class', 'available-people');
         spanCount.innerHTML = count + " people are available at this time."
+        const inputCount = document.createElement('input');
+        inputCount.setAttribute('type', 'number');
+        inputCount.setAttribute('class', 'meeting-count');
+        inputCount.setAttribute('value', `${count}`);
+        inputCount.disabled = true;
+        inputCount.hidden = true;
         divFrame.appendChild(spanCount);
-    }else if(day == 0){
+        divFrame.appendChild(inputCount);
+    }else {
         const deleteTime = document.createElement('img');
         deleteTime.setAttribute('src', '../images/delete.png');
         deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
@@ -311,55 +318,6 @@ function addTime(day=0, time=0, count=0){
         divFrame.appendChild(deleteTime);
     }
 }
-
-function pickTime() {
-    var buttons = document.querySelectorAll('.pick-button');
-
-    buttons.forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            var selectDay = this.parentElement.querySelector('.meeting-select');
-            var day = selectDay.value;
-            var timeStart = this.parentElement.querySelector('.time-start');
-            var start = timeStart.value;
-            var timeEnd = this.parentElement.querySelector('.time-end');
-            var end = timeEnd.value;
-
-            if(day == 0){
-                alert("Please select day");
-                selectDay.focus();
-                return false;
-            }
-            if(start == ""){
-                alert("Please enter available time.");
-                timeStart.focus();
-                return false;
-            }
-            if(start < 0 || start > 23){
-                alert("Start time should be 0-23");
-                timeStart.focus();
-                return false;
-            }
-            if(end == ""){
-                alert("Please enter available time.");
-                timeEnd.focus();
-                return false;
-            }
-            if(end < 0 || end > 23){
-                alert("End time should be 0-23");
-                timeEnd.focus();
-                return false;
-            }
-            if(end <= start){
-                alert("End time should be greater than start time.");
-                timeEnd.focus();
-                return false;
-            }
-
-
-        });
-    });
-}
-
 
 function deleteTime() {
     const images = document.querySelectorAll('.available-frame img');
@@ -384,7 +342,7 @@ function addLocation() {
     const radio = document.createElement('input');
     radio.setAttribute('type', 'radio');
     radio.setAttribute('name', 'location');
-    radio.setAttribute('class', 'meeting-radio');
+    radio.setAttribute('class', 'meeting-radio-location');
     const spanRadio = document.createElement('span');
     spanRadio.setAttribute('class', 'checkmark');
 
@@ -407,6 +365,126 @@ function addLocation() {
     deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
     deleteTime.setAttribute('onclick', 'deleteTime()');
     divFrame.appendChild(deleteTime);
+}
+
+function saveMeeting() {
+    if(meetingDataValidate()){
+        const userAnswer = askYesNoQuestion("Do you want to save your data?");
+        if (userAnswer) {
+            const selectInputs = document.getElementsByClassName('meeting-select');
+            const startInputs = document.getElementsByClassName('time-start');
+            const endInputs = document.getElementsByClassName('time-end');
+            const countInputs = document.getElementsByClassName('meeting-count');
+            const radioTimeInputs = document.getElementsByClassName('meeting-radio-time');
+            var days = {};
+            for (let i = 0; i < selectInputs.length; i++) {
+                const day = parseInt(selectInputs[i].value);
+                const startValue = parseInt(startInputs[i].value);
+                const endValue = parseInt(endInputs[i].value);
+                const radioValue = radioTimeInputs[i].checked;
+
+                days[i] = days[i] || [];
+                days[i].push(day);
+                days[i].push(startValue);
+                days[i].push(endValue);
+                days[i].push(radioValue);
+                if(countInputs[i] != null) {
+                    const countValue = parseInt(countInputs[i].value);
+                    days[i].push(countValue);
+                }else{
+                    days[i].push(0);
+                }
+            }
+
+            const locationInputs = document.getElementsByClassName('location');
+            const radioLocationInputs = document.getElementsByClassName('meeting-radio-location');
+            var locations = {};
+            for (let i = 0; i < locationInputs.length; i++) {
+                const location = locationInputs[i].value;
+                const radioValue = radioLocationInputs[i].checked;
+
+                locations[i] = locations[i] || [];
+                locations[i].push(location);
+                locations[i].push(radioValue);
+            }
+
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            groupId = urlParams.get('gi');
+
+            const data = {
+                groupId: groupId,
+                days: days,
+                locations: locations,
+            }
+
+            console.log(data);
+        
+            axios.post(`/api/group_meeting_save`, data)
+                .then(res => {
+                    if(res && res.data && res.data.success) {
+                        console.log(res);
+                        alert("Meeting information successfully saved!");
+                        location.reload();
+                    }
+                });
+        }
+    }
+}
+
+function meetingDataValidate() {
+    const selectInputs = document.getElementsByClassName('meeting-select');
+    const startInputs = document.getElementsByClassName('time-start');
+    const endInputs = document.getElementsByClassName('time-end');
+
+    for (let i = 0; i < selectInputs.length; i++) {
+        const day = selectInputs[i].value;
+        const start = startInputs[i].value;
+        const end = endInputs[i].value;
+        if(day == "" || day == 0){
+          alert("Please select day");
+          selectInputs[i].focus();
+          return false;
+        }
+        if(start == ""){
+          alert("Please enter available time.");
+          startInputs[i].focus();
+          return false;
+        }
+        if(start < 0 || start > 23){
+          alert("Start time should be 0-23");
+          startInputs[i].focus();
+          return false;
+        }
+        if(end == ""){
+          alert("Please enter available time.");
+          endInputs[i].focus();
+          return false;
+        }
+        if(end < 0 || end > 23){
+          alert("End time should be 0-23");
+          endInputs[i].focus();
+          return false;
+        }
+        if(end <= start){
+          alert("End time should be greater than start time.");
+          endInputs[i].focus();
+          return false;
+        }
+      }
+
+      const locationInputs = document.getElementsByClassName('location');
+  
+      for (let i = 0; i < locationInputs.length; i++) {
+        const location = locationInputs[i].value;
+        if(location == ""){
+          alert("Please enter location.");
+          locationInputs[i].focus();
+          return false;
+        }
+      }
+
+      return true;
 }
 
 // This function executes in the course homepage.

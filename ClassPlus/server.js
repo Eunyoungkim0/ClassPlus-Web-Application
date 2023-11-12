@@ -854,6 +854,40 @@ app.get('/api/getGroupAvailableTime/:groupId', async(req, res) => {
         res.json(results);
     });
 });
+
+
+app.post('/api/group_meeting_save', async (req, res) => {
+    const { groupId, days, locations } = req.body;
+
+    // for (const dayKey in days) {
+    //     if (days.hasOwnProperty(dayKey)) {
+    //         const times = days[dayKey];
+    //         for (const time of times) {
+    //             const sql = `INSERT INTO availableTime (userId, year, semester, day, time) VALUES (${userId}, ${currentYear}, 'fall', ${dayKey}, ${time})`;
+    //             connection.query(sql, function (error, results, fields) {
+    //                 if (error) throw error;
+    //             });
+    //         }
+    //     }
+    // }
+
+    // for (const locationKey in locations) {
+    //     if (locations.hasOwnProperty(locationKey)) {
+    //         const locationsData = locations[locationKey];
+    //         for (const location of locationsData) {
+    //             const sql = `INSERT INTO availableTime (userId, year, semester, day, time) VALUES (${userId}, ${currentYear}, 'fall', ${locationKey}, ${location})`;
+    //             connection.query(sql, function (error, results, fields) {
+    //                 if (error) throw error;
+    //             });
+    //         }
+    //     }
+    // }
+
+    // res.json({
+    //     success: true
+    // });
+});
+
 //--------------------------------------------------------------------------------------------------------
 
 
