@@ -23,28 +23,23 @@
 
       <div class="column" style="width: 70%;">
         <div class="wrapper">
-          <div class="coursepage-display"> Posts </div>
+          <div class="coursepage-display"> Study Group </div>
         </div>
         <div class="coursepage-line"></div>
 
         <!-- Implement to get the data from the database and show it -->
-        <div id="divForPost">
+        <div id="divForGroup">
             <div class="table-row">
-                
-                <select class ="table-data" aria-label="category" name="category" id="category">
-                    <option value="Question">Question</option>
-                    <option value="Homework">Homework</option>
-                    <option value="Note">Note</option>
-                </select>
-                <div class="table-label">Title</div>
+                <div class="table-label" style="width: 150px;">Group Name</div>
                 <input type="text" id="title" class="table-data"></input>
             </div>
             <div class="table-row">
-                <input type="textarea" id="content" class="table-data"></input>
+                <div class="table-label" style="width: 150px;">Group Description</div>
+                <input type="text" id="description" class="table-data"></input>
             </div>
             <div class="table-row">
               <div class="empty-div"></div>
-              <button class="save-button" onclick="editPost()">
+              <button class="save-button" onclick="saveGroup()">
                 <div class="save-text">Save</div>
               </button>
             </div>

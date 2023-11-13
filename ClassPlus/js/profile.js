@@ -273,7 +273,7 @@ function dataValidate() {
       }
       if(end < 0 || end > 23){
         alert("End time should be 0-23");
-        startInputs[i].focus();
+        endInputs[i].focus();
         return false;
       }
       if(end <= start){
@@ -381,15 +381,6 @@ function loadAvailableTime(userId) {
     });
 }
 
-// This function makes sure that users put only number on unccId field.
-function isNumber(evt) {
-    evt = (evt) ? evt : window.event;
-    var charCode = (evt.which) ? evt.which : evt.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-    }
-    return true;
-  }
   
 // This function loads data depending on its page name.
 function loadData(){

@@ -17,30 +17,36 @@
     <div id="groupTop-placeholder"></div>
 
     <div class="row">
-      <div class="column" style="width: 300px; margin-top:5%">
-        <div id="groupNav-placeholder"></div>
-      </div>
-
-      <div class="column" style="width: 70%;">
-      <div class="study-group-content">
-        <!-- Group title -->
-        <div class="group-details">
-          <h2 id="groupName"></h2>
-            <p id="groupDescription"></p>
+        <div class="column" style="width: 300px; margin-top:5%">
+          <div id="groupNav-placeholder"></div>
         </div>
-        <!-- Next Meeting Info -->
-        <div class="next-meeting">
-          <h4>Next meeting:</h4>
-          <p id="meetingInfo"></p>
-        </div>
-        <!-- Group members -->
-        <div class="group-members">
-          <h3>Group Members (<span id="memberCount"></span>)</h3>
-          <div id="memberList">
-            <!-- Group Member list gonna show here -->
+  
+        <div class="column" style="width: 70%;">
+          <div class="wrapper">
+            <div class="coursepage-display"> Group Information </div>
           </div>
-    </div>
-
-    <script type="text/javascript" src="../js/utils.js"></script>
-  </body>
-</html>
+          <div class="coursepage-line"></div>
+  
+          <div class="study-group-content">
+            <!-- Group title -->
+            <h2 id="groupName"></h2>
+            <div class="group-details">
+                <p><b>Group Description</b></p>
+                <p id="groupDescription"></p>
+            </div>
+            <!-- Next Meeting Info -->
+            <div class="next-meeting">
+              <p><b>Meeting Information</b></p>
+              <p id="meetingInfo"></p>
+              <div id="timeList"></div>
+              <div id="locationList"></div>
+            </div>
+            <!-- Group members -->
+            <div class="group-members">
+              <p><b>Group Members (<span id="memberCount"></span>)</b></p>
+              <div id="memberList"></div>
+          </div>
+        </div>
+      <script type="text/javascript" src="../js/utils.js"></script>
+    </body>
+  </html>

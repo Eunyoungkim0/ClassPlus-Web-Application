@@ -70,6 +70,216 @@ function formatDateString(dateString) {
     return date.toLocaleString('en-US', options).replace(/,/g, '');
 }
 
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
+function addGroupTime(day=0, start=0, end=0, count=0, isSelected=0){
+    const currentPagePath = window.location.pathname.substring(1);
+    var readonlyValue = false;
+    if(currentPagePath == "group_detail.html" || currentPagePath == "course_group_view.html"){
+        readonlyValue = true;
+    }
+
+    const divTimeList = document.getElementById('timeList');
+
+    const divFrame = document.createElement('div');
+    divFrame.setAttribute('class', 'available-frame');
+
+    const labelRadio = document.createElement('label');
+    labelRadio.setAttribute('class', 'radio-container');
+    const radio = document.createElement('input');
+    radio.setAttribute('type', 'radio');
+    radio.setAttribute('name', 'time');
+    radio.setAttribute('class', 'meeting-radio-time');
+    const radioValue = day + "|" + start + "|" + end;
+    radio.setAttribute('value', `${radioValue}`);
+    if(isSelected == 1){
+        radio.checked = true;
+    }
+    const spanRadio = document.createElement('span');
+    spanRadio.setAttribute('class', 'checkmark');
+
+    labelRadio.appendChild(radio);
+    labelRadio.appendChild(spanRadio);
+
+    const selectDay = document.createElement('select');
+    selectDay.setAttribute('class', 'meeting-select');
+    divFrame.appendChild(selectDay);
+    for(var i=0; i<8; i++){
+        var optionName = "optionDay" + i;
+        var dynamicVariable = {};
+        dynamicVariable[optionName] = document.createElement('option');
+        dynamicVariable[optionName].value = i;
+        var strDay = "";
+        switch (i) {
+            case 0:
+                strDay = "Select day";
+                break;
+            case 1:
+                strDay = "Monday";
+                break;
+            case 2:
+                strDay = "Tuesday";
+                break;
+            case 3:
+                strDay = "Wednesday";
+                break;
+            case 4:
+                strDay = "Thursday";
+                break;
+            case 5:
+                strDay = "Friday";
+                break;
+            case 6:
+                strDay = "Saturday";
+                break;
+            case 7:
+                strDay = "Sunday";
+                break;
+            default:
+                strDay = "";
+              
+        }
+        dynamicVariable[optionName].innerHTML = strDay;
+        selectDay.appendChild(dynamicVariable[optionName]);
+    }
+    if(day > 0){
+        selectDay.value = day;
+        selectDay.disabled = true;
+    }
+
+    const inputStart = document.createElement('input');
+    inputStart.setAttribute('type', 'number');
+    inputStart.setAttribute('class', 'time-start');
+    inputStart.setAttribute('onkeypress', 'return isNumber(event)');
+    inputStart.setAttribute('min', 0);
+    inputStart.setAttribute('max', 23);
+    if(day > 0) {
+        inputStart.value = start;
+        inputStart.disabled = true;
+    }
+    const span1 = document.createElement('span');
+    span1.innerHTML = ":00 - ";
+    const inputEnd = document.createElement('input');
+    inputEnd.setAttribute('type', 'number');
+    inputEnd.setAttribute('class', 'time-end');
+    inputEnd.setAttribute('onkeypress', 'return isNumber(event)');
+    inputEnd.setAttribute('min', 0);
+    inputEnd.setAttribute('max', 23);
+    if(count > 0) {
+        inputEnd.value = start + 1;
+        inputEnd.disabled = true;
+    }else{
+        if(end > 0) {
+            inputEnd.value = end;
+            inputEnd.disabled = true;
+        }
+    }
+    const span2 = document.createElement('span');
+    span2.innerHTML = ":00";
+
+    
+    divTimeList.appendChild(divFrame);
+    divFrame.appendChild(labelRadio);
+    divFrame.appendChild(selectDay);
+
+    divFrame.appendChild(inputStart);
+    divFrame.appendChild(span1);
+    divFrame.appendChild(inputEnd);
+    divFrame.appendChild(span2);
+
+    if(readonlyValue == false){
+        if(count > 0) {
+            const spanCount = document.createElement('span');
+            spanCount.setAttribute('class', 'available-people');
+            spanCount.innerHTML = count + " people are available at this time."
+            const inputCount = document.createElement('input');
+            inputCount.setAttribute('type', 'number');
+            inputCount.setAttribute('class', 'meeting-count');
+            inputCount.setAttribute('value', `${count}`);
+            inputCount.disabled = true;
+            inputCount.hidden = true;
+            divFrame.appendChild(spanCount);
+            divFrame.appendChild(inputCount);
+        }else {
+            if(joined == 1){
+                const deleteTime = document.createElement('img');
+                deleteTime.setAttribute('src', '../images/delete.png');
+                deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
+                deleteTime.setAttribute('onclick', 'deleteTime()');
+                divFrame.appendChild(deleteTime);
+            }
+        }
+    }
+    
+    if(readonlyValue == true || joined == 0){
+        radio.disabled = true;
+        selectDay.disabled = true;
+        inputStart.disabled = true;
+        inputEnd.disabled = true;
+    }
+}
+
+function addLocation(location="", isSelected=0) {
+    const currentPagePath = window.location.pathname.substring(1);
+    var readonlyValue = false;
+    if(currentPagePath == "group_detail.html" || currentPagePath == "course_group_view.html"){
+        readonlyValue = true;
+    }
+
+    const divLocationList = document.getElementById('locationList');
+
+    const divFrame = document.createElement('div');
+    divFrame.setAttribute('class', 'available-frame');
+
+    const labelRadio = document.createElement('label');
+    labelRadio.setAttribute('class', 'radio-container');
+    const radio = document.createElement('input');
+    radio.setAttribute('type', 'radio');
+    radio.setAttribute('name', 'location');
+    radio.setAttribute('class', 'meeting-radio-location');
+    if(isSelected == 1){
+        radio.checked = true;
+    }
+    const spanRadio = document.createElement('span');
+    spanRadio.setAttribute('class', 'checkmark');
+
+    labelRadio.appendChild(radio);
+    labelRadio.appendChild(spanRadio);
+
+
+    const inputLocation = document.createElement('input');
+    inputLocation.setAttribute('type', 'text');
+    inputLocation.setAttribute('class', 'location');
+    if(location != ""){
+        inputLocation.value = location;
+        inputLocation.disabled = true;
+    }
+    
+    divLocationList.appendChild(divFrame);
+    divFrame.appendChild(labelRadio);
+    divFrame.appendChild(inputLocation);
+
+    if(readonlyValue == false && joined == 1){
+        const deleteTime = document.createElement('img');
+        deleteTime.setAttribute('src', '../images/delete.png');
+        deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
+        deleteTime.setAttribute('onclick', 'deleteLocation()');
+        divFrame.appendChild(deleteTime);
+    }
+
+    if(readonlyValue == true || joined == 0){
+        radio.disabled = true;
+        inputLocation.disabled = true;
+    }
+}
+
 // When the page loads, this function executes.
 function onLoad() {
     const userId = localStorage.getItem('userId');

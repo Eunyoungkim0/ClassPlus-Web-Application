@@ -24,8 +24,35 @@
       <div class="column" style="width: 70%;">
         <div class="wrapper">
           <div class="coursepage-display"> Group Meeting </div>
+          <button class="save-button" onclick="saveMeeting()" id="saveMeeting">
+              <div class="save-text">Save</div>
+          </button>
         </div>
         <div class="coursepage-line"></div>
+            
+        <div class="table-row group-table-row">
+            <div class="meeting-title">Members' Top Available Time</div>
+            <button class="add-button" onclick="addGroupTime()" id="addTime">
+                <div class="course-text">Add Time</div>
+            </button>
+        </div>
+
+        <div class="table-row group-table-row">
+            <div id="timeList" class="list-frame"></div>
+        </div>
+        
+
+        <div class="table-row group-table-row">
+            <div class="meeting-title">Location</div>
+            <button class="add-button" onclick="addLocation()" id="addLocation">
+                <div class="course-text">Add Location</div>
+            </button>
+        </div>
+
+        <div class="table-row group-table-row">
+            <div id="locationList" class="list-frame"></div>
+        </div>
+
       </div>
     </div>
 

@@ -24,7 +24,7 @@
     /*box-shadow: #004F34 0px 2px 10px;*/
     box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
     border: 1px #d9d9d9 solid;
-    border-radius: 5%;
+    border-radius: 10px;
     color: gray;
     cursor: pointer;
 }
@@ -40,10 +40,6 @@
 
 .group-def {
     font-size: 1.2em;
-}
-
-.group-members {
-    font-size: 0.9em;
 }
 
 .group-line {
@@ -101,4 +97,44 @@
     padding-bottom: 19px;
     flex-grow: 1;
     font-size: 25px;
+}
+
+.group-table-row {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.meeting-title {
+    display: flex;
+    align-items: flex-end;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0px 20px;
+    flex-grow: 1;
+}
+
+.add-button {
+    width: auto;
+    height: 40px;
+    margin: 0px 20px;
+    padding: 8px 11px;
+    background: #004F34;
+    border-radius: 4px;
+    align-items: right;
+    display: flex;
+    border: 1px #d9d9d9 solid;
+}
+
+.list-frame {
+    width: 100%;
+    margin: 20px;
+    padding: 20px;
+    border: 1px #d9d9d9 solid;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+span {
+    margin-right: 5px;
 }

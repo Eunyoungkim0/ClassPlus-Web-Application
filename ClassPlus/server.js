@@ -661,12 +661,18 @@ app.get('/api/getMyGroup/:userId', async(req, res) => {
 
 app.post('/api/getGroup/:groupId', async(req, res) => {
     const groupId = req.params.groupId;
-    const sql = `SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as members
-    FROM groupmembers gm, classplus.groups g, courses c 
-    WHERE g.year = '${currentYear}' AND g.semester = 'fall'
-    AND gm.groupId = g.groupId AND g.courseId = c.courseId
-    AND g.groupId = ${groupId}
-    GROUP BY g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title; `;
+    const userId = req.query.userId;
+    const sql = `SELECT a.*,
+    (CASE WHEN gm2.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIJoined,
+    (CASE WHEN e.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIEnrolled
+FROM (SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as members
+  FROM groupmembers gm, classplus.groups g, courses c 
+  WHERE g.year = '${currentYear}' AND g.semester = 'fall'
+  AND gm.groupId = g.groupId AND g.courseId = c.courseId
+  AND g.groupId = ${groupId}
+  GROUP BY g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title) AS A
+LEFT JOIN groupmembers gm2 ON a.groupId = gm2.groupId AND gm2.userId = ${userId}
+LEFT JOIN classesenrolled e ON a.courseId = e.courseId AND e.userId = ${userId} AND e.year = '${currentYear}' AND e.semester = 'fall'; `;
     connection.query(sql, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
@@ -679,7 +685,12 @@ app.post('/api/getGroup/:groupId', async(req, res) => {
 
 app.get('/api/getGroupMembers/:groupId', async(req, res) => {
     const groupId = req.params.groupId;
-    const sql = `SELECT gm.groupId, u.userId, u.lastName, u.firstName, u.picture FROM groupmembers gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId`;
+    const userId = req.query.userId;
+    const sql = `SELECT a.groupId, a.userId, a.lastName, a.firstName, a.picture,
+    (CASE WHEN f.userId IS NOT NULL THEN 1 ELSE 0 END) AS isFriend
+   FROM (SELECT gm.groupId, u.userId, u.lastName, u.firstName, u.picture FROM groupmembers gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId) AS a
+   LEFT JOIN friends f ON a.userId = f.friendId AND f.userId = ${userId};
+    `;
     connection.query(sql, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
@@ -758,7 +769,6 @@ app.post('/api/joinGroup/', async(req, res) => {
         }else{
             const sql = `INSERT INTO groupmembers (groupId, courseId, userId) 
                          SELECT ${groupId}, courseId, ${userId} FROM classplus.groups g WHERE g.groupId = ${groupId};`;
-            console.log(sql);
             connection.query(sql, function(error, results, fields){
                 if(error) {
                     // Handle the error by sending an error response
@@ -772,6 +782,196 @@ app.post('/api/joinGroup/', async(req, res) => {
         }
     });
 
+});
+
+
+app.post('/api/followFriend/:userId', async(req, res) => {
+    const userId = req.params.userId;
+    const friendId = req.query.friendId;
+    const sql = `INSERT INTO friends VALUES(${userId}, ${friendId}); `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json({
+            success: true
+        });
+    });
+});
+
+app.post('/api/createGroup', async(req, res) => {
+    const { groupName, groupDescription, subject, courseNumber, userId } = req.body;
+    
+    const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+        var insertGroup = `INSERT INTO classplus.groups (groupId, groupName, description, courseId, year, semester, createrId) `;
+        insertGroup += `SELECT COALESCE(MAX(groupId), 0) + 1, '${groupName}', '${groupDescription}', ${courseId}, '${currentYear}', 'fall', ${userId} FROM classplus.groups;`;
+        connection.query(insertGroup, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            var insertGroupMember = `INSERT INTO groupmembers (groupId, courseId, userId) `;
+            insertGroupMember += `SELECT COALESCE(MAX(groupId), 0), ${courseId}, ${userId} FROM classplus.groups; `;
+            connection.query(insertGroupMember, function(error, results, fields){
+                if(error) {
+                    // Handle the error by sending an error response
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }            
+                res.json({
+                    success: true
+                });
+            });
+        });
+    });
+});
+
+app.get('/api/getGroupAvailableTime/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT gm.groupId, a.day, a.time, count(*) as count
+    FROM availabletime a
+    LEFT JOIN groupmembers gm ON a.userId = gm.userId
+   WHERE gm.groupId = ${groupId}
+   GROUP BY gm.groupId, a.day, a.time
+   HAVING count > 1 ORDER BY count DESC;`;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/api/getGroupSavedMeeting/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT * FROM groupavailable WHERE groupId = ${groupId}; `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/api/getGroupNextMeeting/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT * FROM groupavailable WHERE groupId = ${groupId} AND isSelected = 1; `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/group_meeting_save', async (req, res) => {
+    const { groupId, days, locations } = req.body;
+
+    for (const dayKey in days) {
+        if (days.hasOwnProperty(dayKey)) {
+            const times = days[dayKey];
+
+            const selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = 'Time' AND value1 = ${times[0]} AND value2 = ${times[1]} AND value3 = ${times[2]}; `;
+            connection.query(selectSQL, function (error, results, fields) {
+                if (error) throw error;
+                const resultExist = results[0].count;
+                if(resultExist == 0){
+                    const insertSQL = `INSERT INTO groupavailable (groupId, type, value1, value2, value3, isSelected, memCount) VALUES (${groupId}, 'Time', ${times[0]}, ${times[1]}, ${times[2]}, ${times[3]}, ${times[4]});`;
+                    connection.query(insertSQL, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }else{
+                    const updateSQL1 = `UPDATE groupavailable SET isSelected = ${times[3]}, memCount = ${times[4]} WHERE groupId = ${groupId} AND type = 'Time' AND value1 = ${times[0]} AND value2 = ${times[1]} AND value3 = ${times[2]}; `;
+                    connection.query(updateSQL1, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }
+            });
+            
+        }
+    }
+
+    for (const locationKey in locations) {
+        if (locations.hasOwnProperty(locationKey)) {
+            const locationsData = locations[locationKey];
+
+            const selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = 'Location' AND value0 = '${locationsData[0]}'; `;
+            connection.query(selectSQL, function (error, results, fields) {
+                if (error) throw error;
+                const resultExist = results[0].count;
+                if(resultExist == 0){
+                    const insertSQL = `INSERT INTO groupavailable (groupId, type, value0, isSelected) VALUES (${groupId}, 'Location', '${locationsData[0]}', ${locationsData[1]});`;
+                    connection.query(insertSQL, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }else{
+                    const updateSQL1 = `UPDATE groupavailable SET isSelected = ${locationsData[1]} WHERE groupId = ${groupId} AND type = 'Location' AND value0 = '${locationsData[0]}'; `;
+                    connection.query(updateSQL1, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }
+            });
+        }
+    }
+
+    res.json({
+        success: true
+    });
+});
+
+
+app.post('/api/group_meeting_delete', async(req, res) => {
+    const { groupId, type, value0, value1, value2, value3 } = req.body;
+
+    var selectSQL = "";
+    if(type == "Time"){
+        selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value1 = ${value1} AND value2 = ${value2} AND value3 = ${value3}; `;
+    }else if(type == "Location"){
+        selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value0 = '${value0}'`;
+    }
+    
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const count = results[0].count;
+        if(count > 0){
+            var deleteSQL = "";
+            if(type == "Time"){
+                deleteSQL = `DELETE FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value1 = ${value1} AND value2 = ${value2} AND value3 = ${value3}; `;
+            }else if(type == "Location"){
+                deleteSQL = `DELETE FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value0 = '${value0}'`;
+            }
+            connection.query(deleteSQL, function(error, results, fields){
+                if(error) {
+                    // Handle the error by sending an error response
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }
+            });
+        }
+        res.json({
+            success: true
+        });
+    });
 });
 //--------------------------------------------------------------------------------------------------------
 
