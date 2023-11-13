@@ -935,6 +935,44 @@ app.post('/api/group_meeting_save', async (req, res) => {
     });
 });
 
+
+app.post('/api/group_meeting_delete', async(req, res) => {
+    const { groupId, type, value0, value1, value2, value3 } = req.body;
+
+    var selectSQL = "";
+    if(type == "Time"){
+        selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value1 = ${value1} AND value2 = ${value2} AND value3 = ${value3}; `;
+    }else if(type == "Location"){
+        selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value0 = '${value0}'`;
+    }
+    
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const count = results[0].count;
+        if(count > 0){
+            var deleteSQL = "";
+            if(type == "Time"){
+                deleteSQL = `DELETE FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value1 = ${value1} AND value2 = ${value2} AND value3 = ${value3}; `;
+            }else if(type == "Location"){
+                deleteSQL = `DELETE FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value0 = '${value0}'`;
+            }
+            connection.query(deleteSQL, function(error, results, fields){
+                if(error) {
+                    // Handle the error by sending an error response
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }
+            });
+        }
+        res.json({
+            success: true
+        });
+    });
+});
 //--------------------------------------------------------------------------------------------------------
 
 

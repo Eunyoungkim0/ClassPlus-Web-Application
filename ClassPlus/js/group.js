@@ -149,7 +149,7 @@ function loadGroupInfo() {
             const amIEnrolled = res.data[0].amIEnrolled;
             document.getElementById('groupName').innerHTML = res.data[0].groupName;
             document.getElementById('groupDescription').innerHTML = ": " + res.data[0].description;
-            document.getElementById('memberCount').innerHTML = res.data[0].members;
+            document.getElementById('memberCount').innerHTML = " "+ res.data[0].members;
 
             axios.get(`/api/getGroupMembers/${groupId}?userId=${userId}`)
             .then(res => {
@@ -256,9 +256,65 @@ function deleteTime() {
 
     images.forEach((image, index) => {
     image.addEventListener('click', function(event) {
+        // const userAnswer = askYesNoQuestion("Do you want to delete data?");
+        // if (userAnswer) {
             const clickedImage = event.target;
             const parentDiv = clickedImage.parentElement;
-            parentDiv.remove();
+
+            const meetingSelect = parentDiv.getElementsByClassName('meeting-select');
+            const timeStart = parentDiv.getElementsByClassName('time-start');
+            const timeEnd = parentDiv.getElementsByClassName('time-end');
+            if(meetingSelect != null && timeStart != null && timeEnd != null){
+                data = {
+                    groupId: groupId,
+                    type: "Time",
+                    value0: null,
+                    value1: meetingSelect[0].value,
+                    value2: timeStart[0].value,
+                    value3: timeEnd[0].value
+                }
+            }
+            
+            axios.post(`/api/group_meeting_delete`, data)
+            .then(res => {
+                if(res && res.data && res.data.success) {
+                    parentDiv.remove();
+                }
+            });
+        // }
+        });
+    });
+}
+
+function deleteLocation() {
+    const images = document.querySelectorAll('.available-frame img');
+
+    images.forEach((image, index) => {
+    image.addEventListener('click', function(event) {
+        // const userAnswer = askYesNoQuestion("Do you want to delete data?");
+        // if (userAnswer) {
+            const clickedImage = event.target;
+            const parentDiv = clickedImage.parentElement;
+
+            const location = parentDiv.getElementsByClassName('location');
+            if(location != null){
+                data = {
+                    groupId: groupId,
+                    type: "Location",
+                    value0: location[0].value,
+                    value1: null,
+                    value2: null,
+                    value3: null
+                }
+            }
+            
+            axios.post(`/api/group_meeting_delete`, data)
+            .then(res => {
+                if(res && res.data && res.data.success) {
+                    parentDiv.remove();
+                }
+            });
+        // }
         });
     });
 }

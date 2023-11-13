@@ -151,7 +151,7 @@ function addGroupTime(day=0, start=0, end=0, count=0, isSelected=0){
     }
     if(day > 0){
         selectDay.value = day;
-        if(count > 0) selectDay.disabled = true;
+        selectDay.disabled = true;
     }
 
     const inputStart = document.createElement('input');
@@ -162,7 +162,7 @@ function addGroupTime(day=0, start=0, end=0, count=0, isSelected=0){
     inputStart.setAttribute('max', 23);
     if(day > 0) {
         inputStart.value = start;
-        if(count > 0) inputStart.disabled = true;
+        inputStart.disabled = true;
     }
     const span1 = document.createElement('span');
     span1.innerHTML = ":00 - ";
@@ -176,7 +176,10 @@ function addGroupTime(day=0, start=0, end=0, count=0, isSelected=0){
         inputEnd.value = start + 1;
         inputEnd.disabled = true;
     }else{
-        if(end > 0) inputEnd.value = end;
+        if(end > 0) {
+            inputEnd.value = end;
+            inputEnd.disabled = true;
+        }
     }
     const span2 = document.createElement('span');
     span2.innerHTML = ":00";
@@ -256,6 +259,7 @@ function addLocation(location="", isSelected=0) {
     inputLocation.setAttribute('class', 'location');
     if(location != ""){
         inputLocation.value = location;
+        inputLocation.disabled = true;
     }
     
     divLocationList.appendChild(divFrame);
@@ -266,7 +270,7 @@ function addLocation(location="", isSelected=0) {
         const deleteTime = document.createElement('img');
         deleteTime.setAttribute('src', '../images/delete.png');
         deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
-        deleteTime.setAttribute('onclick', 'deleteTime()');
+        deleteTime.setAttribute('onclick', 'deleteLocation()');
         divFrame.appendChild(deleteTime);
     }
 
