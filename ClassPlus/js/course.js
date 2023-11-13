@@ -362,8 +362,8 @@ function savePost() {
         courseNumber: courseNumber,
         category: category,
         subCategory: document.getElementById('Category').value,
-        title: document.getElementById('title').value,
-        content: document.getElementById('content').value,
+        title: document.getElementById('posttitle').value,
+        content: document.getElementById('postcontent').value,
         userId : localStorage.getItem('userId'),
     };
 

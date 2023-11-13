@@ -197,6 +197,12 @@
     width: 100%;
 }
 
+#postcontent {
+    min-height: 300px;
+    padding: 20px;
+    width: 100%;
+}
+
 .studyset-frame{
     width: 95%;
     margin: 15px;

@@ -465,17 +465,25 @@ app.post('/api/getStudySet/:activityId', async(req, res) => {
 app.post('/api/createPost', async(req, res) => {
     const { subject, courseNumber, category, subCategory, title, content, userId } = req.body;
 
-    var insertSQL = `INSERT INTO courseActivities(activityId, courseId, year, semester, category, subCategory, title, content, userId, date, postUpdate) `;
-    insertSQL += ` SELECT COALESCE(MAX(activityId), 0) + 1, ${courseId}, '${currentYear}', 'fall', '${category}', '${subCategory}', '${title}', '${content}', ${userId}, DATE_SUB(NOW(), INTERVAL 5 HOUR), DATE_SUB(NOW(), INTERVAL 5 HOUR)`;
-    insertSQL += ` FROM courseActivities;`;
-    connection.query(insertSQL, function(error, results, fields){
-        if(error) {
-            // Handle the error by sending an error response
-            res.status(500).json({ error: 'Internal Server Error' });
-            throw error;
-        }
-        res.json({
-            success: true,
+    var getCourseId = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+
+    connection.query(getCourseId, function(error, results, fields){
+        if(error) throw error;
+
+        const courseId = results[0].courseId;
+
+        var insertSQL = `INSERT INTO courseActivities(activityId, courseId, year, semester, category, subCategory, title, content, userId, date, postUpdate) `;
+        insertSQL += ` SELECT COALESCE(MAX(activityId), 0) + 1, ${courseId}, '${currentYear}', 'fall', '${category}', '${subCategory}', '${title}', '${content}', ${userId}, DATE_SUB(NOW(), INTERVAL 5 HOUR), DATE_SUB(NOW(), INTERVAL 5 HOUR)`;
+        insertSQL += ` FROM courseActivities;`;
+        connection.query(insertSQL, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json({
+                success: true,
+            });
         });
     });
 });
