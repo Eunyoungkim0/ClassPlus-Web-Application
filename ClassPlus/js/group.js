@@ -1,5 +1,7 @@
 let data;
 let groupId;
+let enrolled;
+let joined;
 
 //---------------------------------------------------------------------------------
 // START OF FUNCTIONS FOR MY GROUP
@@ -105,13 +107,27 @@ function amIJoined(data) {
     axios.post(`/api/getGroupPermission`, data)
         .then(res => {
             const btnJoin = document.getElementById('buttonForJoin');
+            const btnSave = document.getElementById('saveMeeting');
+            const btnAddTime = document.getElementById('addTime');
+            const btnAddLocation = document.getElementById('addLocation');
+            enrolled = res.data.enrolled;
+            joined = res.data.joined;
 
             if(res && res.data && res.data.enrolled && res.data.joined) {
                 if(btnJoin != null) btnJoin.hidden = true;
+                if(btnSave != null) btnSave.hidden = false;
+                if(btnAddTime != null) btnAddTime.hidden = false;
+                if(btnAddLocation != null) btnAddLocation.hidden = false;
             }else if(res && res.data && !res.data.enrolled){
                 if(btnJoin != null) btnJoin.hidden = true;
+                if(btnSave != null) btnSave.hidden = false;
+                if(btnAddTime != null) btnAddTime.hidden = false;
+                if(btnAddLocation != null) btnAddLocation.hidden = false;
             }else if(res && res.data && res.data.enrolled && !res.data.joined){
                 if(btnJoin != null) btnJoin.hidden = false;
+                if(btnSave != null) btnSave.hidden = true;
+                if(btnAddTime != null) btnAddTime.hidden = true;
+                if(btnAddLocation != null) btnAddLocation.hidden = true;
             }
       });
 }
@@ -129,8 +145,6 @@ function loadGroupInfo() {
     axios.post(`/api/getGroup/${groupId}?userId=${userId}`)
     .then(res => {
         if(res && res.data) {
-            console.log(res.data);
-            console.log(res.data);
             const amIJoined = res.data[0].amIJoined;
             const amIEnrolled = res.data[0].amIEnrolled;
             document.getElementById('groupName').innerHTML = res.data[0].groupName;
@@ -140,7 +154,6 @@ function loadGroupInfo() {
             axios.get(`/api/getGroupMembers/${groupId}?userId=${userId}`)
             .then(res => {
                 if(res && res.data) {
-                    console.log(res.data);
                     var divMembers = document.getElementById('memberList');
                     for(var i=0; i < res.data.length; i++){
                         const isFriend = res.data[i].isFriend;
@@ -183,140 +196,59 @@ function loadGroupInfo() {
     });
 }
 
-function loadGroupMeeting(groupId) {
-    axios.get(`/api/getGroupAvailableTime/${groupId}`)
+function loadNextMeeting(groupId) {
+    axios.get(`/api/getGroupNextMeeting/${groupId}`)
     .then(res => {
-        console.log(res.data);
-        const divTimeList = document.getElementById('timeList');
+        const divMeetingInfo = document.getElementById('meetingInfo');
         if(res.data.length == 0){
-            divTimeList.innerHTML = "There are no available time.";
+            divMeetingInfo.innerHTML = "There is no meeting information.";
+            document.getElementById('timeList').innerHTML = "";
+            document.getElementById('locationList').innerHTML = "";
         }else{
             for(var i=0; i < res.data.length; i++){
-                addTime(res.data[i].day, res.data[i].time, res.data[i].count);
+                if(res.data[i].type == "Time"){
+                    document.getElementById('timeList').innerHTML = "Time: ";
+                    addGroupTime(res.data[i].value1, res.data[i].value2, res.data[i].value3, 1, res.data[i].isSelected);
+                }else if(res.data[i].type == "Location"){
+                    document.getElementById('locationList').innerHTML = "Location: ";
+                    addLocation(res.data[i].value0, res.data[i].isSelected, 1);
+                }
             }
         }
     });   
 }
 
-function addTime(day=0, time=0, count=0){
-    const divTimeList = document.getElementById('timeList');
-
-    const divFrame = document.createElement('div');
-    divFrame.setAttribute('class', 'available-frame');
-
-    const labelRadio = document.createElement('label');
-    labelRadio.setAttribute('class', 'radio-container');
-    const radio = document.createElement('input');
-    radio.setAttribute('type', 'radio');
-    radio.setAttribute('name', 'time');
-    radio.setAttribute('class', 'meeting-radio-time');
-    const spanRadio = document.createElement('span');
-    spanRadio.setAttribute('class', 'checkmark');
-
-    labelRadio.appendChild(radio);
-    labelRadio.appendChild(spanRadio);
-
-    const selectDay = document.createElement('select');
-    selectDay.setAttribute('class', 'meeting-select');
-    divFrame.appendChild(selectDay);
-    for(var i=0; i<8; i++){
-        var optionName = "optionDay" + i;
-        var dynamicVariable = {};
-        dynamicVariable[optionName] = document.createElement('option');
-        dynamicVariable[optionName].value = i;
-        var strDay = "";
-        switch (i) {
-            case 0:
-                strDay = "Select day";
-                break;
-            case 1:
-                strDay = "Monday";
-                break;
-            case 2:
-                strDay = "Tuesday";
-                break;
-            case 3:
-                strDay = "Wednesday";
-                break;
-            case 4:
-                strDay = "Thursday";
-                break;
-            case 5:
-                strDay = "Friday";
-                break;
-            case 6:
-                strDay = "Saturday";
-                break;
-            case 7:
-                strDay = "Sunday";
-                break;
-            default:
-                strDay = "";
-              
+function loadGroupMeeting(groupId) {
+    axios.get(`/api/getGroupAvailableTime/${groupId}`)
+    .then(res => {
+        const divTimeList = document.getElementById('timeList');
+        if(res.data.length == 0){
+            divTimeList.innerHTML = "There are no available time.";
+        }else{
+            for(var i=0; i < res.data.length; i++){
+                addGroupTime(res.data[i].day, res.data[i].time, res.data[i].time+1, res.data[i].count, 0);
+            }
         }
-        dynamicVariable[optionName].innerHTML = strDay;
-        selectDay.appendChild(dynamicVariable[optionName]);
-    }
-    if(day > 0) {
-        selectDay.value = day;
-        selectDay.disabled = true;
-    }
+    });   
+}
 
-    const inputStart = document.createElement('input');
-    inputStart.setAttribute('type', 'number');
-    inputStart.setAttribute('class', 'time-start');
-    inputStart.setAttribute('onkeypress', 'return isNumber(event)');
-    inputStart.setAttribute('min', 0);
-    inputStart.setAttribute('max', 23);
-    if(day > 0) {
-        inputStart.value = time;
-        inputStart.disabled = true;
-    }
-    const span1 = document.createElement('span');
-    span1.innerHTML = ":00 - ";
-    const inputEnd = document.createElement('input');
-    inputEnd.setAttribute('type', 'number');
-    inputEnd.setAttribute('class', 'time-end');
-    inputEnd.setAttribute('onkeypress', 'return isNumber(event)');
-    inputEnd.setAttribute('min', 0);
-    inputEnd.setAttribute('max', 23);
-    if(day > 0) {
-        inputEnd.value = time + 1;
-        inputEnd.disabled = true;
-    }
-    const span2 = document.createElement('span');
-    span2.innerHTML = ":00";
-
-    
-    divTimeList.appendChild(divFrame);
-    divFrame.appendChild(labelRadio);
-    divFrame.appendChild(selectDay);
-
-    divFrame.appendChild(inputStart);
-    divFrame.appendChild(span1);
-    divFrame.appendChild(inputEnd);
-    divFrame.appendChild(span2);
-
-    
-    if(count > 0) {
-        const spanCount = document.createElement('span');
-        spanCount.setAttribute('class', 'available-people');
-        spanCount.innerHTML = count + " people are available at this time."
-        const inputCount = document.createElement('input');
-        inputCount.setAttribute('type', 'number');
-        inputCount.setAttribute('class', 'meeting-count');
-        inputCount.setAttribute('value', `${count}`);
-        inputCount.disabled = true;
-        inputCount.hidden = true;
-        divFrame.appendChild(spanCount);
-        divFrame.appendChild(inputCount);
-    }else {
-        const deleteTime = document.createElement('img');
-        deleteTime.setAttribute('src', '../images/delete.png');
-        deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
-        deleteTime.setAttribute('onclick', 'deleteTime()');
-        divFrame.appendChild(deleteTime);
-    }
+function loadSavedGroupMeeting(groupId) {
+    axios.get(`/api/getGroupSavedMeeting/${groupId}`)
+    .then(res => {
+        for(var i=0; i < res.data.length; i++){
+            if(res.data[i].type == "Time"){
+                if(res.data[i].memCount > 0 && res.data[i].isSelected == 1){
+                    const radioValue = res.data[i].value1 + "|" + res.data[i].value2 + "|" + res.data[i].value3;
+                    const radioElement = document.querySelector(`.meeting-radio-time[value='${radioValue}']`);
+                    radioElement.checked = true;
+                }else if(res.data[i].memCount == 0){
+                    addGroupTime(res.data[i].value1, res.data[i].value2, res.data[i].value3, 0, res.data[i].isSelected);
+                }
+            }else if(res.data[i].type == "Location"){
+                addLocation(res.data[i].value0, res.data[i].isSelected);
+            }
+        }
+    });   
 }
 
 function deleteTime() {
@@ -331,41 +263,6 @@ function deleteTime() {
     });
 }
 
-function addLocation() {
-    const divLocationList = document.getElementById('locationList');
-
-    const divFrame = document.createElement('div');
-    divFrame.setAttribute('class', 'available-frame');
-
-    const labelRadio = document.createElement('label');
-    labelRadio.setAttribute('class', 'radio-container');
-    const radio = document.createElement('input');
-    radio.setAttribute('type', 'radio');
-    radio.setAttribute('name', 'location');
-    radio.setAttribute('class', 'meeting-radio-location');
-    const spanRadio = document.createElement('span');
-    spanRadio.setAttribute('class', 'checkmark');
-
-    labelRadio.appendChild(radio);
-    labelRadio.appendChild(spanRadio);
-
-
-    const inputLocation = document.createElement('input');
-    inputLocation.setAttribute('type', 'text');
-    inputLocation.setAttribute('class', 'location');
-    
-    
-    divLocationList.appendChild(divFrame);
-    divFrame.appendChild(labelRadio);
-    divFrame.appendChild(inputLocation);
-
-    
-    const deleteTime = document.createElement('img');
-    deleteTime.setAttribute('src', '../images/delete.png');
-    deleteTime.setAttribute('style', 'width: 25px; height: 25px; cursor: pointer; margin-left: 20px;');
-    deleteTime.setAttribute('onclick', 'deleteTime()');
-    divFrame.appendChild(deleteTime);
-}
 
 function saveMeeting() {
     if(meetingDataValidate()){
@@ -376,6 +273,7 @@ function saveMeeting() {
             const endInputs = document.getElementsByClassName('time-end');
             const countInputs = document.getElementsByClassName('meeting-count');
             const radioTimeInputs = document.getElementsByClassName('meeting-radio-time');
+
             var days = {};
             for (let i = 0; i < selectInputs.length; i++) {
                 const day = parseInt(selectInputs[i].value);
@@ -417,13 +315,10 @@ function saveMeeting() {
                 days: days,
                 locations: locations,
             }
-
-            console.log(data);
         
             axios.post(`/api/group_meeting_save`, data)
                 .then(res => {
                     if(res && res.data && res.data.success) {
-                        console.log(res);
                         alert("Meeting information successfully saved!");
                         location.reload();
                     }
@@ -508,10 +403,12 @@ function loadGroupHomepage(currentPagePath){
     groupInfo(data);
     amIJoined(data);
 
-    if(currentPagePath == 'group_detail.html'){
+    if(currentPagePath == 'group_detail.html' || currentPagePath == 'course_group_view.html'){
         loadGroupInfo();
+        loadNextMeeting(groupId);
     }else if(currentPagePath == 'group_meeting.html'){
         loadGroupMeeting(groupId);
+        loadSavedGroupMeeting(groupId);
     }
 }
 

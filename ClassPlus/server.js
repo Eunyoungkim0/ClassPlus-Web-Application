@@ -769,7 +769,6 @@ app.post('/api/joinGroup/', async(req, res) => {
         }else{
             const sql = `INSERT INTO groupmembers (groupId, courseId, userId) 
                          SELECT ${groupId}, courseId, ${userId} FROM classplus.groups g WHERE g.groupId = ${groupId};`;
-            console.log(sql);
             connection.query(sql, function(error, results, fields){
                 if(error) {
                     // Handle the error by sending an error response
@@ -855,37 +854,85 @@ app.get('/api/getGroupAvailableTime/:groupId', async(req, res) => {
     });
 });
 
+app.get('/api/getGroupSavedMeeting/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT * FROM groupavailable WHERE groupId = ${groupId}; `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/api/getGroupNextMeeting/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT * FROM groupavailable WHERE groupId = ${groupId} AND isSelected = 1; `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
 
 app.post('/api/group_meeting_save', async (req, res) => {
     const { groupId, days, locations } = req.body;
 
-    // for (const dayKey in days) {
-    //     if (days.hasOwnProperty(dayKey)) {
-    //         const times = days[dayKey];
-    //         for (const time of times) {
-    //             const sql = `INSERT INTO availableTime (userId, year, semester, day, time) VALUES (${userId}, ${currentYear}, 'fall', ${dayKey}, ${time})`;
-    //             connection.query(sql, function (error, results, fields) {
-    //                 if (error) throw error;
-    //             });
-    //         }
-    //     }
-    // }
+    for (const dayKey in days) {
+        if (days.hasOwnProperty(dayKey)) {
+            const times = days[dayKey];
 
-    // for (const locationKey in locations) {
-    //     if (locations.hasOwnProperty(locationKey)) {
-    //         const locationsData = locations[locationKey];
-    //         for (const location of locationsData) {
-    //             const sql = `INSERT INTO availableTime (userId, year, semester, day, time) VALUES (${userId}, ${currentYear}, 'fall', ${locationKey}, ${location})`;
-    //             connection.query(sql, function (error, results, fields) {
-    //                 if (error) throw error;
-    //             });
-    //         }
-    //     }
-    // }
+            const selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = 'Time' AND value1 = ${times[0]} AND value2 = ${times[1]} AND value3 = ${times[2]}; `;
+            connection.query(selectSQL, function (error, results, fields) {
+                if (error) throw error;
+                const resultExist = results[0].count;
+                if(resultExist == 0){
+                    const insertSQL = `INSERT INTO groupavailable (groupId, type, value1, value2, value3, isSelected, memCount) VALUES (${groupId}, 'Time', ${times[0]}, ${times[1]}, ${times[2]}, ${times[3]}, ${times[4]});`;
+                    connection.query(insertSQL, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }else{
+                    const updateSQL1 = `UPDATE groupavailable SET isSelected = ${times[3]}, memCount = ${times[4]} WHERE groupId = ${groupId} AND type = 'Time' AND value1 = ${times[0]} AND value2 = ${times[1]} AND value3 = ${times[2]}; `;
+                    connection.query(updateSQL1, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }
+            });
+            
+        }
+    }
 
-    // res.json({
-    //     success: true
-    // });
+    for (const locationKey in locations) {
+        if (locations.hasOwnProperty(locationKey)) {
+            const locationsData = locations[locationKey];
+
+            const selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = 'Location' AND value0 = '${locationsData[0]}'; `;
+            connection.query(selectSQL, function (error, results, fields) {
+                if (error) throw error;
+                const resultExist = results[0].count;
+                if(resultExist == 0){
+                    const insertSQL = `INSERT INTO groupavailable (groupId, type, value0, isSelected) VALUES (${groupId}, 'Location', '${locationsData[0]}', ${locationsData[1]});`;
+                    connection.query(insertSQL, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }else{
+                    const updateSQL1 = `UPDATE groupavailable SET isSelected = ${locationsData[1]} WHERE groupId = ${groupId} AND type = 'Location' AND value0 = '${locationsData[0]}'; `;
+                    connection.query(updateSQL1, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }
+            });
+        }
+    }
+
+    res.json({
+        success: true
+    });
 });
 
 //--------------------------------------------------------------------------------------------------------

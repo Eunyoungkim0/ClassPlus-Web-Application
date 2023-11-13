@@ -112,7 +112,6 @@ function loadCoursePosts(data) {
     axios.post(`/api/getCoursePosts`, data)
     .then(res => {
         if(res && res.data) {
-            console.log(res.data);
             if(res.data.length == 0){
                 document.getElementById('divForPost').innerHTML = "There is no post in this class yet.";
             }else{
@@ -264,6 +263,7 @@ function loadCourseHomepage(currentPagePath){
         getStudySetData();
     }else if(currentPagePath == 'course_group_view.html'){
         getGroupData();
+        loadNextMeeting(groupId);
     }
 }
 
@@ -478,7 +478,6 @@ function getStudySetData() {
 
     axios.post(`/api/getStudySet/${activityId}`)
         .then(res => {
-            console.log(res);
             if(res && res.data) {
                 if(currentPagePath == 'course_study_set_view.html'){
                     var writerId = res.data.userId;
@@ -549,7 +548,6 @@ function getGroupData() {
     axios.post(`/api/getGroup/${groupId}?userId=${userId}`)
     .then(res => {
         if(res && res.data) {
-            console.log(res.data);
             const amIJoined = res.data[0].amIJoined;
             const amIEnrolled = res.data[0].amIEnrolled;
             if(btnGroup != null && amIEnrolled == 1){
@@ -568,7 +566,6 @@ function getGroupData() {
             axios.get(`/api/getGroupMembers/${groupId}?userId=${userId}`)
             .then(res => {
                 if(res && res.data) {
-                    console.log(res.data);
                     var divMembers = document.getElementById('memberList');
                     for(var i=0; i < res.data.length; i++){
                         const isFriend = res.data[i].isFriend;
@@ -609,6 +606,28 @@ function getGroupData() {
             });
         }
     });
+}
+
+function loadNextMeeting(groupId) {
+    axios.get(`/api/getGroupNextMeeting/${groupId}`)
+    .then(res => {
+        const divMeetingInfo = document.getElementById('meetingInfo');
+        if(res.data.length == 0){
+            divMeetingInfo.innerHTML = "There is no meeting information.";
+            document.getElementById('timeList').innerHTML = "";
+            document.getElementById('locationList').innerHTML = "";
+        }else{
+            for(var i=0; i < res.data.length; i++){
+                if(res.data[i].type == "Time"){
+                    document.getElementById('timeList').innerHTML = "Time: ";
+                    addGroupTime(res.data[i].value1, res.data[i].value2, res.data[i].value3, 1, res.data[i].isSelected);
+                }else if(res.data[i].type == "Location"){
+                    document.getElementById('locationList').innerHTML = "Location: ";
+                    addLocation(res.data[i].value0, res.data[i].isSelected, 1);
+                }
+            }
+        }
+    });   
 }
 
 function navigateToJoin() {
@@ -784,8 +803,6 @@ function editStudySet() {
         title: document.getElementById('title').value,
         studySet : studySetData,
     };
-
-    console.log(data);
 
     const userAnswer = askYesNoQuestion("Do you want to save your data?");
     if (userAnswer) {

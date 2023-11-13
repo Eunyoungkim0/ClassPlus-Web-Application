@@ -30,6 +30,11 @@ function groupCheck(page, needsGi=0){
     }
 
     var url = page;
+
+    // if(url == "group_meeting.html" && joined == 0){
+    //     alert("You must join the group to set group meeting schedule.");
+    //     return false;
+    // }
     if(groupId != null && needsGi == 1) url += "?gi=" + groupId;
     window.location.href = url;
 }
