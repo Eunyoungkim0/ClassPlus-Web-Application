@@ -15,7 +15,7 @@
   - [x] Allow students to join study groups 
   - [x] Implement study sets function
   - [ ] Chat feature implemented (X)
-  - [x] Implement location/time booking system
+  - [ ] Implement location/time booking system
   - [x] Implement a notes/hw sharing feature
 ---
 
