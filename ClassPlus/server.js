@@ -692,20 +692,34 @@ LEFT JOIN classesenrolled e ON a.courseId = e.courseId AND e.userId = ${userId} 
 });
 
 app.post('/api/getSearchedGroups/', async(req, res) => {
-    const { userId, subject, courseNumber, groupName } = req.body;
-    const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    const { userId, subject, courseNumber, groupName, limit } = req.body;
+    var sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    var ifNameExists = `AND g.groupName= '${groupName}'`;
+
+    if(courseNumber == ""){
+        sql = `SELECT courseId FROM courses`;
+    }
+
+    if(groupName == ""){
+        ifNameExists = ``;
+    }
+
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
+        
         const courseId = results[0].courseId;
+
         var sql2 = `SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title, count(*) as member
         FROM classplus.groups g, courses c, groupmembers gm
        WHERE g.courseId = c.courseId
          AND g.courseId = ${courseId}
+         '${ifNameExists}'
          AND g.courseId = gm.courseId
          AND g.groupId = gm.groupId
          AND g.year = '${currentYear}' AND g.semester = 'fall'
        GROUP BY g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title
        ORDER BY member DESC`;
+
         if(limit > 0){
             sql2 += ` LIMIT ${limit};`;
         }else{

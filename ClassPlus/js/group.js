@@ -95,30 +95,21 @@ function handleSelectChange(selectElement) {
     });
 }
 
-function searchGroups(data) {
+function searchGroups() {
 
     subject = document.getElementById('subjectSelect').value;
     courseNumber = document.getElementById('classSelect').value;
-    groupName = document.getElementById('name').value;
-
-    if(subject == ""){
-        subject = "*";
-    }
-    if(courseNumber == ""){
-        courseNumber = "*";
-    }
-    if(groupName == ""){
-        groupName = "*";
-    }
+    groupName = "";
 
     data = {
         userId : localStorage.getItem('userId'),
         subject : subject,
         courseNumber: courseNumber,
         groupName : groupName,
+        limit : 0,
     };
 
-    axios.post(`/api/getCourseGroups`, data)
+    axios.post(`/api/getSearchedGroups`, data)
     .then(res => {
         if(res && res.data) {
             if(res.data.length == 0){
@@ -127,7 +118,7 @@ function searchGroups(data) {
                 for(var i=0; i < res.data.length; i++){
                     var divElement1 = document.createElement('div');
                     divElement1.setAttribute('class', 'group-frame');
-                    divElement1.setAttribute('onclick', `loadPost('Group', ${res.data[i].groupId})`);
+                    divElement1.setAttribute('onclick', `gotoGroup('${res.data[i].groupId}')`);
 
                     var divElement2 = document.createElement('div');
                     divElement2.setAttribute('class', 'group-title');
