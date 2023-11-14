@@ -76,6 +76,85 @@ function getSubject(){
 // END OF FUNCTIONS FOR MY GROUP
 //---------------------------------------------------------------------------------
 
+// This function sets course number according to the subject that a user selects.
+function handleSelectChange(selectElement) {
+    const selectedValue = selectElement.value;
+    const classes = document.getElementById('classSelect');
+    for (let i = classes.options.length - 1; i >= 0; i--) {
+        classes.remove(i);
+    }
+
+    axios.get(`/api/getClasses/${selectedValue}`)
+    .then(res => {
+        for(var i=0; i < res.data.length; i++){
+            var option = document.createElement('option');
+            option.setAttribute('value', res.data[i].courseNumber);
+            option.innerHTML = res.data[i].courseNumber + " " + res.data[i].title;
+            document.querySelector('#classSelect').appendChild(option);
+        }
+    });
+}
+
+function searchGroups(data) {
+
+    subject = document.getElementById('subjectSelect').value;
+    courseNumber = document.getElementById('classSelect').value;
+    groupName = document.getElementById('name').value;
+
+    if(subject == ""){
+        subject = "*";
+    }
+    if(courseNumber == ""){
+        courseNumber = "*";
+    }
+    if(groupName == ""){
+        groupName = "*";
+    }
+
+    data = {
+        userId : localStorage.getItem('userId'),
+        subject : subject,
+        courseNumber: courseNumber,
+        groupName : groupName,
+    };
+
+    axios.post(`/api/getCourseGroups`, data)
+    .then(res => {
+        if(res && res.data) {
+            if(res.data.length == 0){
+                document.getElementById('divForGroup').innerHTML = "There is no group with this information.";
+            }else{
+                for(var i=0; i < res.data.length; i++){
+                    var divElement1 = document.createElement('div');
+                    divElement1.setAttribute('class', 'group-frame');
+                    divElement1.setAttribute('onclick', `loadPost('Group', ${res.data[i].groupId})`);
+
+                    var divElement2 = document.createElement('div');
+                    divElement2.setAttribute('class', 'group-title');
+                    divElement2.innerHTML = res.data[i].groupName;
+
+                    var divElement3 = document.createElement('div');
+                    divElement3.setAttribute('class', 'group-description');
+                    divElement3.innerHTML = res.data[i].description;
+                    var divElement4 = document.createElement('div');
+                    divElement4.setAttribute('class', 'group-course');
+                    divElement4.innerHTML = res.data[i].subject + res.data[i].courseNumber +" : " + res.data[i].title;
+
+                    var divElement5 = document.createElement('div');
+                    divElement5.setAttribute('class', 'group-member');
+                    divElement5.innerHTML = res.data[i].member + " people are in this group.";
+                    
+                    document.getElementById('divForGroup').appendChild(divElement1);
+                    divElement1.appendChild(divElement2);
+                    divElement1.appendChild(divElement3);
+                    divElement1.appendChild(divElement4);
+                    divElement1.appendChild(divElement5);
+                }
+            }
+        }
+    });   
+}
+
 function navigateToJoin() {
     axios.post(`/api/joinGroup`, data)
     .then(res => {
@@ -482,3 +561,4 @@ function loadData(){
 }
 
 loadData();
+

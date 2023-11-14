@@ -691,6 +691,38 @@ LEFT JOIN classesenrolled e ON a.courseId = e.courseId AND e.userId = ${userId} 
     });
 });
 
+app.post('/api/getSearchedGroups/', async(req, res) => {
+    const { userId, subject, courseNumber, groupName } = req.body;
+    const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    connection.query(sql, function(error, results, fields){
+        if (error) throw error;
+        const courseId = results[0].courseId;
+        var sql2 = `SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title, count(*) as member
+        FROM classplus.groups g, courses c, groupmembers gm
+       WHERE g.courseId = c.courseId
+         AND g.courseId = ${courseId}
+         AND g.courseId = gm.courseId
+         AND g.groupId = gm.groupId
+         AND g.year = '${currentYear}' AND g.semester = 'fall'
+       GROUP BY g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title
+       ORDER BY member DESC`;
+        if(limit > 0){
+            sql2 += ` LIMIT ${limit};`;
+        }else{
+            sql2 += `;`;
+        }
+
+        connection.query(sql2, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json(results);
+        });     
+    });
+});
+
 app.get('/api/getGroupMembers/:groupId', async(req, res) => {
     const groupId = req.params.groupId;
     const userId = req.query.userId;
