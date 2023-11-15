@@ -85,21 +85,21 @@
 }
 
 #divForPost {
-    min-height: 80%;
+    min-height: 45%;
     align-items: center;
     margin: 10px;
     padding: 1%;
 }
 
 #divForStudySet {
-    min-height: 80%;
+    min-height: 45%;
     align-items: center;
     margin: 1%;
     padding: 1%;
 }
 
 #divForGroup {
-    min-height: 80%;
+    min-height: 45%;
     align-items: center;
     margin: 1%;
     padding: 1%;

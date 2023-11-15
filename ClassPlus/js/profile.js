@@ -28,6 +28,7 @@ function saveButton() {
                 if(res && res.data && res.data.success) {
                     console.log(res);
                     alert("Data successfully saved!");
+                    location.reload();
                 }
             });
     }
