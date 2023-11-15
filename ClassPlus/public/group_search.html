@@ -15,63 +15,34 @@
 
 <body>
     <div id="nav-placeholder"></div>
-
-    <div style="width: 1010px; height: 397px; left: 10%; top: 30%; position: absolute">
-        <div style="width: 362.72px; height: 66.77px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 50px; top: 0px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex">
-            <div style="width: 106px; height: 12px; color: #ABB5BE; font-size: 20px; font-family: Inter; font-weight: 600; text-transform: uppercase; line-height: 16px; letter-spacing: 0.96px; word-wrap: break-word">
-            subject
-            </div>
-        </div>
-        <div style="width: 362.72px; height: 75.79px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 50px; top: 75.79px; position: absolute; background: white; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-            <select id="subjectSelect" onchange="handleSelectChange(this)">
-            </select>
-        </div>
-
-
-        <div style="width: 433.60px; height: 66.77px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 200px; top: 0px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex">
-            <div style="width: 106px; height: 12px; color: #ABB5BE; font-size: 20px; font-family: Inter; font-weight: 600; text-transform: uppercase; line-height: 16px; letter-spacing: 0.96px; word-wrap: break-word">
-            Class
-            <br/><br/> 
-            </div>
-        </div>
-
-        <div style="width: 433.60px; height: 75.79px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 200px; top: 75.79px; position: absolute; background: white; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-            <select id="classSelect" style="width: 520px">
-                <option></option>
-            </select>
-        </div>
-
-        <div style="width: 433.60px; height: 66.77px; padding-left: 16px; padding-right: 16px; padding-top: 8px; padding-bottom: 8px; left: 780px; top: 0px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex">
-            <div style="width: 106px; height: 12px; color: #ABB5BE; font-size: 20px; font-family: Inter; font-weight: 600; text-transform: uppercase; line-height: 16px; letter-spacing: 0.96px; word-wrap: break-word">
-            Group Name
-            <br/><br/> 
-            </div>
-        </div>
-
-        <div style="width: 433.60px; height: 8px; padding-left: 69px; padding-right: 16px; padding-top: 3px; padding-bottom: 8px; left: 720px; top: 73px; position: absolute; background: white; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-            <input type="text" id="groupName" style="width: 200px; border-radius: 4px;" placeholder="Enter group name">
-        </div>
-        
-        <div style="left: 105%; top: 18%; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-            <button onclick="searchGroups()" style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
-                <div style="text-align: center; color: #F5F5F5; font-size: 16px; font-family: Inter; font-weight: 600; word-wrap: break-word">
-                    Search
-                </div>
-            </button>
-        </div>
+    <div class="course-title" style="margin-bottom: 50px">
+        <div class="searchTitle">Group Search</div>
     </div>
-    
-    <div style="height: 112px; padding-left: 160px; padding-right: 160px; padding-top: 32px; padding-bottom: 32px; left: -5px; top: 87px; position: absolute; background: rgba(255, 255, 255, 0); border-bottom: 1px #DEE2E6 dotted; flex-direction: column; justify-content: center; align-items: flex-start; display: inline-flex">
-        <div style="flex-direction: column; justify-content: flex-start; align-items: center; display: flex">
-            <div style="color: #343A40; font-size: 40px; font-family: Inter; font-weight: 700; word-wrap: break-word">Group Search</div>
+
+    <div class="row" style="width:100%; height:100%">
+        <div class="row" style="margin: auto; width: 70%; padding: 10px;">
+            <div class="column" style="width:20%">
+                <div class="searchText">Subject</div>
+                <select id="subjectSelect" onchange="handleSelectChange(this)"></select>
+            </div>
+            <div class="column" style="width:50%;">
+                <div class="searchText">Class</div>
+                <select id="classSelect" style="width: 520px">
+                    <option></option>
+                </select>
+            </div>
+            <div class="column" style="width:20%">
+                <div class="searchText">Group Name</div>
+                <input type="text" id="groupName" style="width: 300px; border-radius: 4px;" placeholder="Enter group name">
+                <button class="buttons" style="width:130px; height:45px; margin-top:5%; margin-left:100%;" onclick="searchGroups()">Search</button>
+            </div>
+        </div>
+
+        <div class="row" style="margin-right:8%; margin-left:8%">
+            <div id="divForGroup"></div>
         </div>
     </div>
 
-</div>
-
-    <div id="divForGroup"></div>
-
-    
     <script type="text/javascript" src="../js/utils.js"></script>
     <script type="text/javascript" src="../js/group.js"></script>
 </body>

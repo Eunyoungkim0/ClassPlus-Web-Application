@@ -99,7 +99,7 @@ function searchGroups() {
 
     subject = document.getElementById('subjectSelect').value;
     courseNumber = document.getElementById('classSelect').value;
-    groupName = "";
+    groupName = document.getElementById('groupName').value;
 
     data = {
         userId : localStorage.getItem('userId'),
