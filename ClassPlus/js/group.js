@@ -350,6 +350,17 @@ function loadGroupInfo() {
     });
 }
 
+function followFriend(userId, friendId) {
+    axios.post(`/api/followFriend/${userId}?friendId=${friendId}`)
+    .then(res => {
+        if(res && res.data && res.data.success) {
+            const message = "Great! You have one more friend!";
+            alert(message);
+            location.reload();
+        }
+    });   
+}
+
 function loadNextMeeting(groupId) {
     axios.get(`/api/getGroupNextMeeting/${groupId}`)
     .then(res => {
