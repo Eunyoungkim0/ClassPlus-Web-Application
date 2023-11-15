@@ -693,51 +693,49 @@ LEFT JOIN classesenrolled e ON a.courseId = e.courseId AND e.userId = ${userId} 
 
 
 app.post('/api/getSearchedGroups/', async(req, res) => {
-    const { userId, subject, courseNumber, groupName, limit } = req.body;
+    const { subject, courseNumber, groupName, limit } = req.body;
     
-    let sql = 'SELECT courseId FROM courses';
+    let whereSQL = `WHERE 1=1 `;
 
-    if (courseNumber) {
-        sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    if(subject != ""){
+        whereSQL += ` AND subject = '${subject}'`;
     }
 
-    let ifNameExists = '';
-    if (groupName) {
-        ifNameExists = `AND g.groupName = '${groupName}'`;
+    if (courseNumber != "") {
+        whereSQL += ` AND courseNumber = '${courseNumber}'`;
     }
 
-    connection.query(sql, function(error, results, fields){
-        if (error) throw error;
-            
-        for (const course of results) {
-            const courseId = course.courseId;
+    if (groupName != "") {
+        whereSQL += ` AND groupName like '%${groupName}%'`;
+    }
 
-            let sql2 = `
-                SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as member
-                FROM classplus.groups g
-                JOIN courses c ON g.courseId = c.courseId
-                JOIN groupmembers gm ON g.courseId = gm.courseId AND g.groupId = gm.groupId
-                WHERE g.courseId = ${courseId} ${ifNameExists}
-                AND g.year = '${currentYear}' AND g.semester = 'fall'
-                GROUP BY g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title
-                ORDER BY member DESC
-            `;
+    let selectSQL = `
+        SELECT * 
+            FROM
+        (SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as member
+        FROM classplus.groups g
+        JOIN courses c ON g.courseId = c.courseId
+        JOIN groupmembers gm ON g.courseId = gm.courseId AND g.groupId = gm.groupId
+        WHERE g.year = '${currentYear}' AND g.semester = 'fall'
+        GROUP BY g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title
+        ORDER BY member DESC) AS a
+    `;
 
-            if(limit > 0){
-                sql2 += ` LIMIT ${limit};`;
-            }else{
-                sql2 += `;`;
-            }
+    selectSQL += whereSQL;
 
-            connection.query(sql2, function(error, results, fields){
-                if(error) {
-                    // Handle the error by sending an error response
-                    res.status(500).json({ error: 'Internal Server Error' });
-                    throw error;
-                }
-                res.json(results);
-            });
+    if(limit > 0){
+        selectSQL += ` LIMIT ${limit};`;
+    }else{
+        selectSQL += `;`;
+    }
+
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
         }
+        res.json(results);
     });
 });
 
