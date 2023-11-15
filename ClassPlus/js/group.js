@@ -131,20 +131,23 @@ function searchGroups() {
                     divElement1.setAttribute('onclick', `gotoGroup('${res.data[i].groupId}')`);
                 
                     var divElement2 = document.createElement('div');
-                    divElement2.setAttribute('class', 'group-title');
+                    divElement2.setAttribute('class', 'group-name');
                     divElement2.innerHTML = res.data[i].groupName;
                 
                     var divElement3 = document.createElement('div');
-                    divElement3.setAttribute('class', 'group-description');
+                    divElement3.setAttribute('class', 'group-def');
                     divElement3.innerHTML = res.data[i].description;
                 
                     var divElement4 = document.createElement('div');
-                    divElement4.setAttribute('class', 'group-course');
-                    divElement4.innerHTML = res.data[i].subject + res.data[i].courseNumber + " : " + res.data[i].title;
-                
+                    divElement4.setAttribute('class', 'group-members');
+                    divElement4.innerHTML = res.data[i].member + " people are in this group.";
+
                     var divElement5 = document.createElement('div');
-                    divElement5.setAttribute('class', 'group-member');
-                    divElement5.innerHTML = res.data[i].member + " people are in this group.";
+                    divElement5.setAttribute('class', 'group-line');
+
+                    var divElement6 = document.createElement('div');
+                    divElement6.setAttribute('class', 'group-course');
+                    divElement6.innerHTML = res.data[i].subject + res.data[i].courseNumber + " : " + res.data[i].title;
                 
                     // Append divs to the current row
                     rowElement.appendChild(divElement1);
@@ -152,6 +155,7 @@ function searchGroups() {
                     divElement1.appendChild(divElement3);
                     divElement1.appendChild(divElement4);
                     divElement1.appendChild(divElement5);
+                    divElement1.appendChild(divElement6);
                 }
                 
             }

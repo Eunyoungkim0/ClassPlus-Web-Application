@@ -691,6 +691,7 @@ LEFT JOIN classesenrolled e ON a.courseId = e.courseId AND e.userId = ${userId} 
     });
 });
 
+
 app.post('/api/getSearchedGroups/', async(req, res) => {
     const { userId, subject, courseNumber, groupName, limit } = req.body;
     
@@ -712,7 +713,7 @@ app.post('/api/getSearchedGroups/', async(req, res) => {
             const courseId = course.courseId;
 
             let sql2 = `
-                SELECT m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title, count(*) as members
+                SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as member
                 FROM classplus.groups g
                 JOIN courses c ON g.courseId = c.courseId
                 JOIN groupmembers gm ON g.courseId = gm.courseId AND g.groupId = gm.groupId
