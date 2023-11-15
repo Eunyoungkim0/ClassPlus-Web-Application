@@ -64,14 +64,21 @@
 #subjectSelect {
     height: 30px;
     padding: 5px;
-    border: 1px gray solid;
+    margin: 10px 10px 35px 10px;
     border-radius: 5%;
+    display: flex;
+    justify-content: flex-end;
+    width: 18%;
+    text-wrap: wrap;
 }
 
 #classSelect{
     height: 30px;
     padding: 5px;
+    margin: 10px 10px 35px 10px;
+    width: 60%;
 }
+
 
 #courseInformation {
     cursor: pointer;
@@ -223,4 +230,90 @@
     width: 80%;
     padding: 10px;
     border-left: 1px #d9d9d9 solid;
+}
+
+
+.course-search-frame {
+    margin-top: 300px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.course-search-row {
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    align-items: center;
+}
+
+.searchText{
+    width: 30%;
+    padding-left: 10px;
+    height: 100%;
+    color: #ABB5BE;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 16px;
+    letter-spacing: 0.96px;
+    word-wrap: break-word;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px #d9d9d9 solid;
+}
+
+#divForCourse {
+    width: 80%;
+    margin-top: 1%;
+    margin-left: 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.result-frame {
+    display: flex;
+    flex-direction: column;
+    font: 12px;
+}
+
+.list-row-frame-title {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row;
+    border-radius: 10px;
+    font-weight: bold;
+    background-color: #A49665;
+    height: 30px;
+}
+
+.list-row-frame {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row;
+    border-bottom: 1px #d9d9d9 solid;
+    height: 35px;
+}
+
+.list-row-frame:hover {
+    background-color: #004F34;
+    color: white;
+}
+
+.list-subject {
+    padding-left: 5px;
+    width: 8%;
+}
+
+.list-coursenumber {
+    padding-left: 5px;
+    width: 10%;
+}
+
+.list-title {
+    padding-left: 5px;
+    width: 60%;
 }

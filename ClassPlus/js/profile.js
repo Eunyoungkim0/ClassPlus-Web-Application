@@ -248,9 +248,9 @@ function dataValidate() {
     const startInputs = document.getElementsByClassName('time-start');
     const endInputs = document.getElementsByClassName('time-end');
     for (let i = 0; i < selectInputs.length; i++) {
-      const day = selectInputs[i].value;
-      const start = startInputs[i].value;
-      const end = endInputs[i].value;
+      const day = parseInt(selectInputs[i].value);
+      const start = parseInt(startInputs[i].value);
+      const end = parseInt(endInputs[i].value);
       if(day == "" || day == 0){
         alert("Please select day");
         selectInputs[i].focus();
@@ -277,7 +277,7 @@ function dataValidate() {
         return false;
       }
       if(end <= start){
-        alert("End time should be greater than start time.");
+        alert(`End time should be greater than start time.\nYour start: ${start}, Your end: ${end}`);
         endInputs[i].focus();
         return false;
       }

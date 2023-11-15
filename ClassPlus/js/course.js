@@ -41,6 +41,87 @@ function getMyCourse(){
     });
 }
 
+function searchCourses() {
+
+    const subject = document.getElementById('subjectSelect').value;
+    const courseNumber = document.getElementById('classSelect').value;
+
+    if(subject == ""){
+        alert("Please select subject.");
+        document.getElementById('subjectSelect').focus();
+        return false;
+    }
+
+    data = {
+        subject : subject,
+        courseNumber: courseNumber,
+        limit : 0,
+    };
+    
+    axios.post(`/api/getSearchedCourses`, data)
+    .then(res => {
+        if(res && res.data) {
+            if(res.data.length == 0){
+                document.getElementById('divForCourse').innerHTML = "There is no course with this information.";
+            }else{
+                console.log(res.data);
+                const divForCourse = document.getElementById('divForCourse');
+                while (divForCourse.firstChild) {
+                    divForCourse.removeChild(divForCourse.firstChild);
+                }
+
+                const divListFrame = document.createElement('div');
+                divListFrame.setAttribute('class', 'result-frame');
+                const divRowFrame = document.createElement('div');
+                divRowFrame.setAttribute('class', 'list-row-frame-title');
+                const divSubject = document.createElement('div');
+                divSubject.innerHTML = "Subject";
+                divSubject.setAttribute('class', 'list-subject')
+                const divCourseNumber = document.createElement('div');
+                divCourseNumber.innerHTML = "Course #";
+                divCourseNumber.setAttribute('class', 'list-coursenumber')
+                const divTitle = document.createElement('div');
+                divTitle.innerHTML = "Title";
+                divTitle.setAttribute('class', 'list-title');
+
+                divForCourse.appendChild(divListFrame);
+                divListFrame.appendChild(divRowFrame);
+                divRowFrame.appendChild(divSubject);
+                divRowFrame.appendChild(divCourseNumber);
+                divRowFrame.appendChild(divTitle);
+
+                for (var i = 0; i < res.data.length; i++) {
+                    const rsSubject = res.data[i].subject;
+                    const rsCourseNumber = res.data[i].courseNumber;
+                    const rsTitle = res.data[i].title;
+
+                    const divListFrame = document.createElement('div');
+                    divListFrame.setAttribute('class', 'result-frame');
+                    const divRowFrame = document.createElement('div');
+                    divRowFrame.setAttribute('class', 'list-row-frame');
+                    divRowFrame.setAttribute('onclick', `gotoCourse('${rsSubject}', '${rsCourseNumber}')`);
+                    divRowFrame.setAttribute('style', 'cursor: pointer;');
+                    const divSubject = document.createElement('div');
+                    divSubject.innerHTML = rsSubject;
+                    divSubject.setAttribute('class', 'list-subject')
+                    const divCourseNumber = document.createElement('div');
+                    divCourseNumber.innerHTML = rsCourseNumber;
+                    divCourseNumber.setAttribute('class', 'list-coursenumber')
+                    const divTitle = document.createElement('div');
+                    divTitle.innerHTML = rsTitle;
+                    divTitle.setAttribute('class', 'list-title');
+
+                    divForCourse.appendChild(divListFrame);
+                    divListFrame.appendChild(divRowFrame);
+                    divRowFrame.appendChild(divSubject);
+                    divRowFrame.appendChild(divCourseNumber);
+                    divRowFrame.appendChild(divTitle);
+                }
+            }
+        }
+    });   
+}
+
 function gotoCourse(sj, cn) {
     const subject = sj;
     const courseNumber = cn;
@@ -301,6 +382,9 @@ function handleSelectChange(selectElement) {
 
     axios.get(`/api/getClasses/${selectedValue}`)
     .then(res => {
+        var option = document.createElement('option');
+        document.querySelector('#classSelect').appendChild(option);
+
         for(var i=0; i < res.data.length; i++){
             var option = document.createElement('option');
             option.setAttribute('value', res.data[i].courseNumber);

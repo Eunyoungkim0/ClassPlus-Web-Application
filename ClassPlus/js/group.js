@@ -265,18 +265,20 @@ function amIJoined(data) {
             enrolled = res.data.enrolled;
             joined = res.data.joined;
 
-            if(res && res.data && res.data.enrolled && res.data.joined) {
+            if(res.data.enrolled){
+                if(res.data.joined){
+                    if(btnJoin != null) btnJoin.hidden = true;
+                    if(btnSave != null) btnSave.hidden = false;
+                    if(btnAddTime != null) btnAddTime.hidden = false;
+                    if(btnAddLocation != null) btnAddLocation.hidden = false;
+                }else{
+                    if(btnJoin != null) btnJoin.hidden = false;
+                    if(btnSave != null) btnSave.hidden = true;
+                    if(btnAddTime != null) btnAddTime.hidden = true;
+                    if(btnAddLocation != null) btnAddLocation.hidden = true;
+                }
+            }else{
                 if(btnJoin != null) btnJoin.hidden = true;
-                if(btnSave != null) btnSave.hidden = false;
-                if(btnAddTime != null) btnAddTime.hidden = false;
-                if(btnAddLocation != null) btnAddLocation.hidden = false;
-            }else if(res && res.data && !res.data.enrolled){
-                if(btnJoin != null) btnJoin.hidden = true;
-                if(btnSave != null) btnSave.hidden = false;
-                if(btnAddTime != null) btnAddTime.hidden = false;
-                if(btnAddLocation != null) btnAddLocation.hidden = false;
-            }else if(res && res.data && res.data.enrolled && !res.data.joined){
-                if(btnJoin != null) btnJoin.hidden = false;
                 if(btnSave != null) btnSave.hidden = true;
                 if(btnAddTime != null) btnAddTime.hidden = true;
                 if(btnAddLocation != null) btnAddLocation.hidden = true;

@@ -285,6 +285,40 @@ app.get('/api/getClasses/:selectedValue', async(req, res) => {
     });
 });
 
+app.post('/api/getSearchedCourses/', async(req, res) => {
+    const { subject, courseNumber, limit } = req.body;
+    
+    let whereSQL = ` WHERE 1=1 `;
+
+    if(subject != ""){
+        whereSQL += ` AND subject = '${subject}'`;
+    }
+
+    if (courseNumber != "") {
+        whereSQL += ` AND courseNumber = '${courseNumber}'`;
+    }
+
+    let selectSQL = `SELECT * FROM courses `;
+
+    selectSQL += whereSQL;
+    selectSQL += ` ORDER BY subject, courseNumber `;
+
+    if(limit > 0){
+        selectSQL += ` LIMIT ${limit};`;
+    }else{
+        selectSQL += `;`;
+    }
+
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
 app.get('/api/getMyCourse/:userId', async(req, res) => {
     const userId = req.params.userId;
     const sql = `SELECT e.courseId, c.subject, c.courseNumber, c.title FROM classesenrolled e, courses c WHERE e.userId = ${userId} AND e.year = '${currentYear}' AND e.semester = 'fall' AND e.courseId = c.courseId;`;
@@ -690,7 +724,6 @@ LEFT JOIN classesenrolled e ON a.courseId = e.courseId AND e.userId = ${userId} 
         res.json(results);
     });
 });
-
 
 app.post('/api/getSearchedGroups/', async(req, res) => {
     const { subject, courseNumber, groupName, limit } = req.body;
