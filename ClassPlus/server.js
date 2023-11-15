@@ -712,7 +712,7 @@ app.post('/api/getSearchedGroups/', async(req, res) => {
             const courseId = course.courseId;
 
             let sql2 = `
-                SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title, COUNT(*) as member
+                SELECT m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title, count(*) as members
                 FROM classplus.groups g
                 JOIN courses c ON g.courseId = c.courseId
                 JOIN groupmembers gm ON g.courseId = gm.courseId AND g.groupId = gm.groupId

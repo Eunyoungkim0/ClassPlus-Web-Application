@@ -115,32 +115,45 @@ function searchGroups() {
             if(res.data.length == 0){
                 document.getElementById('divForGroup').innerHTML = "There is no group with this information.";
             }else{
-                for(var i=0; i < res.data.length; i++){
+                for (var i = 0; i < res.data.length; i++) {
+                    // Check if it's the start of a new row
+                    if (i % 3 === 0) {
+                        // Create a new row div
+                        var rowElement = document.createElement('div');
+                        rowElement.setAttribute('class', 'row');
+                        document.getElementById('divForGroup').appendChild(rowElement);
+                    }
+                
+                    // Create a div for each group
                     var divElement1 = document.createElement('div');
                     divElement1.setAttribute('class', 'group-frame');
+                    divElement1.style.maxWidth = '400px';
                     divElement1.setAttribute('onclick', `gotoGroup('${res.data[i].groupId}')`);
-
+                
                     var divElement2 = document.createElement('div');
                     divElement2.setAttribute('class', 'group-title');
                     divElement2.innerHTML = res.data[i].groupName;
-
+                
                     var divElement3 = document.createElement('div');
                     divElement3.setAttribute('class', 'group-description');
                     divElement3.innerHTML = res.data[i].description;
+                
                     var divElement4 = document.createElement('div');
                     divElement4.setAttribute('class', 'group-course');
-                    divElement4.innerHTML = res.data[i].subject + res.data[i].courseNumber +" : " + res.data[i].title;
-
+                    divElement4.innerHTML = res.data[i].subject + res.data[i].courseNumber + " : " + res.data[i].title;
+                
                     var divElement5 = document.createElement('div');
                     divElement5.setAttribute('class', 'group-member');
                     divElement5.innerHTML = res.data[i].member + " people are in this group.";
-                    
-                    document.getElementById('divForGroup').appendChild(divElement1);
+                
+                    // Append divs to the current row
+                    rowElement.appendChild(divElement1);
                     divElement1.appendChild(divElement2);
                     divElement1.appendChild(divElement3);
                     divElement1.appendChild(divElement4);
                     divElement1.appendChild(divElement5);
                 }
+                
             }
         }
     });   
