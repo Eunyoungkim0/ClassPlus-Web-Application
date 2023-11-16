@@ -1,4 +1,4 @@
-function courseCheck(page){
+function courseCheck(page, needsAi=0){
     // Get the query string from the URL
     const queryString = window.location.search;
     // Create a URLSearchParams object from the query string
@@ -13,7 +13,29 @@ function courseCheck(page){
     }
 
     var url = page + "?sj=" + subject + "&cn=" + courseNumber;
-    if(activityId != null) url += "&ai=" + activityId;
+    if(activityId != null && needsAi == 1) url += "&ai=" + activityId;
+    window.location.href = url;
+}
+
+function groupCheck(page, needsGi=0){
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    groupId = urlParams.get('gi');
+
+    if(groupId == ""){
+        alert("The wrong approach.");
+        location.replace("mygroup.html");
+    }
+
+    var url = page;
+
+    // if(url == "group_meeting.html" && joined == 0){
+    //     alert("You must join the group to set group meeting schedule.");
+    //     return false;
+    // }
+    if(groupId != null && needsGi == 1) url += "?gi=" + groupId;
     window.location.href = url;
 }
 

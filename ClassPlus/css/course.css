@@ -24,7 +24,7 @@
     /*box-shadow: #004F34 0px 2px 10px;*/
     box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
     border: 1px #d9d9d9 solid;
-    border-radius: 5%;
+    border-radius: 10px;
     color: gray;
     cursor: pointer;
 }
@@ -36,6 +36,12 @@
 
 .course-number {
     font-size: 2em;
+}
+
+.course-line {
+    border-bottom: 1px #d9d9d9 solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .course-name {
@@ -58,35 +64,42 @@
 #subjectSelect {
     height: 30px;
     padding: 5px;
-    border: 1px gray solid;
+    margin: 10px 10px 35px 10px;
     border-radius: 5%;
+    display: flex;
+    justify-content: flex-end;
+    width: 18%;
+    text-wrap: wrap;
 }
 
 #classSelect{
     height: 30px;
     padding: 5px;
+    margin: 10px 10px 35px 10px;
+    width: 60%;
 }
+
 
 #courseInformation {
     cursor: pointer;
 }
 
 #divForPost {
-    min-height: 80%;
+    min-height: 45%;
     align-items: center;
     margin: 10px;
     padding: 1%;
 }
 
 #divForStudySet {
-    min-height: 80%;
+    min-height: 45%;
     align-items: center;
     margin: 1%;
     padding: 1%;
 }
 
 #divForGroup {
-    min-height: 80%;
+    min-height: 45%;
     align-items: center;
     margin: 1%;
     padding: 1%;
@@ -137,12 +150,12 @@
 .group-frame {
     display: flex;
     justify-content: center;
-    padding: 5%;
+    padding: 3%;
     flex-direction: column;
     margin: 15px;
     width: 100%;
     box-shadow: #004F34 0px 0px 0px 1px;
-    border-radius: 5%;
+    border-radius: 10px;
     cursor: pointer;
 }
 .group-frame:hover {
@@ -155,7 +168,7 @@
     flex-direction: row;
 }
 .group-title {
-    font-size: large;
+    font-size: 1.5em;
     display: block;
     font-weight: bold;
 }
@@ -173,21 +186,11 @@
     font-size: small;
 }
 
-.table-row {
-    display: flex;
-    flex-direction: row;
-}
-
-.table-label {
-    margin: 5px;
-    padding: 5px;
-    width: 70px;
-    border: 1px gray solid;
-    border-radius: 8%;
-    background-color: #d9d9d9;
-}
-
 #title {
+    flex-grow: 1;
+}
+
+#description {
     flex-grow: 1;
 }
 
@@ -195,18 +198,13 @@
     flex-grow: 1;
 }
 
-.table-data {
-    margin: 5px;
-    padding: 5px;
-    border: 1px gray solid;
-    border-radius: 5%;
-}
-
-.empty-div {
-    flex-grow: 1;
-}
-
 #content {
+    min-height: 300px;
+    padding: 20px;
+    width: 100%;
+}
+
+#postcontent {
     min-height: 300px;
     padding: 20px;
     width: 100%;
@@ -218,18 +216,104 @@
     padding: 10px;
     display: flex;
     flex-direction: row;
-    border: 1px gray dashed;
-    border-radius: 5%;
+    border: 1px gray dotted;
+    border-radius: 10px;
 }
 
 .term {
     width: 20%;
     padding: 10px;
-    border-right: 1px gray solid;
+    
 }
 
 .definition {
     width: 80%;
     padding: 10px;
-    border-left: 1px gray solid;
+    border-left: 1px #d9d9d9 solid;
+}
+
+
+.course-search-frame {
+    margin-top: 300px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.course-search-row {
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    align-items: center;
+}
+
+.searchText{
+    width: 30%;
+    padding-left: 10px;
+    height: 100%;
+    color: #ABB5BE;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 16px;
+    letter-spacing: 0.96px;
+    word-wrap: break-word;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px #d9d9d9 solid;
+}
+
+#divForCourse {
+    width: 80%;
+    margin-top: 1%;
+    margin-left: 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.result-frame {
+    display: flex;
+    flex-direction: column;
+    font: 12px;
+}
+
+.list-row-frame-title {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row;
+    border-radius: 10px;
+    font-weight: bold;
+    background-color: #A49665;
+    height: 30px;
+}
+
+.list-row-frame {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row;
+    border-bottom: 1px #d9d9d9 solid;
+    height: 35px;
+}
+
+.list-row-frame:hover {
+    background-color: #004F34;
+    color: white;
+}
+
+.list-subject {
+    padding-left: 5px;
+    width: 8%;
+}
+
+.list-coursenumber {
+    padding-left: 5px;
+    width: 10%;
+}
+
+.list-title {
+    padding-left: 5px;
+    width: 60%;
 }

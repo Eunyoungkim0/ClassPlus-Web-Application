@@ -118,24 +118,46 @@ app.get('/api/profile/:userId', async(req, res) => {
     });
 });
 
-app.post('/api/profile_save', async(req, res) => {
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images/');
+    },
+    filename: (req, file, cb) => {
+        const userId = req.body.userId;
+        const pictureFileName = `${userId}_profile_picture.jpg`;
+        cb(null, pictureFileName);
+    },
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/api/profile_save', upload.single('profile-picture'), async (req, res) => {
     const { userId, firstName, lastName, major, minor, isStudent, isInstructor } = req.body;
+
+    const pictureFileName = req.file ? req.file.filename : null;
 
     connection.query(`SELECT my_row_id FROM users WHERE userId = ${userId}`, function(error, results, fields){
         if (error) throw error;
+
         const my_row_id = results[0].my_row_id;
-        
+
         const sql = `UPDATE users
                         SET firstName = '${firstName}',
                         lastName = '${lastName}',
                         major = '${major}',
                         minor = '${minor}',
+                        picture = ${pictureFileName ? `'${pictureFileName}'` : 'NULL'},
                         isStudent = ${isStudent},
                         isInstructor = ${isInstructor}
                 WHERE my_row_id = ${my_row_id}`;
-        
-        connection.query(sql, function(error, results, fields){
-            if (error) throw error;
+
+        connection.query(sql, function (error, results, fields) {
+            if (error) {
+                console.error('Error updating user:', error);
+                return res.status(500).json({ success: false, myContent: 'Error updating user' });
+            }
+
             res.json({
                 success: true,
                 myContent: 'Update completed successfully'
@@ -143,6 +165,9 @@ app.post('/api/profile_save', async(req, res) => {
         });
     });
 });
+
+
+
 
 app.get('/api/profile_ci/:userId', async(req, res) => {
     const userId = req.params.userId;
@@ -196,6 +221,47 @@ app.get('/api/profile_fl_class/:userId', async(req, res) => {
     });
 });
 
+
+app.get('/api/profile_at/:userId', async(req, res) => {
+    const userId = req.params.userId;
+    connection.query(`SELECT * FROM availableTime WHERE userId = ${userId} AND year = '${currentYear}' AND semester = 'fall' ORDER BY day, time;`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/profile_at_save', async (req, res) => {
+    const { userId, days } = req.body;
+    const deleteSQL = `DELETE FROM availableTime WHERE userId = ${userId} AND year = '${currentYear}' AND semester = 'fall';`;
+    connection.query(deleteSQL, function(error, results, fields){
+        if (error) throw error;
+
+        for (const dayKey in days) {
+            if (days.hasOwnProperty(dayKey)) {
+                const times = days[dayKey];
+                for (const time of times) {
+                const sql = `INSERT INTO availableTime (userId, year, semester, day, time) VALUES (${userId}, ${currentYear}, 'fall', ${dayKey}, ${time})`;
+                connection.query(sql, function(error, results, fields){
+                    if (error) throw error;
+                });
+                }
+            }
+        }
+        res.json({
+            success: true,
+        });
+    });
+});
+
+
+
+
+
+
 app.get('/api/getCourseSubject', async(req, res) => {
     connection.query(`SELECT distinct subject FROM courses ORDER BY subject;`, function(error, results, fields){
         if(error) {
@@ -210,6 +276,40 @@ app.get('/api/getCourseSubject', async(req, res) => {
 app.get('/api/getClasses/:selectedValue', async(req, res) => {
     const subject = req.params.selectedValue;
     connection.query(`SELECT courseNumber, title FROM courses WHERE subject = '${subject}' ORDER BY courseNumber;`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/getSearchedCourses/', async(req, res) => {
+    const { subject, courseNumber, limit } = req.body;
+    
+    let whereSQL = ` WHERE 1=1 `;
+
+    if(subject != ""){
+        whereSQL += ` AND subject = '${subject}'`;
+    }
+
+    if (courseNumber != "") {
+        whereSQL += ` AND courseNumber = '${courseNumber}'`;
+    }
+
+    let selectSQL = `SELECT * FROM courses `;
+
+    selectSQL += whereSQL;
+    selectSQL += ` ORDER BY subject, courseNumber `;
+
+    if(limit > 0){
+        selectSQL += ` LIMIT ${limit};`;
+    }else{
+        selectSQL += `;`;
+    }
+
+    connection.query(selectSQL, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
             res.status(500).json({ error: 'Internal Server Error' });
@@ -399,17 +499,25 @@ app.post('/api/getStudySet/:activityId', async(req, res) => {
 app.post('/api/createPost', async(req, res) => {
     const { subject, courseNumber, category, subCategory, title, content, userId } = req.body;
 
-    var insertSQL = `INSERT INTO courseActivities(activityId, courseId, year, semester, category, subCategory, title, content, userId, date, postUpdate) `;
-    insertSQL += ` SELECT COALESCE(MAX(activityId), 0) + 1, ${courseId}, '${currentYear}', 'fall', '${category}', '${subCategory}', '${title}', '${content}', ${userId}, DATE_SUB(NOW(), INTERVAL 5 HOUR), DATE_SUB(NOW(), INTERVAL 5 HOUR)`;
-    insertSQL += ` FROM courseActivities;`;
-    connection.query(insertSQL, function(error, results, fields){
-        if(error) {
-            // Handle the error by sending an error response
-            res.status(500).json({ error: 'Internal Server Error' });
-            throw error;
-        }
-        res.json({
-            success: true,
+    var getCourseId = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+
+    connection.query(getCourseId, function(error, results, fields){
+        if(error) throw error;
+
+        const courseId = results[0].courseId;
+
+        var insertSQL = `INSERT INTO courseActivities(activityId, courseId, year, semester, category, subCategory, title, content, userId, date, postUpdate) `;
+        insertSQL += ` SELECT COALESCE(MAX(activityId), 0) + 1, ${courseId}, '${currentYear}', 'fall', '${category}', '${subCategory}', '${title}', '${content}', ${userId}, DATE_SUB(NOW(), INTERVAL 5 HOUR), DATE_SUB(NOW(), INTERVAL 5 HOUR)`;
+        insertSQL += ` FROM courseActivities;`;
+        connection.query(insertSQL, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json({
+                success: true,
+            });
         });
     });
 });
@@ -481,7 +589,6 @@ app.post('/api/editStudySet', async(req, res) => {
             const { term, definition } = data;
           
             var sql = `UPDATE studySets SET term = '${term}', definition = '${definition}' WHERE activityId = ${activityId} AND studySetId = ${count}`;          
-            console.log(sql);
             connection.query(sql, function(error, results, fields){
                 if (error) {
                     res.status(500).json({ error: 'Internal Server Error' });
@@ -539,7 +646,6 @@ app.post('/api/saveClass/', async(req, res) => {
     });
 });
 
-
 app.post('/api/getPermission/', async(req, res) => {
     const { userId, subject, courseNumber } = req.body;
     const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}';`
@@ -571,6 +677,395 @@ app.post('/api/getPermission/', async(req, res) => {
         });
     });
 });
+
+
+
+//--------------------------------------------------------------------------------------------------------
+// APIs FOR GROUP
+app.get('/api/getMyGroup/:userId', async(req, res) => {
+    const userId = req.params.userId;
+    var sql = `SELECT m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title, count(*) as members `;
+    sql += `FROM (SELECT gm.groupId, g.groupName, g.description, gm.courseId FROM groupmembers gm, classplus.groups g WHERE gm.userId = ${userId} AND gm.groupId = g.groupId AND g.year='${currentYear}' AND g.semester='fall') AS m, `;
+    sql += `courses c, groupmembers gm `;
+    sql += `WHERE m.courseId = c.courseId AND m.groupId = gm.groupId `;
+    sql += `GROUP BY m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title `;
+    sql += `ORDER BY c.subject, c.courseNumber;`;
+
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/getGroup/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const userId = req.query.userId;
+    const sql = `SELECT a.*,
+    (CASE WHEN gm2.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIJoined,
+    (CASE WHEN e.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIEnrolled
+FROM (SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as members
+  FROM groupmembers gm, classplus.groups g, courses c 
+  WHERE g.year = '${currentYear}' AND g.semester = 'fall'
+  AND gm.groupId = g.groupId AND g.courseId = c.courseId
+  AND g.groupId = ${groupId}
+  GROUP BY g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title) AS A
+LEFT JOIN groupmembers gm2 ON a.groupId = gm2.groupId AND gm2.userId = ${userId}
+LEFT JOIN classesenrolled e ON a.courseId = e.courseId AND e.userId = ${userId} AND e.year = '${currentYear}' AND e.semester = 'fall'; `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/getSearchedGroups/', async(req, res) => {
+    const { subject, courseNumber, groupName, limit } = req.body;
+    
+    let whereSQL = `WHERE 1=1 `;
+
+    if(subject != ""){
+        whereSQL += ` AND subject = '${subject}'`;
+    }
+
+    if (courseNumber != "") {
+        whereSQL += ` AND courseNumber = '${courseNumber}'`;
+    }
+
+    if (groupName != "") {
+        whereSQL += ` AND groupName like '%${groupName}%'`;
+    }
+
+    let selectSQL = `
+        SELECT * 
+            FROM
+        (SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as member
+        FROM classplus.groups g
+        JOIN courses c ON g.courseId = c.courseId
+        JOIN groupmembers gm ON g.courseId = gm.courseId AND g.groupId = gm.groupId
+        WHERE g.year = '${currentYear}' AND g.semester = 'fall'
+        GROUP BY g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title
+        ORDER BY member DESC) AS a
+    `;
+
+    selectSQL += whereSQL;
+
+    if(limit > 0){
+        selectSQL += ` LIMIT ${limit};`;
+    }else{
+        selectSQL += `;`;
+    }
+
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/api/getGroupMembers/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const userId = req.query.userId;
+    const sql = `SELECT a.groupId, a.userId, a.lastName, a.firstName, a.picture,
+    (CASE WHEN f.userId IS NOT NULL THEN 1 ELSE 0 END) AS isFriend
+   FROM (SELECT gm.groupId, u.userId, u.lastName, u.firstName, u.picture FROM groupmembers gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId) AS a
+   LEFT JOIN friends f ON a.userId = f.friendId AND f.userId = ${userId};
+    `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+
+app.post('/api/getGroupInfo/', async(req, res) => {
+    const { userId, groupId } = req.body;
+    const sql = `SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title FROM classplus.groups g, courses c WHERE g.groupId = ${groupId} AND g.courseId = c.courseId;`;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/getGroupPermission/', async(req, res) => {
+    const { userId, groupId } = req.body;
+    var sql = ` SELECT (CASE WHEN e.courseId IS NOT NULL THEN 1 ELSE 0 END) AS enrolled, 
+                       (CASE WHEN gm.groupId IS NOT NULL THEN 1 ELSE 0 END) AS joined 
+                  FROM classplus.groups g 
+                  LEFT JOIN classesenrolled e ON g.courseId = e.courseId AND g.year = e.year AND g.semester = e.semester AND e.userId = ${userId} 
+                  LEFT JOIN groupmembers gm ON g.groupId = gm.groupId AND gm.userId = ${userId} 
+                 WHERE g.groupId = ${groupId};`;
+
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        
+        if(results[0].enrolled == 1){
+            if(results[0].joined == 1){
+                res.json({
+                    enrolled: true,
+                    joined: true
+                });
+            }else{
+                res.json({
+                    enrolled: true,
+                    joined: false
+                });
+            }
+        }else{
+            res.json({
+                enrolled: false,
+                joined: false
+            });
+        }
+    });
+});
+
+app.post('/api/joinGroup/', async(req, res) => {
+    const { userId, groupId } = req.body;
+
+    connection.query(`SELECT count(*) as count FROM groupmembers WHERE userId = ${userId} AND groupId = ${groupId}`, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        if(results[0].count == 1){
+            res.json({
+                success: false,
+                alreadyJoined: true
+            });
+        }else{
+            const sql = `INSERT INTO groupmembers (groupId, courseId, userId) 
+                         SELECT ${groupId}, courseId, ${userId} FROM classplus.groups g WHERE g.groupId = ${groupId};`;
+            connection.query(sql, function(error, results, fields){
+                if(error) {
+                    // Handle the error by sending an error response
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }
+                res.json({
+                    success: true
+                });
+            });
+        }
+    });
+
+});
+
+
+app.post('/api/followFriend/:userId', async(req, res) => {
+    const userId = req.params.userId;
+    const friendId = req.query.friendId;
+    const sql = `INSERT INTO friends VALUES(${userId}, ${friendId}); `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json({
+            success: true
+        });
+    });
+});
+
+app.post('/api/createGroup', async(req, res) => {
+    const { groupName, groupDescription, subject, courseNumber, userId } = req.body;
+    
+    const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}'`;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+        var insertGroup = `INSERT INTO classplus.groups (groupId, groupName, description, courseId, year, semester, createrId) `;
+        insertGroup += `SELECT COALESCE(MAX(groupId), 0) + 1, '${groupName}', '${groupDescription}', ${courseId}, '${currentYear}', 'fall', ${userId} FROM classplus.groups;`;
+        connection.query(insertGroup, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            var insertGroupMember = `INSERT INTO groupmembers (groupId, courseId, userId) `;
+            insertGroupMember += `SELECT COALESCE(MAX(groupId), 0), ${courseId}, ${userId} FROM classplus.groups; `;
+            connection.query(insertGroupMember, function(error, results, fields){
+                if(error) {
+                    // Handle the error by sending an error response
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }            
+                res.json({
+                    success: true
+                });
+            });
+        });
+    });
+});
+
+app.get('/api/getGroupAvailableTime/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT gm.groupId, a.day, a.time, count(*) as count
+    FROM availabletime a
+    LEFT JOIN groupmembers gm ON a.userId = gm.userId
+   WHERE gm.groupId = ${groupId}
+   GROUP BY gm.groupId, a.day, a.time
+   HAVING count > 1 ORDER BY count DESC limit 5;`;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/api/getGroupSavedMeeting/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT * FROM groupavailable WHERE groupId = ${groupId}; `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/api/getGroupNextMeeting/:groupId', async(req, res) => {
+    const groupId = req.params.groupId;
+    const sql = `SELECT * FROM groupavailable WHERE groupId = ${groupId} AND isSelected = 1; `;
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/group_meeting_save', async (req, res) => {
+    const { groupId, days, locations } = req.body;
+
+    for (const dayKey in days) {
+        if (days.hasOwnProperty(dayKey)) {
+            const times = days[dayKey];
+
+            const selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = 'Time' AND value1 = ${times[0]} AND value2 = ${times[1]} AND value3 = ${times[2]}; `;
+            connection.query(selectSQL, function (error, results, fields) {
+                if (error) throw error;
+                const resultExist = results[0].count;
+                if(resultExist == 0){
+                    const insertSQL = `INSERT INTO groupavailable (groupId, type, value1, value2, value3, isSelected, memCount) VALUES (${groupId}, 'Time', ${times[0]}, ${times[1]}, ${times[2]}, ${times[3]}, ${times[4]});`;
+                    connection.query(insertSQL, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }else{
+                    const updateSQL1 = `UPDATE groupavailable SET isSelected = ${times[3]}, memCount = ${times[4]} WHERE groupId = ${groupId} AND type = 'Time' AND value1 = ${times[0]} AND value2 = ${times[1]} AND value3 = ${times[2]}; `;
+                    connection.query(updateSQL1, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }
+            });
+            
+        }
+    }
+
+    for (const locationKey in locations) {
+        if (locations.hasOwnProperty(locationKey)) {
+            const locationsData = locations[locationKey];
+
+            const selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = 'Location' AND value0 = '${locationsData[0]}'; `;
+            connection.query(selectSQL, function (error, results, fields) {
+                if (error) throw error;
+                const resultExist = results[0].count;
+                if(resultExist == 0){
+                    const insertSQL = `INSERT INTO groupavailable (groupId, type, value0, isSelected) VALUES (${groupId}, 'Location', '${locationsData[0]}', ${locationsData[1]});`;
+                    connection.query(insertSQL, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }else{
+                    const updateSQL1 = `UPDATE groupavailable SET isSelected = ${locationsData[1]} WHERE groupId = ${groupId} AND type = 'Location' AND value0 = '${locationsData[0]}'; `;
+                    connection.query(updateSQL1, function (error, results, fields) {
+                        if (error) throw error;
+                    });
+                }
+            });
+        }
+    }
+
+    res.json({
+        success: true
+    });
+});
+
+
+app.post('/api/group_meeting_delete', async(req, res) => {
+    const { groupId, type, value0, value1, value2, value3 } = req.body;
+
+    var selectSQL = "";
+    if(type == "Time"){
+        selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value1 = ${value1} AND value2 = ${value2} AND value3 = ${value3}; `;
+    }else if(type == "Location"){
+        selectSQL = `SELECT count(*) AS count FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value0 = '${value0}'`;
+    }
+    
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const count = results[0].count;
+        if(count > 0){
+            var deleteSQL = "";
+            if(type == "Time"){
+                deleteSQL = `DELETE FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value1 = ${value1} AND value2 = ${value2} AND value3 = ${value3}; `;
+            }else if(type == "Location"){
+                deleteSQL = `DELETE FROM groupavailable WHERE groupId = ${groupId} AND type = '${type}' AND value0 = '${value0}'`;
+            }
+            connection.query(deleteSQL, function(error, results, fields){
+                if(error) {
+                    // Handle the error by sending an error response
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    throw error;
+                }
+            });
+        }
+        res.json({
+            success: true
+        });
+    });
+});
+//--------------------------------------------------------------------------------------------------------
+
+
+
 
 app.use(function (err, req, res, next) {
     if(err.name == 'UnauthorizedError'){

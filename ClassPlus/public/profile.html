@@ -15,113 +15,65 @@
 <body>
     <div id="nav-placeholder"></div>    
 
-    <div style="width: 300px; margin-top:5%">
-        <div id="profileNav-placeholder"></div>
-    </div>
+    <div class="row">
+        <div class="column" style="width: 300px; margin-top:5%">
+            <div id="profileNav-placeholder"></div>
+        </div>
 
-    <div
-        style="width: 270px; height: 262px; left: 500px; top: 174px; position: absolute; background: #D9D9D9; border-radius: 9999px">
-    </div>
-    <div
-        style="left: 579px; top: 291px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word">
-        user picture</div>
-    <div
-        style="left: 832px; top: 170px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word">
-        First Name</div>
-    <div
-        style="left: 832px; top: 472px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word">
-        Major</div>
-    <div
-        style="left: 832px; top: 566px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word">
-        Minor</div>
-    <div
-        style="left: 832px; top: 654px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word">
-        Status</div>
-    <div
-        style="left: 530px; top: 444px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word">
-        Change profile picture</div>
-    <div
-        style="left: 832px; top: 373px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word">
-        Email Address</div>
-    <div
-        style="left: 832px; top: 274px; position: absolute; color: black; font-size: 20px; font-weight: 400; line-height: 28px; word-wrap: break-word">
-        Last Name</div>
-    <div
-        style="left: 797px; top: 787px; position: absolute; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-        <button style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #004F34; border-radius: 4px; justify-content: flex-start; align-items: center; display: flex">
-            <div onclick="saveButton()"
-            style="text-align: center; color: #F5F5F5; font-size: 16px; font-weight: 600; word-wrap: break-word">
-            Save</div>
-        </button>
-    </div>
+        <div class="column profile-right">
+            <div id="welcome"></div>
+            <div class="profile-frame">
+                <div class="column profile-right" style="width: 30%; margin: 5%;">
+                    <div class="row">
+                        <div class="profile-picture" id="picture" style="align-items: center;">user picture</div>
+                    </div>
+                    <div class="row" style="align-items: center;">
+                        <input type="file" id="profile-picture" name="profile-picture" accept=".jpg, .jpeg, .png">
+                    </div>
+                </div>
 
-
-    <div
-        style="height: 38px; left: 832px; top: 208px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-        <div
-            style="align-self: stretch; padding-left: 16px; padding-right: 16px; padding-top: 9px; padding-bottom: 9px; background: #D9D9D9; border-radius: 6px; border: 1px #D9D9D9 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-            
-            <input type="text" id="firstName" class="userInput">
-        </div>
-    </div>
-    <div
-        style="height: 38px; left: 832px; top: 305px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-        <div
-            style="align-self: stretch; padding-left: 16px; padding-right: 16px; padding-top: 9px; padding-bottom: 9px; background: #D9D9D9; border-radius: 6px; border: 1px #D9D9D9 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-            
-            <input type="text" id="lastName" class="userInput">
-        </div>
-    </div>
-    <div
-        style="height: 38px; left: 832px; top: 597px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-        <div
-            style="align-self: stretch; padding-left: 16px; padding-right: 16px; padding-top: 9px; padding-bottom: 9px; background: #D9D9D9; border-radius: 6px; border: 1px #D9D9D9 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-            <input type="text" id="minor" class="userInput">
-        </div>
-    </div>
-    <div
-        style="height: 38px; left: 832px; top: 509px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-        <div
-            style="align-self: stretch; padding-left: 16px; padding-right: 16px; padding-top: 9px; padding-bottom: 9px; background: #D9D9D9; border-radius: 6px; border: 1px #D9D9D9 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-            <input type="text" id="major" class="userInput">
-        </div>
-    </div>
-    <div
-        style="height: 38px; left: 832px; top: 407px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-        <div
-            style="align-self: stretch; padding-left: 16px; padding-right: 16px; padding-top: 9px; padding-bottom: 9px; background: #D9D9D9; border-radius: 6px; border: 1px #D9D9D9 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-            <input type="text" id="email" class="userInput" disabled>
-        </div>
-    </div>
-    
-    <div
-        style="left: 832px; top: 685px; position: absolute; justify-content: flex-start; align-items: center; display: inline-flex">
-        <div style="padding: 8px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-            <div style="width: 16px; height: 16px; position: relative">
-                <input type="radio" id="isStudent" name="userStatus" value="Student">
+                
+                <div class="column" style="width: 70%; margin: 5%;">
+                    <div class="row">
+                        <div class="col-md-4 input-label">First Name:</div>
+                        <div class="col-md-8"><input type="text" id="firstName" class="userInput"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 input-label">Last Name:</div>
+                        <div class="col-md-8"><input type="text" id="lastName" class="userInput"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 input-label">Email:</div>
+                        <div class="col-md-8"><input type="text" id="email" class="userInput" disabled></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 input-label">Major:</div>
+                        <div class="col-md-8"><input type="text" id="major" class="userInput"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 input-label">Minor:</div>
+                        <div class="col-md-8"><input type="text" id="minor" class="userInput"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 input-label">Status:</div>
+                        <div class="col md=8">
+                            Student <input type="radio" id="isStudent" name="userStatus" value="Student">
+                            Instructor <input type="radio" id="isInstructor" name="userStatus" value="instructor">
+                            TA <input type="checkbox" id="isTa" name="userStatus" value="ta" disabled>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <label for="isStudent">Student</label>
-        </div>
-    </div>
-    <div
-        style="left: 933px; top: 685px; position: absolute; justify-content: flex-start; align-items: center; display: inline-flex">
-        <div style="padding: 8px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-            <div style="width: 16px; height: 16px; position: relative">
-                <input type="radio" id="isInstructor" name="userStatus" value="instructor">
-            </div>
-            <label for="isInstructor">Instructor</label><br>
-        </div>
-    </div>
-    <div
-        style="left: 1048px; top: 685px; position: absolute; justify-content: flex-start; align-items: center; display: inline-flex">
-        <div style="padding: 8px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-            <div style="width: 16px; height: 16px; position: relative">
-                <input type="checkbox" id="isTa" name="userStatus" value="ta" disabled>
-            </div>
-            <label for="isTa">TA</label>
-        </div>
-    </div>
 
+            <div class="row" style="margin-top:5%;">
+                <div class="d-flex justify-content-end">
+                    <button class="save-button" onclick="saveButton()">
+                        <div class="save-text">Save</div>
+                    </button>
+                </div>
+            </div>
+        
+        </div>
 
     <script type="text/javascript" src="../js/utils.js"></script>
     <script type="text/javascript" src="../js/profile.js"></script>

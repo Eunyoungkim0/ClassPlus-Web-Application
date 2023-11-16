@@ -12,30 +12,114 @@ function getMyCourse(){
             var divCourse = document.createElement('div');
             divCourse.innerHTML = "There are no enrolled classes.";
             document.querySelector('.box').appendChild(divCourse);
-        }
-
-        for(var i=0; i < res.data.length; i++){
-            var subject = res.data[i].subject;
-            var courseNumber = res.data[i].courseNumber; 
-            var title = res.data[i].title;
-
-            var divCourse = document.createElement('div');
-            var divCourseNumber = document.createElement('div');
-            var divTitle = document.createElement('div');
-
-            divCourse.setAttribute('class', 'course-frame');
-            divCourse.setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
-            divCourseNumber.setAttribute('class', 'course-number');
-            divTitle.setAttribute('class', 'course-name');
-
-            divCourseNumber.innerHTML = subject + courseNumber;
-            divTitle.innerHTML = title;
-
-            document.querySelector('.box').appendChild(divCourse);
-            divCourse.appendChild(divCourseNumber);
-            divCourse.appendChild(divTitle);
+        }else{
+            for(var i=0; i < res.data.length; i++){
+                var subject = res.data[i].subject;
+                var courseNumber = res.data[i].courseNumber; 
+                var title = res.data[i].title;
+    
+                var divCourse = document.createElement('div');
+                var divCourseNumber = document.createElement('div');
+                var divLine = document.createElement('div');
+                var divTitle = document.createElement('div');
+    
+                divCourse.setAttribute('class', 'course-frame');
+                divCourse.setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
+                divCourseNumber.setAttribute('class', 'course-number');
+                divLine.setAttribute('class', 'course-line');
+                divTitle.setAttribute('class', 'course-name');
+    
+                divCourseNumber.innerHTML = subject + courseNumber;
+                divTitle.innerHTML = title;
+    
+                document.querySelector('.box').appendChild(divCourse);
+                divCourse.appendChild(divCourseNumber);
+                divCourse.appendChild(divLine);
+                divCourse.appendChild(divTitle);
+            }
         }
     });
+}
+
+function searchCourses() {
+
+    const subject = document.getElementById('subjectSelect').value;
+    const courseNumber = document.getElementById('classSelect').value;
+
+    if(subject == ""){
+        alert("Please select subject.");
+        document.getElementById('subjectSelect').focus();
+        return false;
+    }
+
+    data = {
+        subject : subject,
+        courseNumber: courseNumber,
+        limit : 0,
+    };
+    
+    axios.post(`/api/getSearchedCourses`, data)
+    .then(res => {
+        if(res && res.data) {
+            if(res.data.length == 0){
+                document.getElementById('divForCourse').innerHTML = "There is no course with this information.";
+            }else{
+                console.log(res.data);
+                const divForCourse = document.getElementById('divForCourse');
+                while (divForCourse.firstChild) {
+                    divForCourse.removeChild(divForCourse.firstChild);
+                }
+
+                const divListFrame = document.createElement('div');
+                divListFrame.setAttribute('class', 'result-frame');
+                const divRowFrame = document.createElement('div');
+                divRowFrame.setAttribute('class', 'list-row-frame-title');
+                const divSubject = document.createElement('div');
+                divSubject.innerHTML = "Subject";
+                divSubject.setAttribute('class', 'list-subject')
+                const divCourseNumber = document.createElement('div');
+                divCourseNumber.innerHTML = "Course #";
+                divCourseNumber.setAttribute('class', 'list-coursenumber')
+                const divTitle = document.createElement('div');
+                divTitle.innerHTML = "Title";
+                divTitle.setAttribute('class', 'list-title');
+
+                divForCourse.appendChild(divListFrame);
+                divListFrame.appendChild(divRowFrame);
+                divRowFrame.appendChild(divSubject);
+                divRowFrame.appendChild(divCourseNumber);
+                divRowFrame.appendChild(divTitle);
+
+                for (var i = 0; i < res.data.length; i++) {
+                    const rsSubject = res.data[i].subject;
+                    const rsCourseNumber = res.data[i].courseNumber;
+                    const rsTitle = res.data[i].title;
+
+                    const divListFrame = document.createElement('div');
+                    divListFrame.setAttribute('class', 'result-frame');
+                    const divRowFrame = document.createElement('div');
+                    divRowFrame.setAttribute('class', 'list-row-frame');
+                    divRowFrame.setAttribute('onclick', `gotoCourse('${rsSubject}', '${rsCourseNumber}')`);
+                    divRowFrame.setAttribute('style', 'cursor: pointer;');
+                    const divSubject = document.createElement('div');
+                    divSubject.innerHTML = rsSubject;
+                    divSubject.setAttribute('class', 'list-subject')
+                    const divCourseNumber = document.createElement('div');
+                    divCourseNumber.innerHTML = rsCourseNumber;
+                    divCourseNumber.setAttribute('class', 'list-coursenumber')
+                    const divTitle = document.createElement('div');
+                    divTitle.innerHTML = rsTitle;
+                    divTitle.setAttribute('class', 'list-title');
+
+                    divForCourse.appendChild(divListFrame);
+                    divListFrame.appendChild(divRowFrame);
+                    divRowFrame.appendChild(divSubject);
+                    divRowFrame.appendChild(divCourseNumber);
+                    divRowFrame.appendChild(divTitle);
+                }
+            }
+        }
+    });   
 }
 
 function gotoCourse(sj, cn) {
@@ -45,7 +129,7 @@ function gotoCourse(sj, cn) {
     window.location.href = url;
 }
 
-// END OF FUNCTIONS FOR COURSE HOMEPAGE
+// END OF FUNCTIONS FOR MY COURSE
 //---------------------------------------------------------------------------------
 
 
@@ -109,7 +193,6 @@ function loadCoursePosts(data) {
     axios.post(`/api/getCoursePosts`, data)
     .then(res => {
         if(res && res.data) {
-            console.log(res.data);
             if(res.data.length == 0){
                 document.getElementById('divForPost').innerHTML = "There is no post in this class yet.";
             }else{
@@ -186,6 +269,7 @@ function loadCourseGroups(data) {
                 for(var i=0; i < res.data.length; i++){
                     var divElement1 = document.createElement('div');
                     divElement1.setAttribute('class', 'group-frame');
+                    divElement1.setAttribute('onclick', `loadPost('Group', ${res.data[i].groupId})`);
 
                     var divElement2 = document.createElement('div');
                     divElement2.setAttribute('class', 'group-title');
@@ -222,10 +306,11 @@ function loadCourseHomepage(currentPagePath){
     const urlParams = new URLSearchParams(queryString);
     subject = urlParams.get('sj');
     courseNumber = urlParams.get('cn');
+    groupId = urlParams.get('gi');
 
     if(subject == "" || courseNumber== ""){
         alert("The wrong approach.");
-        location.replace("course_page_searchpage.html");
+        location.replace("mycourse.html");
     }
 
     data = {
@@ -257,6 +342,9 @@ function loadCourseHomepage(currentPagePath){
         getStudySetData();
     }else if(currentPagePath == 'course_study_set_edit.html'){
         getStudySetData();
+    }else if(currentPagePath == 'course_group_view.html'){
+        getGroupData();
+        loadNextMeeting(groupId);
     }
 }
 
@@ -294,6 +382,9 @@ function handleSelectChange(selectElement) {
 
     axios.get(`/api/getClasses/${selectedValue}`)
     .then(res => {
+        var option = document.createElement('option');
+        document.querySelector('#classSelect').appendChild(option);
+
         for(var i=0; i < res.data.length; i++){
             var option = document.createElement('option');
             option.setAttribute('value', res.data[i].courseNumber);
@@ -355,8 +446,8 @@ function savePost() {
         courseNumber: courseNumber,
         category: category,
         subCategory: document.getElementById('Category').value,
-        title: document.getElementById('title').value,
-        content: document.getElementById('content').value,
+        title: document.getElementById('posttitle').value,
+        content: document.getElementById('postcontent').value,
         userId : localStorage.getItem('userId'),
     };
 
@@ -416,6 +507,9 @@ function loadPost(category, activityId){
     }else if(category == 'StudySet'){
         var url = `course_study_set_view.html?sj=${subject}&cn=${courseNumber}&ai=${activityId}`
         window.location.href = url;
+    }else if(category == 'Group'){
+        var url = `course_group_view.html?sj=${subject}&cn=${courseNumber}&gi=${activityId}`
+        window.location.href = url;
     }
 }
 
@@ -468,7 +562,6 @@ function getStudySetData() {
 
     axios.post(`/api/getStudySet/${activityId}`)
         .then(res => {
-            console.log(res);
             if(res && res.data) {
                 if(currentPagePath == 'course_study_set_view.html'){
                     var writerId = res.data.userId;
@@ -524,6 +617,167 @@ function getStudySetData() {
         });
 }
 
+function getGroupData() {
+    // Get the query string from the URL
+    const currentPagePath = window.location.pathname.substring(1);
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    const userId = localStorage.getItem('userId');
+    groupId = urlParams.get('gi');
+    
+    const btnGroup = document.getElementById('buttonForGroup');
+    const btnTxtGroup = document.getElementById('buttonTextForGroup');
+    btnGroup.hidden = true;
+    axios.post(`/api/getGroup/${groupId}?userId=${userId}`)
+    .then(res => {
+        if(res && res.data) {
+            const amIJoined = res.data[0].amIJoined;
+            const amIEnrolled = res.data[0].amIEnrolled;
+            if(btnGroup != null && amIEnrolled == 1){
+                if(amIJoined == 0) {
+                    btnGroup.hidden = false;
+                    btnGroup.setAttribute('onclick', "navigateToJoin()");
+                    btnTxtGroup.innerHTML = 'Join';
+                }else{
+                    btnGroup.setAttribute('style', 'display: none;');
+                }
+            }
+            document.getElementById('groupName').innerHTML = res.data[0].groupName;
+            document.getElementById('groupDescription').innerHTML = ": " + res.data[0].description;
+            document.getElementById('memberCount').innerHTML = res.data[0].members;
+
+            axios.get(`/api/getGroupMembers/${groupId}?userId=${userId}`)
+            .then(res => {
+                if(res && res.data) {
+                    var divMembers = document.getElementById('memberList');
+                    for(var i=0; i < res.data.length; i++){
+                        const isFriend = res.data[i].isFriend;
+                        const friendId = res.data[i].userId;
+
+                        const divFrame = document.createElement('div');
+                        divFrame.setAttribute('class', 'member-frame');
+                        const divPicture = document.createElement('div');
+                        divPicture.setAttribute('class', 'picture-frame');
+                        const imgPicture = document.createElement('img');
+                        let picture = res.data[i].picture;
+                        if(picture === null){
+                            picture = "basicProfileImage.png";
+                        }
+                        imgPicture.setAttribute('src', `../images/${picture}`);
+                        imgPicture.setAttribute('class', 'picture');
+                        const divMemberName = document.createElement('div');
+                        divMemberName.setAttribute('class', 'member-name');
+                        divMemberName.innerHTML = res.data[i].firstName + " " + res.data[i].lastName;
+
+                        divMembers.appendChild(divFrame);
+                        divFrame.appendChild(divPicture);
+                        divPicture.appendChild(imgPicture);
+                        divFrame.appendChild(divMemberName);
+                        
+                        if(amIJoined == 1 && friendId != userId && isFriend == 0){
+                            const btnFollow = document.createElement('button');
+                            btnFollow.setAttribute('class', 'follow-button');
+                            btnFollow.setAttribute('onclick', `followFriend(${userId}, ${friendId})`);
+                            const divFollow = document.createElement('div');
+                            divFollow.setAttribute('class', 'course-text');
+                            divFollow.innerHTML = "Follow";
+                            btnFollow.appendChild(divFollow);
+                            divFrame.appendChild(btnFollow);
+                        }
+                    }
+                }
+            });
+        }
+    });
+}
+
+function loadNextMeeting(groupId) {
+    axios.get(`/api/getGroupNextMeeting/${groupId}`)
+    .then(res => {
+        const divMeetingInfo = document.getElementById('meetingInfo');
+        if(res.data.length == 0){
+            divMeetingInfo.innerHTML = "There is no meeting information.";
+            document.getElementById('timeList').innerHTML = "";
+            document.getElementById('locationList').innerHTML = "";
+        }else{
+            for(var i=0; i < res.data.length; i++){
+                if(res.data[i].type == "Time"){
+                    document.getElementById('timeList').innerHTML = "Time: ";
+                    addGroupTime(res.data[i].value1, res.data[i].value2, res.data[i].value3, 1, res.data[i].isSelected);
+                }else if(res.data[i].type == "Location"){
+                    document.getElementById('locationList').innerHTML = "Location: ";
+                    addLocation(res.data[i].value0, res.data[i].isSelected, 1);
+                }
+            }
+        }
+    });   
+}
+
+function navigateToJoin() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    groupId = urlParams.get('gi');
+    const joinData = {
+        userId : localStorage.getItem('userId'),
+        groupId : groupId
+    }
+    axios.post(`/api/joinGroup`, joinData)
+    .then(res => {
+        if(res && res.data && res.data.success) {
+            const message = "Successfully joined";
+            alert(message);
+            location.reload();
+        }else if(res && res.data && res.data.alreadyJoined) {
+            const message = "You're already joined in this group.";
+            alert(message);
+        }
+    });   
+}
+
+function followFriend(userId, friendId) {
+    axios.post(`/api/followFriend/${userId}?friendId=${friendId}`)
+    .then(res => {
+        if(res && res.data && res.data.success) {
+            const message = "Great! You have one more friend!";
+            alert(message);
+            location.reload();
+        }
+    });   
+}
+
+function dataCheckForGroup() {
+    if(document.getElementById('title').value == ""){
+        alert("Please enter group name.");
+        document.getElementById('title').focus();
+        return false;
+    }
+    return true;
+}
+
+function saveGroup() {
+    if(dataCheckForGroup()){
+        const groupInformation = {
+            groupName : document.getElementById('title').value,
+            groupDescription : document.getElementById('description').value,
+            subject : subject,
+            courseNumber : courseNumber,
+            userId : localStorage.getItem('userId'),
+        }
+        
+        const userAnswer = askYesNoQuestion("Do you want to save your data?");
+        if (userAnswer) {
+            axios.post(`/api/createGroup`, groupInformation)
+                .then(res => {
+                    if(res && res.data && res.data.success) {
+                        const url = "course_StudyGroup.html" + "?sj=" + subject + "&cn=" + courseNumber;
+                        window.location.href = url;
+                    }
+                });
+        }
+    }
+}
+
 function addStudySet() {
     const divFrame = document.createElement('div');
     divFrame.setAttribute('class', 'studyset-frame');
@@ -542,7 +796,7 @@ function addStudySet() {
     divFrame.appendChild(divDefinition);
 }
 
-function dataCheck() {
+function dataCheckForStudySet() {
     if(document.getElementById('title').value == ""){
         alert("Please enter title");
         document.getElementById('title').focus();
@@ -569,7 +823,7 @@ function dataCheck() {
 }
 
 function saveStudySet() {
-    if(dataCheck()){
+    if(dataCheckForStudySet()){
         // Get the query string from the URL
         const queryString = window.location.search;
         // Create a URLSearchParams object from the query string
@@ -634,8 +888,6 @@ function editStudySet() {
         studySet : studySetData,
     };
 
-    console.log(data);
-
     const userAnswer = askYesNoQuestion("Do you want to save your data?");
     if (userAnswer) {
         axios.post(`/api/editStudySet`, data)
@@ -648,6 +900,16 @@ function editStudySet() {
     }
 }
 
+function gotoGroupPage() {
+    // Get the query string from the URL
+    const queryString = window.location.search;
+    // Create a URLSearchParams object from the query string
+    const urlParams = new URLSearchParams(queryString);
+    groupId = urlParams.get('gi');
+
+    const url = "group_detail.html?gi=" + groupId;
+    window.location.href = url;
+}
 
 // This function loads data depending on its page name.
 function loadData(){
@@ -655,7 +917,7 @@ function loadData(){
 
     if(currentPagePath == 'mycourse.html'){
         getMyCourse();
-    }else if(currentPagePath == 'course_page_searchpage.html'){
+    }else if(currentPagePath == 'course_search.html'){
         getSubject();
     }else{
         loadCourseHomepage(currentPagePath);

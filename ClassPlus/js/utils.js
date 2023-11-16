@@ -34,10 +34,24 @@ $.get("mygroup_top.html", function(data){
     $("#mygroupTop-placeholder").replaceWith(data);
 });
 
+$.get("group_top.html", function(data){
+    $("#groupTop-placeholder").replaceWith(data);
+});
+
+$.get("study_group_nav.html", function(data){
+    $("#groupNav-placeholder").replaceWith(data);
+});
+
+
+
 function navigateToCoursePage() {
     window.location.href = 'mycourse.html';
 }
 
 function navigateToSearch() {
-    window.location.href = 'course_page_searchpage.html';
+    window.location.href = 'course_search.html';
+}
+
+function navigateToSearchGroup() {
+    window.location.href = 'group_search.html';
 }

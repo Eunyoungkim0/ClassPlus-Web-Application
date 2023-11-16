@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/group.css">
+    <link rel="stylesheet" type="text/css" href="webtheme.css">
+    <title>Group - Search</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" 
+    integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="nav-placeholder"></div>
+    <div class="course-title" style="margin-bottom: 100px">
+        <div class="searchTitle">Group Search</div>
+    </div>
+
+    <div class="row">
+        <div class="group-search-frame">
+            <div class="group-search-row">
+                <div class="searchText">Search Type</div>
+                <select id="searchType" onchange="limitSearch(this)">
+                    <option value="1">All</option>
+                    <option value="2">By Course</option>
+                    <option value="3">By Group Name</option>
+                </select>
+                <div class="searchText search-groupname">Group Name</div>
+                <input type="text" id="searchGroupName" placeholder="Enter group name">
+            </div>
+            <div class="group-search-row">
+                <div class="searchText search-subject">Subject</div>
+                <select id="subjectSelect" onchange="handleSelectChange(this)">
+                    <option></option>
+                </select>
+                <div class="searchText">Class</div>
+                <select id="classSelect">
+                    <option></option>
+                </select>
+            </div>
+            <div class="group-search-row">
+                <div class="empty-div"></div>
+                <button class="buttons" onclick="searchGroups()">Search</button>
+            </div>
+        </div>
+
+        <div id="divForGroup"></div>
+    </div>
+
+    <script type="text/javascript" src="../js/utils.js"></script>
+    <script type="text/javascript" src="../js/group.js"></script>
+</body>
+</html>
