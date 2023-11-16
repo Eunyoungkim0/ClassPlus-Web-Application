@@ -932,7 +932,7 @@ app.get('/api/getGroupAvailableTime/:groupId', async(req, res) => {
     LEFT JOIN groupmembers gm ON a.userId = gm.userId
    WHERE gm.groupId = ${groupId}
    GROUP BY gm.groupId, a.day, a.time
-   HAVING count > 1 ORDER BY count DESC;`;
+   HAVING count > 1 ORDER BY count DESC limit 5;`;
     connection.query(sql, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
