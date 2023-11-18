@@ -1,22 +1,11 @@
 # ClassPlus
-## IMPORTANT REMINDERS
-  - Place all HTML files in the "public" folder.
-  - Store image files in the "images" folder.
-  - Keep CSS files in the "css" folder.
-  - Store JavaScript files in the "js" folder.
-  - The "_old" folder contains code for sprint 2. Do not touch it.
-  - The "node_modules" folder is for Node.js. Do not touch it.
-  - Outside of these folders, you should only find "server.js", "package.json", and "package-lock.json".
----
 
-### :bell:TO-DO List for Sprint3
-  - [x] Student should be allowed to search for group
-  - [x] Users shall be able to create groups that focus on what they wish to study
-  - [x] Allow students to join study groups 
-  - [x] Implement study sets function
-  - [ ] Chat feature implemented (X)
-  - [x] Implement location/time booking system
-  - [x] Implement a notes/hw sharing feature
+### :bell:TO-DO List for Sprint4
+  - [ ] Allow read and write to class sessions for instructor members 
+  - [ ] TA should be able to join any group under the same course they are working with
+  - [ ] Moderators should be able to remove posts/study sets/groups from the list.
+  - [ ] Moderators should be able to block anyone.
+  - [ ] Implement an onboarding tutorial screen to guide new users of website features.
 ---
 
 ### :pushpin: Git Command
