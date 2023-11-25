@@ -52,13 +52,13 @@ function searchCourses() {
         return false;
     }
 
-    data = {
+    const searchData = {
         subject : subject,
         courseNumber: courseNumber,
         limit : 0,
     };
     
-    axios.post(`/api/getSearchedCourses`, data)
+    axios.post(`/api/getSearchedCourses`, searchData)
     .then(res => {
         if(res && res.data) {
             if(res.data.length == 0){
@@ -318,6 +318,7 @@ function loadCourseHomepage(currentPagePath){
         subject : subject,
         courseNumber: courseNumber,
         limit : 0,
+        instructor: localStorage.getItem('instructor'),
     };
 
     classInfo(data);
@@ -441,7 +442,7 @@ function savePost() {
     courseNumber = urlParams.get('cn');
     var category = "Post";
 
-    const data = {
+    const postData = {
         subject: subject,
         courseNumber: courseNumber,
         category: category,
@@ -453,7 +454,7 @@ function savePost() {
 
     const userAnswer = askYesNoQuestion("Do you want to save your data?");
     if (userAnswer) {
-        axios.post(`/api/createPost`, data)
+        axios.post(`/api/createPost`, postData)
             .then(res => {
                 if(res && res.data && res.data.success) {
                     const url = "course_Post.html" + "?sj=" + subject + "&cn=" + courseNumber;
@@ -473,7 +474,7 @@ function editPost() {
     const urlParams = new URLSearchParams(queryString);
     activityId = urlParams.get('ai');
 
-    const data = {
+    const editData = {
         activityId: activityId,
         subCategory: document.getElementById('category').value,
         title: document.getElementById('title').value,
@@ -482,7 +483,7 @@ function editPost() {
 
     const userAnswer = askYesNoQuestion("Do you want to save your data?");
     if (userAnswer) {
-        axios.post(`/api/editPost`, data)
+        axios.post(`/api/editPost`, editData)
             .then(res => {
                 if(res && res.data && res.data.success) {
                     const url = "course_Post.html" + "?sj=" + subject + "&cn=" + courseNumber;
@@ -843,7 +844,7 @@ function saveStudySet() {
           studySetData.push(newDataItem);
         }
     
-        const data = {
+        const studysetData = {
             title: document.getElementById('title').value,
             subject: subject,
             courseNumber: courseNumber,
@@ -853,7 +854,7 @@ function saveStudySet() {
         
         const userAnswer = askYesNoQuestion("Do you want to save your data?");
         if (userAnswer) {
-            axios.post(`/api/createStudySet`, data)
+            axios.post(`/api/createStudySet`, studysetData)
                 .then(res => {
                     if(res && res.data && res.data.success) {
                         const url = "course_StudySet.html" + "?sj=" + subject + "&cn=" + courseNumber;
@@ -882,7 +883,7 @@ function editStudySet() {
       studySetData.push(newDataItem);
     }
 
-    const data = {
+    const editData = {
         activityId: activityId,
         title: document.getElementById('title').value,
         studySet : studySetData,
@@ -890,7 +891,7 @@ function editStudySet() {
 
     const userAnswer = askYesNoQuestion("Do you want to save your data?");
     if (userAnswer) {
-        axios.post(`/api/editStudySet`, data)
+        axios.post(`/api/editStudySet`, editData)
             .then(res => {
                 if(res && res.data && res.data.success) {
                     const url = "course_StudySet.html" + "?sj=" + subject + "&cn=" + courseNumber;

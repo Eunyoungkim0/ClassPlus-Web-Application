@@ -72,4 +72,18 @@ function setNavColor(){
     }
 }
 
+function setPeopleTab() {
+    const isInstructor = localStorage.getItem('instructor');
+    const peopleMenu = document.getElementById('course_People.html');
+
+    if(peopleMenu != null){
+        if(isInstructor == 1){
+            peopleMenu.setAttribute('style', 'visibility: visible;');
+        }else{
+            peopleMenu.remove();
+        }
+    }
+}
+
+setPeopleTab();
 setNavColor();

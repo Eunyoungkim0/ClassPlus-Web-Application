@@ -173,7 +173,7 @@ app.post('/api/profile_save', upload.single('profile-picture'), async (req, res)
 
 app.get('/api/profile_ci/:userId', async(req, res) => {
     const userId = req.params.userId;
-    connection.query(`SELECT e.courseID, e.year, e.semester, c.subject, c.courseNumber, c.title FROM classesEnrolled e, courses c WHERE e.courseId = c.courseId AND e.userId = ${userId};`, function(error, results, fields){
+    connection.query(`SELECT e.courseID, e.year, e.semester, c.subject, c.courseNumber, c.title FROM courses_enrollment e, courses c WHERE e.courseId = c.courseId AND e.userId = ${userId};`, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
             res.status(500).json({ error: 'Internal Server Error' });
@@ -204,13 +204,13 @@ app.get('/api/profile_fl/:userId', async(req, res) => {
 app.get('/api/profile_fl_class/:userId', async(req, res) => {
     const userId = req.params.userId;
     const sql = `SELECT f.friendId, e.courseId, c.subject, c.courseNumber, c.title
-    FROM friends f, classesenrolled e, courses c
+    FROM friends f, courses_enrollment e, courses c
    WHERE f.userId = ${userId}
      AND f.friendId = e.userId
      AND e.courseId = c.courseId
      AND e.year = '${currentYear}'
      AND e.semester = 'fall'
-     AND e.courseId in (SELECT courseId FROM classesenrolled WHERE userId = ${userId} AND year = '${currentYear}' AND semester = 'fall')
+     AND e.courseId in (SELECT courseId FROM courses_enrollment WHERE userId = ${userId} AND year = '${currentYear}' AND semester = 'fall')
    ORDER BY f.friendId`;
 
     connection.query(sql, function(error, results, fields){
@@ -323,7 +323,7 @@ app.post('/api/getSearchedCourses/', async(req, res) => {
 
 app.get('/api/getMyCourse/:userId', async(req, res) => {
     const userId = req.params.userId;
-    const sql = `SELECT e.courseId, c.subject, c.courseNumber, c.title FROM classesenrolled e, courses c WHERE e.userId = ${userId} AND e.year = '${currentYear}' AND e.semester = 'fall' AND e.courseId = c.courseId;`;
+    const sql = `SELECT e.courseId, c.subject, c.courseNumber, c.title FROM courses_enrollment e, courses c WHERE e.userId = ${userId} AND e.year = '${currentYear}' AND e.semester = 'fall' AND e.courseId = c.courseId;`;
 
     connection.query(sql, function(error, results, fields){
         if(error) {
@@ -353,7 +353,7 @@ app.post('/api/getCoursePosts/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT a.activityId, a.subCategory, a.title, a.date, a.views, u.firstName, u.lastName FROM courseactivities a, users u 
+        var sql2 = `SELECT a.activityId, a.subCategory, a.title, a.date, a.views, u.firstName, u.lastName FROM courses_activity a, users u 
         WHERE a.category = 'Post' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
         ORDER BY a.date DESC`;
         if(limit > 0){
@@ -379,7 +379,7 @@ app.post('/api/getCourseStudySets/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT a.activityId, a.title, a.date, a.views, u.firstName, u.lastName FROM courseactivities a, users u 
+        var sql2 = `SELECT a.activityId, a.title, a.date, a.views, u.firstName, u.lastName FROM courses_activity a, users u 
         WHERE a.category = 'Study set' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
         ORDER BY a.date DESC`;
         if(limit > 0){
@@ -406,7 +406,7 @@ app.post('/api/getCourseGroups/', async(req, res) => {
         if (error) throw error;
         const courseId = results[0].courseId;
         var sql2 = `SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title, count(*) as member
-        FROM classplus.groups g, courses c, groupmembers gm
+        FROM studygroups g, courses c, studygroups_member gm
        WHERE g.courseId = c.courseId
          AND g.courseId = ${courseId}
          AND g.courseId = gm.courseId
@@ -433,14 +433,14 @@ app.post('/api/getCourseGroups/', async(req, res) => {
 
 app.post('/api/getPost/:activityId', async(req, res) => {
     const activityId = req.params.activityId;
-    const updateSQL = `UPDATE courseactivities SET views = views + 1 WHERE activityId = ${activityId}`;
+    const updateSQL = `UPDATE courses_activity SET views = views + 1 WHERE activityId = ${activityId}`;
     connection.query(updateSQL, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
             res.status(500).json({ error: 'Internal Server Error' });
             throw error;
         }
-        const sql = `SELECT c.*, u.firstName, u.lastName FROM courseactivities c, users u WHERE activityId = ${activityId} AND c.userId = u.userId;`;
+        const sql = `SELECT c.*, u.firstName, u.lastName FROM courses_activity c, users u WHERE activityId = ${activityId} AND c.userId = u.userId;`;
         connection.query(sql, function(error, results, fields){
             if(error) {
                 // Handle the error by sending an error response
@@ -455,14 +455,14 @@ app.post('/api/getPost/:activityId', async(req, res) => {
 
 app.post('/api/getStudySet/:activityId', async(req, res) => {
     const activityId = req.params.activityId;
-    const updateSQL = `UPDATE courseactivities SET views = views + 1 WHERE activityId = ${activityId}`;
+    const updateSQL = `UPDATE courses_activity SET views = views + 1 WHERE activityId = ${activityId}`;
     connection.query(updateSQL, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
             res.status(500).json({ error: 'Internal Server Error' });
             throw error;
         }
-        const sql = `SELECT c.*, u.firstName, u.lastName FROM courseactivities c, users u WHERE activityId = ${activityId} AND c.userId = u.userId;`;
+        const sql = `SELECT c.*, u.firstName, u.lastName FROM courses_activity c, users u WHERE activityId = ${activityId} AND c.userId = u.userId;`;
         connection.query(sql, function(error, results, fields){
             if(error) {
                 // Handle the error by sending an error response
@@ -508,9 +508,9 @@ app.post('/api/createPost', async(req, res) => {
 
         const courseId = results[0].courseId;
 
-        var insertSQL = `INSERT INTO courseActivities(activityId, courseId, year, semester, category, subCategory, title, content, userId, date, postUpdate) `;
+        var insertSQL = `INSERT INTO courses_activity(activityId, courseId, year, semester, category, subCategory, title, content, userId, date, postUpdate) `;
         insertSQL += ` SELECT COALESCE(MAX(activityId), 0) + 1, ${courseId}, '${currentYear}', 'fall', '${category}', '${subCategory}', '${title}', '${content}', ${userId}, DATE_SUB(NOW(), INTERVAL 5 HOUR), DATE_SUB(NOW(), INTERVAL 5 HOUR)`;
-        insertSQL += ` FROM courseActivities;`;
+        insertSQL += ` FROM courses_activity;`;
         connection.query(insertSQL, function(error, results, fields){
             if(error) {
                 // Handle the error by sending an error response
@@ -527,7 +527,7 @@ app.post('/api/createPost', async(req, res) => {
 app.post('/api/editPost', async(req, res) => {
     const { activityId, subCategory, title, content } = req.body;
 
-    var updateSQL = `UPDATE courseActivities SET subCategory = '${subCategory}', title = '${title}', content = '${content}', postUpdate = DATE_SUB(NOW(), INTERVAL 5 HOUR) WHERE activityId = ${activityId}`;
+    var updateSQL = `UPDATE courses_activity SET subCategory = '${subCategory}', title = '${title}', content = '${content}', postUpdate = DATE_SUB(NOW(), INTERVAL 5 HOUR) WHERE activityId = ${activityId}`;
     connection.query(updateSQL, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
@@ -549,12 +549,12 @@ app.post('/api/createStudySet', async(req, res) => {
         if(error) throw error;
 
         const courseId = results[0].courseId;
-        const activitySQL = `SELECT COALESCE(MAX(activityId), 0) AS max FROM courseActivities;`;
+        const activitySQL = `SELECT COALESCE(MAX(activityId), 0) AS max FROM courses_activity;`;
         connection.query(activitySQL, function(error, results, fields){
             if(error) throw error;
             const activityId = results[0].max + 1;
 
-            var insertSQL = `INSERT INTO courseActivities (activityId, courseId, year, semester, category, title, userId, date, postUpdate) `;
+            var insertSQL = `INSERT INTO courses_activity (activityId, courseId, year, semester, category, title, userId, date, postUpdate) `;
             insertSQL += ` VALUES(${activityId}, ${courseId}, '${currentYear}', 'fall', 'Study set', '${title}', ${userId}, DATE_SUB(NOW(), INTERVAL 5 HOUR), DATE_SUB(NOW(), INTERVAL 5 HOUR));`;
             connection.query(insertSQL, function(error, results, fields){
                 if(error) throw error;
@@ -583,7 +583,7 @@ app.post('/api/createStudySet', async(req, res) => {
 app.post('/api/editStudySet', async(req, res) => {
     const { activityId, title, studySet } = req.body;
 
-    const updateActivity = `UPDATE courseActivities SET title = '${title}', postUpdate = DATE_SUB(NOW(), INTERVAL 5 HOUR) WHERE activityId = ${activityId}`;
+    const updateActivity = `UPDATE courses_activity SET title = '${title}', postUpdate = DATE_SUB(NOW(), INTERVAL 5 HOUR) WHERE activityId = ${activityId}`;
     connection.query(updateActivity, function(error, results, fields){
         if(error) throw error;
         var count = 1;
@@ -608,7 +608,11 @@ app.post('/api/editStudySet', async(req, res) => {
 });
 
 app.post('/api/saveClass/', async(req, res) => {
-    const { userId, subject, courseNumber } = req.body;
+    const { userId, subject, courseNumber, instructor } = req.body;
+    var status = "student";
+    if(instructor == 1){
+        status = "instructor";
+    }
 
     connection.query(`SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}';`, function(error, results, fields){
         if(error) {
@@ -618,7 +622,7 @@ app.post('/api/saveClass/', async(req, res) => {
         }
         const courseId = results[0].courseId;
 
-        connection.query(`SELECT count(*) as count FROM classesEnrolled WHERE userId = ${userId} AND courseId = ${courseId} AND year = '${currentYear}' AND semester = 'fall'`, function(error, results, fields){
+        connection.query(`SELECT count(*) as count FROM courses_enrollment WHERE userId = ${userId} AND courseId = ${courseId} AND year = '${currentYear}' AND semester = 'fall'`, function(error, results, fields){
             if(error) {
                 // Handle the error by sending an error response
                 res.status(500).json({ error: 'Internal Server Error' });
@@ -630,7 +634,7 @@ app.post('/api/saveClass/', async(req, res) => {
                     alreadyEnrolled: true
                 });
             }else{
-                const sql = `INSERT INTO classesEnrolled VALUES (${userId}, ${courseId}, '${currentYear}', 'fall')`;
+                const sql = `INSERT INTO courses_enrollment (userId, courseId, year, semester, status) VALUES (${userId}, ${courseId}, '${currentYear}', 'fall', '${status}')`;
         
                 connection.query(sql, function(error, results, fields){
                     if(error) {
@@ -659,7 +663,7 @@ app.post('/api/getPermission/', async(req, res) => {
             throw error;
         }
         const courseId = results[0].courseId;
-        const secondsql = `SELECT count(*) as count FROM classesEnrolled WHERE userId = ${userId} AND courseId = ${courseId} AND year = '${currentYear}' AND semester = 'fall'`;
+        const secondsql = `SELECT count(*) as count FROM courses_enrollment WHERE userId = ${userId} AND courseId = ${courseId} AND year = '${currentYear}' AND semester = 'fall'`;
 
         connection.query(secondsql, function(error, results, fields){
             if(error) {
@@ -687,8 +691,8 @@ app.post('/api/getPermission/', async(req, res) => {
 app.get('/api/getMyGroup/:userId', async(req, res) => {
     const userId = req.params.userId;
     var sql = `SELECT m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title, count(*) as members `;
-    sql += `FROM (SELECT gm.groupId, g.groupName, g.description, gm.courseId FROM groupmembers gm, classplus.groups g WHERE gm.userId = ${userId} AND gm.groupId = g.groupId AND g.year='${currentYear}' AND g.semester='fall') AS m, `;
-    sql += `courses c, groupmembers gm `;
+    sql += `FROM (SELECT gm.groupId, g.groupName, g.description, gm.courseId FROM studygroups_member gm, studygroups g WHERE gm.userId = ${userId} AND gm.groupId = g.groupId AND g.year='${currentYear}' AND g.semester='fall') AS m, `;
+    sql += `courses c, studygroups_member gm `;
     sql += `WHERE m.courseId = c.courseId AND m.groupId = gm.groupId `;
     sql += `GROUP BY m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title `;
     sql += `ORDER BY c.subject, c.courseNumber;`;
@@ -710,13 +714,13 @@ app.post('/api/getGroup/:groupId', async(req, res) => {
     (CASE WHEN gm2.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIJoined,
     (CASE WHEN e.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIEnrolled
 FROM (SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as members
-  FROM groupmembers gm, classplus.groups g, courses c 
+  FROM studygroups_member gm, studygroups g, courses c 
   WHERE g.year = '${currentYear}' AND g.semester = 'fall'
   AND gm.groupId = g.groupId AND g.courseId = c.courseId
   AND g.groupId = ${groupId}
   GROUP BY g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title) AS A
-LEFT JOIN groupmembers gm2 ON a.groupId = gm2.groupId AND gm2.userId = ${userId}
-LEFT JOIN classesenrolled e ON a.courseId = e.courseId AND e.userId = ${userId} AND e.year = '${currentYear}' AND e.semester = 'fall'; `;
+LEFT JOIN studygroups_member gm2 ON a.groupId = gm2.groupId AND gm2.userId = ${userId}
+LEFT JOIN courses_enrollment e ON a.courseId = e.courseId AND e.userId = ${userId} AND e.year = '${currentYear}' AND e.semester = 'fall'; `;
     connection.query(sql, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
@@ -748,9 +752,9 @@ app.post('/api/getSearchedGroups/', async(req, res) => {
         SELECT * 
             FROM
         (SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as member
-        FROM classplus.groups g
+        FROM studygroups g
         JOIN courses c ON g.courseId = c.courseId
-        JOIN groupmembers gm ON g.courseId = gm.courseId AND g.groupId = gm.groupId
+        JOIN studygroups_member gm ON g.courseId = gm.courseId AND g.groupId = gm.groupId
         WHERE g.year = '${currentYear}' AND g.semester = 'fall'
         GROUP BY g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title
         ORDER BY member DESC) AS a
@@ -779,7 +783,7 @@ app.get('/api/getGroupMembers/:groupId', async(req, res) => {
     const userId = req.query.userId;
     const sql = `SELECT a.groupId, a.userId, a.lastName, a.firstName, a.picture,
     (CASE WHEN f.userId IS NOT NULL THEN 1 ELSE 0 END) AS isFriend
-   FROM (SELECT gm.groupId, u.userId, u.lastName, u.firstName, u.picture FROM groupmembers gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId) AS a
+   FROM (SELECT gm.groupId, u.userId, u.lastName, u.firstName, u.picture FROM studygroups_member gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId) AS a
    LEFT JOIN friends f ON a.userId = f.friendId AND f.userId = ${userId};
     `;
     connection.query(sql, function(error, results, fields){
@@ -795,7 +799,7 @@ app.get('/api/getGroupMembers/:groupId', async(req, res) => {
 
 app.post('/api/getGroupInfo/', async(req, res) => {
     const { userId, groupId } = req.body;
-    const sql = `SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title FROM classplus.groups g, courses c WHERE g.groupId = ${groupId} AND g.courseId = c.courseId;`;
+    const sql = `SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title FROM studygroups g, courses c WHERE g.groupId = ${groupId} AND g.courseId = c.courseId;`;
     connection.query(sql, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
@@ -810,9 +814,9 @@ app.post('/api/getGroupPermission/', async(req, res) => {
     const { userId, groupId } = req.body;
     var sql = ` SELECT (CASE WHEN e.courseId IS NOT NULL THEN 1 ELSE 0 END) AS enrolled, 
                        (CASE WHEN gm.groupId IS NOT NULL THEN 1 ELSE 0 END) AS joined 
-                  FROM classplus.groups g 
-                  LEFT JOIN classesenrolled e ON g.courseId = e.courseId AND g.year = e.year AND g.semester = e.semester AND e.userId = ${userId} 
-                  LEFT JOIN groupmembers gm ON g.groupId = gm.groupId AND gm.userId = ${userId} 
+                  FROM studygroups g 
+                  LEFT JOIN courses_enrollment e ON g.courseId = e.courseId AND g.year = e.year AND g.semester = e.semester AND e.userId = ${userId} 
+                  LEFT JOIN studygroups_member gm ON g.groupId = gm.groupId AND gm.userId = ${userId} 
                  WHERE g.groupId = ${groupId};`;
 
     connection.query(sql, function(error, results, fields){
@@ -846,7 +850,7 @@ app.post('/api/getGroupPermission/', async(req, res) => {
 app.post('/api/joinGroup/', async(req, res) => {
     const { userId, groupId } = req.body;
 
-    connection.query(`SELECT count(*) as count FROM groupmembers WHERE userId = ${userId} AND groupId = ${groupId}`, function(error, results, fields){
+    connection.query(`SELECT count(*) as count FROM studygroups_member WHERE userId = ${userId} AND groupId = ${groupId}`, function(error, results, fields){
         if(error) {
             // Handle the error by sending an error response
             res.status(500).json({ error: 'Internal Server Error' });
@@ -858,8 +862,8 @@ app.post('/api/joinGroup/', async(req, res) => {
                 alreadyJoined: true
             });
         }else{
-            const sql = `INSERT INTO groupmembers (groupId, courseId, userId) 
-                         SELECT ${groupId}, courseId, ${userId} FROM classplus.groups g WHERE g.groupId = ${groupId};`;
+            const sql = `INSERT INTO studygroups_member (groupId, courseId, userId) 
+                         SELECT ${groupId}, courseId, ${userId} FROM studygroups g WHERE g.groupId = ${groupId};`;
             connection.query(sql, function(error, results, fields){
                 if(error) {
                     // Handle the error by sending an error response
@@ -903,16 +907,16 @@ app.post('/api/createGroup', async(req, res) => {
             throw error;
         }
         const courseId = results[0].courseId;
-        var insertGroup = `INSERT INTO classplus.groups (groupId, groupName, description, courseId, year, semester, createrId) `;
-        insertGroup += `SELECT COALESCE(MAX(groupId), 0) + 1, '${groupName}', '${groupDescription}', ${courseId}, '${currentYear}', 'fall', ${userId} FROM classplus.groups;`;
+        var insertGroup = `INSERT INTO studygroups (groupId, groupName, description, courseId, year, semester, createrId) `;
+        insertGroup += `SELECT COALESCE(MAX(groupId), 0) + 1, '${groupName}', '${groupDescription}', ${courseId}, '${currentYear}', 'fall', ${userId} FROM studygroups;`;
         connection.query(insertGroup, function(error, results, fields){
             if(error) {
                 // Handle the error by sending an error response
                 res.status(500).json({ error: 'Internal Server Error' });
                 throw error;
             }
-            var insertGroupMember = `INSERT INTO groupmembers (groupId, courseId, userId) `;
-            insertGroupMember += `SELECT COALESCE(MAX(groupId), 0), ${courseId}, ${userId} FROM classplus.groups; `;
+            var insertGroupMember = `INSERT INTO studygroups_member (groupId, courseId, userId) `;
+            insertGroupMember += `SELECT COALESCE(MAX(groupId), 0), ${courseId}, ${userId} FROM studygroups; `;
             connection.query(insertGroupMember, function(error, results, fields){
                 if(error) {
                     // Handle the error by sending an error response
@@ -931,7 +935,7 @@ app.get('/api/getGroupAvailableTime/:groupId', async(req, res) => {
     const groupId = req.params.groupId;
     const sql = `SELECT gm.groupId, a.day, a.time, count(*) as count
     FROM availabletime a
-    LEFT JOIN groupmembers gm ON a.userId = gm.userId
+    LEFT JOIN studygroups_member gm ON a.userId = gm.userId
    WHERE gm.groupId = ${groupId}
    GROUP BY gm.groupId, a.day, a.time
    HAVING count > 1 ORDER BY count DESC limit 5;`;
