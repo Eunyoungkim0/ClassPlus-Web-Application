@@ -143,7 +143,7 @@ function searchGroups() {
             if(res.data.length == 0){
                 document.getElementById('divForGroup').innerHTML = "There is no group with this information.";
             }else{
-                console.log(res.data);
+                // console.log(res.data);
                 const divForGroup = document.getElementById('divForGroup');
                 while (divForGroup.firstChild) {
                     divForGroup.removeChild(divForGroup.firstChild);

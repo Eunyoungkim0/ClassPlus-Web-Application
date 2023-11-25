@@ -47,7 +47,7 @@ function login() {
         
         axios.post(`/api/login`, data)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 if(res && res.data && res.data.success) {
                     localStorage.setItem('userId', res.data.userId);
                     localStorage.setItem('firstName', res.data.firstName);

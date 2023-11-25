@@ -64,7 +64,7 @@ function searchCourses() {
             if(res.data.length == 0){
                 document.getElementById('divForCourse').innerHTML = "There is no course with this information.";
             }else{
-                console.log(res.data);
+                // console.log(res.data);
                 const divForCourse = document.getElementById('divForCourse');
                 while (divForCourse.firstChild) {
                     divForCourse.removeChild(divForCourse.firstChild);

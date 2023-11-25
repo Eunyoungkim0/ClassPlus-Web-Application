@@ -63,7 +63,7 @@ function signup() {
       axios.post(`/api/signup`, data)
           .then(res => {
               if(res && res.data && res.data.success) {
-                  console.log(res);
+                //   console.log(res);
                   const message = "Hello " + res.data.userName + ", welcome to ClassPlus!"
                   alert(message);
                   location.replace('login.html');

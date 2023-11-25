@@ -26,7 +26,7 @@ function saveButton() {
         axios.post(`/api/profile_save`, formData)
             .then(res => {
                 if(res && res.data && res.data.success) {
-                    console.log(res);
+                    // console.log(res);
                     alert("Data successfully saved!");
                     location.reload();
                 }
@@ -38,7 +38,7 @@ function saveButton() {
 function loadUserInfo(userId) {
     axios.get(`/api/profile/${userId}`)
         .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
 
         document.querySelector('#firstName').value = res.data[0].firstName;
         document.querySelector('#lastName').value = res.data[0].lastName;
@@ -138,7 +138,7 @@ function loadFriendClassList(userId) {
     axios.get(`/api/profile_fl_class/${userId}`)
         .then(res => {
             let friends = {};
-            console.log(res.data);
+            // console.log(res.data);
             for(var i=0; i < res.data.length; i++){
                 var friendId = res.data[i].friendId;
                 var elementDiv = document.getElementById(`classlist${friendId}`);
@@ -320,7 +320,7 @@ function saveTime() {
             axios.post(`/api/profile_at_save`, data)
                 .then(res => {
                     if(res && res.data && res.data.success) {
-                        console.log(res);
+                        // console.log(res);
                         alert("Available time successfully saved!");
                         location.reload();
                     }
