@@ -72,7 +72,7 @@ app.post('/api/signup', async(req, res) => {
 app.post('/api/login', async(req, res) => {
     const { userEmail, userPassword } = req.body;
 
-    connection.query(`SELECT userId, userPassword, firstName, lastName FROM users WHERE email = '${userEmail}'`, function(error, results, fields){
+    connection.query(`SELECT userId, userPassword, firstName, lastName, isInstructor FROM users WHERE email = '${userEmail}'`, function(error, results, fields){
         if (error) throw error;
 
         if(results.length > 0){
@@ -80,6 +80,7 @@ app.post('/api/login', async(req, res) => {
             const password = results[0].userPassword;
             const firstName = results[0].firstName;
             const lastName = results[0].lastName;
+            const isInstructor = results[0].isInstructor;
             
             if(userPassword == password){
                 res.json({
@@ -87,6 +88,7 @@ app.post('/api/login', async(req, res) => {
                     userId: userId,
                     firstName: firstName,
                     lastName: lastName,
+                    isInstructor: isInstructor,
                     myContent: 'Found user!'
                 });
             }else{

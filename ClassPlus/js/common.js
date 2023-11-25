@@ -29,6 +29,8 @@ function setLoginButton(userId) {
             localStorage.removeItem('userId');
             localStorage.removeItem('firstName');
             localStorage.removeItem('lastName');
+            localStorage.removeItem('instructor');
+            amIInstructor();
             location.replace('index.html');
             localStorage.setItem('didLogin', 'n');
         };
@@ -50,6 +52,18 @@ function loginCheckBeforeNav(page){
     }else{
         localStorage.setItem('destination', page);
         location.replace('login.html');
+    }
+}
+
+// This function checks if a user is an instructor.
+function amIInstructor(){
+    const instructorMark = document.getElementById('amIInstructor');
+    const instructor = localStorage.getItem('instructor');
+    if(instructor == 1){
+        instructorMark.setAttribute('style','visibility: visible;');
+        instructorMark.innerHTML = 'Instructor View';
+    }else{
+        instructorMark.setAttribute('style','visibility: hidden;');
     }
 }
 
@@ -285,6 +299,7 @@ function onLoad() {
     const userId = localStorage.getItem('userId');
     needsLogin(userId);
     setLoginButton(userId);
+    amIInstructor();
 }
 
 onLoad();

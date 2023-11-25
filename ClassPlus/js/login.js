@@ -52,6 +52,7 @@ function login() {
                     localStorage.setItem('userId', res.data.userId);
                     localStorage.setItem('firstName', res.data.firstName);
                     localStorage.setItem('lastName', res.data.lastName);
+                    localStorage.setItem('instructor', res.data.isInstructor);
                     const destination = localStorage.getItem('destination');
                     localStorage.removeItem('destination');
                     const message = "Hi " + res.data.firstName + "!";
