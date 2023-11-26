@@ -327,6 +327,12 @@ function loadGroupInfo() {
                         const divMemberName = document.createElement('div');
                         divMemberName.setAttribute('class', 'member-name');
                         divMemberName.innerHTML = res.data[i].firstName + " " + res.data[i].lastName;
+                        divMemberName.innerHTML = res.data[i].firstName + " " + res.data[i].lastName;
+                        if(res.data[i].status == 'instructor'){
+                            divMemberName.innerHTML += "<img src='../images/instructor.png' height='21' style='margin-left:10px;'>";
+                        }else if(res.data[i].status == 'TA'){
+                            divMemberName.innerHTML += "<img src='../images/ta.png'  height='21' style='margin-left:10px;'>";
+                        }
 
                         divMembers.appendChild(divFrame);
                         divFrame.appendChild(divPicture);

@@ -893,9 +893,11 @@ app.get('/api/getGroupMembers/:groupId', async(req, res) => {
     const groupId = req.params.groupId;
     const userId = req.query.userId;
     const sql = `SELECT a.groupId, a.userId, a.lastName, a.firstName, a.picture,
-    (CASE WHEN f.userId IS NOT NULL THEN 1 ELSE 0 END) AS isFriend
-   FROM (SELECT gm.groupId, u.userId, u.lastName, u.firstName, u.picture FROM studygroups_member gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId) AS a
-   LEFT JOIN friends f ON a.userId = f.friendId AND f.userId = ${userId};
+    (CASE WHEN f.userId IS NOT NULL THEN 1 ELSE 0 END) AS isFriend,
+    (SELECT status FROM courses_enrollment e WHERE e.userId=a.userId AND e.courseId=a.courseId AND e.year='${currentYear}' AND e.semester='fall') AS status,
+    a.blocked, a.blockedby
+   FROM (SELECT gm.groupId, gm.courseId, u.userId, u.lastName, u.firstName, u.picture, gm.blocked, gm.blockedby FROM studygroups_member gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId) AS a
+   LEFT JOIN friends f ON a.userId = f.friendId AND f.userId = ${userId}
     `;
     connection.query(sql, function(error, results, fields){
         if(error) {

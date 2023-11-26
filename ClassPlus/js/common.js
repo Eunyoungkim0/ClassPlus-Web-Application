@@ -61,7 +61,8 @@ function amIInstructor(){
     const instructor = localStorage.getItem('instructor');
     if(instructor == 1){
         instructorMark.setAttribute('style','visibility: visible;');
-        instructorMark.innerHTML = 'Instructor View';
+        // instructorMark.innerHTML = 'Instructor View';
+        instructorMark.innerHTML = "<img src='../images/instructor.png' height='21'>";
     }else{
         instructorMark.setAttribute('style','visibility: hidden;');
     }
