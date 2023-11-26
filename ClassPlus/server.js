@@ -355,6 +355,7 @@ app.post('/api/getCoursePosts/', async(req, res) => {
         const courseId = results[0].courseId;
         var sql2 = `SELECT a.activityId, a.subCategory, a.title, a.date, a.views, u.firstName, u.lastName FROM courses_activity a, users u 
         WHERE a.category = 'Post' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
+        AND a.blocked!=1 
         ORDER BY a.date DESC`;
         if(limit > 0){
             sql2 += ` LIMIT ${limit};`;
@@ -381,6 +382,7 @@ app.post('/api/getCourseStudySets/', async(req, res) => {
         const courseId = results[0].courseId;
         var sql2 = `SELECT a.activityId, a.title, a.date, a.views, u.firstName, u.lastName FROM courses_activity a, users u 
         WHERE a.category = 'Study set' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
+        AND a.blocked!=1 
         ORDER BY a.date DESC`;
         if(limit > 0){
             sql2 += ` LIMIT ${limit};`;
@@ -412,6 +414,7 @@ app.post('/api/getCourseGroups/', async(req, res) => {
          AND g.courseId = gm.courseId
          AND g.groupId = gm.groupId
          AND g.year = '${currentYear}' AND g.semester = 'fall'
+         AND g.blocked!=1 
        GROUP BY g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title
        ORDER BY member DESC`;
         if(limit > 0){
@@ -798,7 +801,7 @@ app.post('/api/checkStatus', async(req, res) => {
 
 
 //--------------------------------------------------------------------------------------------------------
-// APIs FOR GROUP
+// API end points FOR GROUP
 app.get('/api/getMyGroup/:userId', async(req, res) => {
     const userId = req.params.userId;
     var sql = `SELECT m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title, count(*) as members `;
@@ -896,7 +899,7 @@ app.get('/api/getGroupMembers/:groupId', async(req, res) => {
     (CASE WHEN f.userId IS NOT NULL THEN 1 ELSE 0 END) AS isFriend,
     (SELECT status FROM courses_enrollment e WHERE e.userId=a.userId AND e.courseId=a.courseId AND e.year='${currentYear}' AND e.semester='fall') AS status,
     a.blocked, a.blockedby
-   FROM (SELECT gm.groupId, gm.courseId, u.userId, u.lastName, u.firstName, u.picture, gm.blocked, gm.blockedby FROM studygroups_member gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId) AS a
+   FROM (SELECT gm.groupId, gm.courseId, u.userId, u.lastName, u.firstName, u.picture, gm.blocked, gm.blockedby FROM studygroups_member gm, users u WHERE gm.groupId = ${groupId} AND gm.userId = u.userId AND gm.blocked!=1) AS a
    LEFT JOIN friends f ON a.userId = f.friendId AND f.userId = ${userId}
     `;
     connection.query(sql, function(error, results, fields){
