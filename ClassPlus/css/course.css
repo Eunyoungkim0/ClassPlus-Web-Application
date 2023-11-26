@@ -340,6 +340,8 @@
 
 .people-title {
     font-weight: bold;
+    margin-left: 5%;
+    padding-left: 5%;
 }
 
 .people-picture {
@@ -348,12 +350,12 @@
 }
 
 .people-name {
-    width: 20%;
+    width: 25%;
     margin: 5px;
 }
 
 .people-email {
-    width: 20%;
+    width: 25%;
     margin: 5px;
 }
 
@@ -382,6 +384,6 @@
 }
 
 .people-button {
-    width: 20%;
+    width: 15%;
     margin: 5px;
 }

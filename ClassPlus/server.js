@@ -702,7 +702,8 @@ app.post('/api/getCoursePeople/', async(req, res) => {
         e.blocked, e.blockedby,
         (SELECT CONCAT(u2.firstName, ' ' , u2.lastName) FROM users u2 WHERE u2.userId=e.blockedby) AS name_blockedby
    FROM courses_enrollment e, users u
-  WHERE e.courseId=${courseId} AND e.year='${currentYear}' AND e.semester='fall' AND e.userId=u.userId ;`;
+  WHERE e.courseId=${courseId} AND e.year='${currentYear}' AND e.semester='fall' AND e.userId=u.userId 
+  ORDER BY u.lastName, u.firstName ;`;
 
         connection.query(secondsql, function(error, results, fields){
             if(error) {
@@ -738,6 +739,61 @@ app.post('/api/changeUserStatus', async(req, res) => {
         });
     });
 });
+
+app.post('/api/blockPeople', async(req, res) => {
+    const { clickedUserId, subject, courseNumber, userId } = req.body;
+
+    var selectSQL = `SELECT courseId FROM courses WHERE subject='${subject}' AND courseNumber='${courseNumber}';`;
+
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+        const updateSQL = `UPDATE courses_enrollment SET blocked=1, blockedby=${userId} WHERE userId=${clickedUserId} AND courseId=${courseId} AND year='${currentYear}' AND semester='fall' ;`;
+
+        connection.query(updateSQL, function(error, results, fields){
+            if(error) {
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json(results);
+        });
+    });
+});
+
+app.post('/api/checkStatus', async(req, res) => {
+    const { subject, courseNumber, userId } = req.body;
+
+    var selectSQL = `SELECT courseId FROM courses WHERE subject='${subject}' AND courseNumber='${courseNumber}';`;
+
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+        const selectSQL2 = `SELECT status FROM courses_enrollment WHERE userId=${userId} AND courseId=${courseId} AND year='${currentYear}' AND semester='fall' AND blocked=0 ;`;
+
+        connection.query(selectSQL2, function(error, results, fields){
+            if(error) {
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            if(results.length > 0){
+                res.json({
+                    status: results[0].status
+                });
+            }else{
+                res.json({
+                    status: null
+                });
+            }
+        });
+    });
+});
+
 
 
 

@@ -314,6 +314,11 @@ function getCoursePeople(){
                 for(var i=0; i < res.data.length; i++){
                     var divElement1 = document.createElement('div');
                     divElement1.setAttribute('class', 'people-frame');
+                    if(res.data[i].status == 'TA'){
+                        divElement1.setAttribute('style', 'color: blue;');
+                    }else if(res.data[i].status == 'instructor'){
+                        divElement1.setAttribute('style', 'color: #004F34; font-weight:bold;');
+                    }
 
                     var divElement2 = document.createElement('div');
                     divElement2.setAttribute('class', 'people-picture');
@@ -372,14 +377,33 @@ function getCoursePeople(){
                         selectElement.addEventListener("change", function(event) {
                             const selectedValue = event.target.value;
                             const parentDiv = event.target.parentElement;
-                            const clickedUserId = parentDiv.getElementsByClassName('user-id')[0].innerText;;
+                            const clickedUserId = parentDiv.getElementsByClassName('user-id')[0].innerText;
                             changeStatus(clickedUserId, selectedValue);
+                            location.reload();
                         });
                     }
 
                     var divElement8 = document.createElement('div');
                     divElement8.setAttribute('onchange', 'people-button');
-                    divElement8.innerHTML = "button";
+
+                    if(res.data[i].blocked!=1 && res.data[i].status!='instructor'){
+                        var buttonBlock = document.createElement('button');
+                        buttonBlock.setAttribute('class','follow-button');
+                        buttonBlock.addEventListener("click", function(event) {
+                            const parentDiv = event.target.parentElement;
+                            const grandparentDiv = parentDiv.parentElement;
+                            const grandgrandparentDiv = grandparentDiv.parentElement;
+                            const roleDiv = grandgrandparentDiv.querySelector('.people-role');
+                            const clickedUserId = roleDiv.querySelector('.user-id').innerText;
+                            blockPeople(clickedUserId);
+                            location.reload();
+                        });
+                        var divBlock = document.createElement('div');
+                        divBlock.setAttribute('class', 'course-text');
+                        divBlock.innerHTML = 'Block';
+                        buttonBlock.appendChild(divBlock);
+                        divElement8.appendChild(buttonBlock);
+                    }
                     
                     document.getElementById('divForPeople').appendChild(divElement1);
                     divElement1.appendChild(divElement2);
@@ -414,7 +438,29 @@ function changeStatus(clickedUserId, status){
             .then(res => {
                 if(res && res.data && res.data.success) {
                     alert("Role successfully changed!");
-                    location.reload();
+                }
+            });
+    }
+}
+
+function blockPeople(clickedUserId){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+    
+    const userAnswer = askYesNoQuestion(`Do you want to block the person?`);
+    if (userAnswer) {
+        const changeStatusData = {
+            clickedUserId: clickedUserId,
+            subject: subject,
+            courseNumber: courseNumber,
+            userId : localStorage.getItem('userId')
+        }
+        axios.post(`/api/blockPeople`, changeStatusData)
+            .then(res => {
+                if(res && res.data && res.data.success) {
+                    alert("Successfully blocked!");
                 }
             });
     }

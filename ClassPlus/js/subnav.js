@@ -73,17 +73,37 @@ function setNavColor(){
 }
 
 function setPeopleTab() {
-    const isInstructor = localStorage.getItem('instructor');
-    const peopleMenu = document.getElementById('course_People.html');
-
-    if(peopleMenu != null){
-        if(isInstructor == 1){
-            peopleMenu.setAttribute('style', 'visibility: visible;');
-        }else{
-            peopleMenu.remove();
-        }
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+    
+    const checkData = {
+        subject: subject,
+        courseNumber: courseNumber,
+        userId : localStorage.getItem('userId')
     }
+    axios.post(`/api/checkStatus`, checkData)
+        .then(res => {
+            if(res && res.data) {
+                const peopleMenu = document.getElementById('course_People.html');
+                if(peopleMenu != null){
+                    if(res.data.status=="instructor" || res.data.status=="TA"){
+                        peopleMenu.hidden=false;
+                    }else{
+                        peopleMenu.hidden=true;
+                    }
+                }
+            }
+        });
 }
 
-setPeopleTab();
-setNavColor();
+function onInit(){
+    const currentPagePath = window.location.pathname.substring(1);
+    if(currentPagePath.includes("course")){
+        setPeopleTab();
+    }
+    setNavColor();
+}
+
+onInit();
