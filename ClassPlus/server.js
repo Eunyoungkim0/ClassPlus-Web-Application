@@ -685,6 +685,36 @@ app.post('/api/getPermission/', async(req, res) => {
 });
 
 
+app.post('/api/getCoursePeople/', async(req, res) => {
+    const { subject, courseNumber } = req.body;
+    const sql = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}';`
+
+    connection.query(sql, function(error, results, fields){
+        if(error) {
+            // Handle the error by sending an error response
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+        const secondsql = `SELECT e.userId, u.picture, u.lastName, u.firstName, u.email, e.status, e.assignedby, 
+        (SELECT count(*) FROM courses_activity a WHERE a.courseId=${courseId} AND a.year='${currentYear}' AND a.semester='fall'AND a.userId=e.userId) AS count_activity,
+        (SELECT count(*) FROM studygroups_member gm, studygroups g WHERE gm.userId=e.userId AND g.groupId=gm.groupId AND g.courseId=${courseId} AND g.year='${currentYear}' AND g.semester='fall') AS count_group,
+        e.blocked, e.blockedby,
+        (SELECT CONCAT(u2.firstName, ' ' , u2.lastName) FROM users u2 WHERE u2.userId=e.blockedby) AS name_blockedby
+   FROM courses_enrollment e, users u
+  WHERE e.courseId=${courseId} AND e.year='${currentYear}' AND e.semester='fall' AND e.userId=u.userId ;`;
+
+        connection.query(secondsql, function(error, results, fields){
+            if(error) {
+                // Handle the error by sending an error response
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json(results);
+        });
+    });
+});
+
 
 //--------------------------------------------------------------------------------------------------------
 // APIs FOR GROUP

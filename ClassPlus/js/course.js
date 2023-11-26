@@ -297,6 +297,99 @@ function loadCourseGroups(data) {
     });   
 }
 
+function getCoursePeople(){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const courseInfo = {
+        subject : urlParams.get('sj'),
+        courseNumber : urlParams.get('cn')
+    }
+
+    axios.post(`/api/getCoursePeople`, courseInfo)
+    .then(res => {
+        if(res && res.data) {
+            if(res.data.length == 0){
+                document.getElementById('divForPeople').innerHTML = "There is no people in this course yet.";
+            }else{
+                console.log(res.data);
+                for(var i=0; i < res.data.length; i++){
+                    var divElement1 = document.createElement('div');
+                    divElement1.setAttribute('class', 'people-frame');
+
+                    var divElement2 = document.createElement('div');
+                    divElement2.setAttribute('class', 'people-picture');
+                    var imgElement = document.createElement('img');
+                    var picture = res.data[i].picture;
+                    if(picture == null){
+                        picture = 'basicProfileImage.png';
+                    }
+                    imgElement.setAttribute('src', `../images/${picture}`);
+                    imgElement.setAttribute('style', 'width: 40px; height:40px;');
+                    divElement2.appendChild(imgElement);
+
+                    var divElement3 = document.createElement('div');
+                    divElement3.setAttribute('class', 'people-name');
+                    divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName;
+
+                    var divElement4 = document.createElement('div');
+                    divElement4.setAttribute('class', 'people-email');
+                    divElement4.innerHTML = res.data[i].email;
+
+                    var divElement5 = document.createElement('div');
+                    divElement5.setAttribute('class', 'people-activity');
+                    divElement5.innerHTML = res.data[i].count_activity;
+
+                    var divElement6 = document.createElement('div');
+                    divElement6.setAttribute('class', 'people-group');
+                    divElement6.innerHTML = res.data[i].count_group;
+                    
+                    var divElement7 = document.createElement('div');
+                    divElement7.setAttribute('class', 'people-role');
+                    var selectElement = document.createElement('select');
+                    selectElement.setAttribute('class', 'people-select');
+                    var optionElement1 = document.createElement('option');
+                    optionElement1.value = 'student';
+                    optionElement1.innerHTML = 'student';
+                    var optionElement2 = document.createElement('option');
+                    optionElement2.value = 'TA';
+                    optionElement2.innerHTML = 'TA';
+                    var optionElement3 = document.createElement('option');
+                    optionElement3.value = 'instructor';
+                    optionElement3.innerHTML = 'instructor';
+                    divElement7.appendChild(selectElement);
+                    selectElement.appendChild(optionElement1);
+                    selectElement.appendChild(optionElement2);
+                    selectElement.appendChild(optionElement3);
+                    selectElement.value = res.data[i].status;
+                    if(selectElement.value == 'instructor'){
+                        selectElement.disabled = true;
+                    }else{
+                        optionElement3.hidden = true;
+                        selectElement.setAttribute('onchange', 'changeStatus()');
+                    }
+
+                    var divElement8 = document.createElement('div');
+                    divElement8.setAttribute('class', 'people-button');
+                    divElement8.innerHTML = "button";
+                    
+                    document.getElementById('divForPeople').appendChild(divElement1);
+                    divElement1.appendChild(divElement2);
+                    divElement1.appendChild(divElement3);
+                    divElement1.appendChild(divElement4);
+                    divElement1.appendChild(divElement5);
+                    divElement1.appendChild(divElement6);
+                    divElement1.appendChild(divElement7);
+                    divElement1.appendChild(divElement8);
+                }
+            }
+        }
+    });   
+}
+
+function changeStatus(){
+    alert("change status?");
+}
+
 
 // This function executes in the course homepage.
 function loadCourseHomepage(currentPagePath){
@@ -346,6 +439,8 @@ function loadCourseHomepage(currentPagePath){
     }else if(currentPagePath == 'course_group_view.html'){
         getGroupData();
         loadNextMeeting(groupId);
+    }else if(currentPagePath == 'course_People.html'){
+        getCoursePeople();
     }
 }
 
