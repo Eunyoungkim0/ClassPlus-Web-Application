@@ -251,6 +251,7 @@ function groupInfo(data) {
             document.getElementById('groupname').innerHTML = res.data[0].groupName;
             document.getElementById('coursename').innerHTML = " - " + courseInfo;
             document.getElementById('groupInformation').setAttribute('onclick', `gotoGroup('${groupId}')`);
+            document.getElementById('groupInformation').setAttribute('title', 'Go to the group main page');
         }
     });            
 }

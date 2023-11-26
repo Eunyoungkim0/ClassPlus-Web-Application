@@ -195,6 +195,7 @@ function classInfo(data) {
         if(res && res.data) {
             document.getElementById('courseInformation').innerHTML = subject + " " + courseNumber + " " + res.data[0].title;
             document.getElementById('courseInformation').setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
+            document.getElementById('courseInformation').setAttribute('title', 'Go to the course main page');
         }
     });            
 }
