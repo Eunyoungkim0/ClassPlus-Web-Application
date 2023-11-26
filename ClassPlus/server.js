@@ -716,6 +716,31 @@ app.post('/api/getCoursePeople/', async(req, res) => {
 });
 
 
+app.post('/api/changeUserStatus', async(req, res) => {
+    const { clickedUserId, status, subject, courseNumber, userId } = req.body;
+
+    var selectSQL = `SELECT courseId FROM courses WHERE subject='${subject}' AND courseNumber='${courseNumber}';`;
+
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+        const updateSQL = `UPDATE courses_enrollment SET status='${status}', assignedby=${userId} WHERE userId=${clickedUserId} AND courseId=${courseId} AND year='${currentYear}' AND semester='fall' ;`;
+
+        connection.query(updateSQL, function(error, results, fields){
+            if(error) {
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json(results);
+        });
+    });
+});
+
+
+
 //--------------------------------------------------------------------------------------------------------
 // APIs FOR GROUP
 app.get('/api/getMyGroup/:userId', async(req, res) => {

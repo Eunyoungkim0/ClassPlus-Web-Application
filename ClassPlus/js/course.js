@@ -311,7 +311,6 @@ function getCoursePeople(){
             if(res.data.length == 0){
                 document.getElementById('divForPeople').innerHTML = "There is no people in this course yet.";
             }else{
-                console.log(res.data);
                 for(var i=0; i < res.data.length; i++){
                     var divElement1 = document.createElement('div');
                     divElement1.setAttribute('class', 'people-frame');
@@ -345,6 +344,10 @@ function getCoursePeople(){
                     
                     var divElement7 = document.createElement('div');
                     divElement7.setAttribute('class', 'people-role');
+                    var divUserId = document.createElement('div');
+                    divUserId.setAttribute('class', 'user-id');
+                    divUserId.innerHTML = res.data[i].userId;
+                    divUserId.hidden = true;
                     var selectElement = document.createElement('select');
                     selectElement.setAttribute('class', 'people-select');
                     var optionElement1 = document.createElement('option');
@@ -360,16 +363,22 @@ function getCoursePeople(){
                     selectElement.appendChild(optionElement1);
                     selectElement.appendChild(optionElement2);
                     selectElement.appendChild(optionElement3);
+                    divElement7.appendChild(divUserId);
                     selectElement.value = res.data[i].status;
                     if(selectElement.value == 'instructor'){
                         selectElement.disabled = true;
                     }else{
                         optionElement3.hidden = true;
-                        selectElement.setAttribute('onchange', 'changeStatus()');
+                        selectElement.addEventListener("change", function(event) {
+                            const selectedValue = event.target.value;
+                            const parentDiv = event.target.parentElement;
+                            const clickedUserId = parentDiv.getElementsByClassName('user-id')[0].innerText;;
+                            changeStatus(clickedUserId, selectedValue);
+                        });
                     }
 
                     var divElement8 = document.createElement('div');
-                    divElement8.setAttribute('class', 'people-button');
+                    divElement8.setAttribute('onchange', 'people-button');
                     divElement8.innerHTML = "button";
                     
                     document.getElementById('divForPeople').appendChild(divElement1);
@@ -386,8 +395,29 @@ function getCoursePeople(){
     });   
 }
 
-function changeStatus(){
-    alert("change status?");
+function changeStatus(clickedUserId, status){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+
+    const userAnswer = askYesNoQuestion(`Change role to ${status}`);
+    if (userAnswer) {
+        const changeStatusData = {
+            clickedUserId: clickedUserId,
+            status: status,
+            subject: subject,
+            courseNumber: courseNumber,
+            userId : localStorage.getItem('userId')
+        }
+        axios.post(`/api/changeUserStatus`, changeStatusData)
+            .then(res => {
+                if(res && res.data && res.data.success) {
+                    alert("Role successfully changed!");
+                    location.reload();
+                }
+            });
+    }
 }
 
 
