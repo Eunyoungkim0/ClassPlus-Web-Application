@@ -193,9 +193,11 @@ function classInfo(data) {
     axios.post(`/api/getClassInfo`, data)
     .then(res => {
         if(res && res.data) {
-            document.getElementById('courseInformation').innerHTML = subject + " " + courseNumber + " " + res.data[0].title;
-            document.getElementById('courseInformation').setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
-            document.getElementById('courseInformation').setAttribute('title', 'Go to the course main page');
+            const divCourseInfo = document.getElementById('courseInformation');
+            divCourseInfo.innerHTML = "<img src='../images/course_bg.png' width=50 height=50 style='margin-right:10px;'>";
+            divCourseInfo.innerHTML += subject + " " + courseNumber + " " + res.data[0].title;
+            divCourseInfo.setAttribute('onclick', `gotoCourse('${subject}','${courseNumber}')`);
+            divCourseInfo.setAttribute('title', 'Go to the course main page');
         }
     });            
 }

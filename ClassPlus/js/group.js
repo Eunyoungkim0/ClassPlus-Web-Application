@@ -248,10 +248,12 @@ function groupInfo(data) {
     .then(res => {
         if(res && res.data) {
             var courseInfo = res.data[0].subject + res.data[0].courseNumber + " " + res.data[0].title;
-            document.getElementById('groupname').innerHTML = res.data[0].groupName;
+            document.getElementById('groupname').innerHTML = "<img src='../images/group_bg.png' width=50 height=50 style='margin-right:10px;'>";
+            document.getElementById('groupname').innerHTML += res.data[0].groupName;
             document.getElementById('coursename').innerHTML = " - " + courseInfo;
-            document.getElementById('groupInformation').setAttribute('onclick', `gotoGroup('${groupId}')`);
-            document.getElementById('groupInformation').setAttribute('title', 'Go to the group main page');
+            const divGroupInfo = document.getElementById('groupInformation');
+            divGroupInfo.setAttribute('onclick', `gotoGroup('${groupId}')`);
+            divGroupInfo.setAttribute('title', 'Go to the group main page');
         }
     });            
 }
