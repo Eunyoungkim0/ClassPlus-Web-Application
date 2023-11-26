@@ -142,21 +142,32 @@ function gotoCourse(sj, cn) {
 function amIEnrolled(data) {
     axios.post(`/api/getPermission`, data)
         .then(res => {
-            const btnEnroll = document.getElementById('buttonForEnroll');
-            const btnPost = document.getElementById('buttonForPosting');
-            const btnStudySet = document.getElementById('buttonForStudySets');
-            const btnGroup = document.getElementById('buttonForGroup');
+            // console.log(res.data);
 
-            if(res && res.data && res.data.enrolled) {
-                if(btnEnroll != null) btnEnroll.hidden = true;
-                if(btnPost != null) btnPost.hidden = false;
-                if(btnStudySet != null) btnStudySet.hidden = false;
-                if(btnGroup != null) btnGroup.hidden = false;
-            }else if(res && res.data && !res.data.enrolled){
-                if(btnEnroll != null) btnEnroll.hidden = false;
-                if(btnPost != null) btnPost.hidden = true;
-                if(btnStudySet != null) btnStudySet.hidden = true;
-                if(btnGroup != null) btnGroup.hidden = true;
+            if(res && res.data){
+                const btnEnroll = document.getElementById('buttonForEnroll');
+                const btnPost = document.getElementById('buttonForPosting');
+                const btnStudySet = document.getElementById('buttonForStudySets');
+                const btnGroup = document.getElementById('buttonForGroup');
+
+                if(res.data.enrolled){
+                    if(btnEnroll != null) btnEnroll.hidden = true;
+
+                    if(res.data.blocked==1){
+                        if(btnPost != null) btnPost.hidden = true;
+                        if(btnStudySet != null) btnStudySet.hidden = true;
+                        if(btnGroup != null) btnGroup.hidden = true;
+                    }else{
+                        if(btnPost != null) btnPost.hidden = false;
+                        if(btnStudySet != null) btnStudySet.hidden = false;
+                        if(btnGroup != null) btnGroup.hidden = false;
+                    }
+                }else{
+                    if(btnEnroll != null) btnEnroll.hidden = false;
+                    if(btnPost != null) btnPost.hidden = true;
+                    if(btnStudySet != null) btnStudySet.hidden = true;
+                    if(btnGroup != null) btnGroup.hidden = true;
+                }
             }
       });
 }
@@ -382,28 +393,40 @@ function getCoursePeople(){
                             const parentDiv = event.target.parentElement;
                             const clickedUserId = parentDiv.getElementsByClassName('user-id')[0].innerText;
                             changeStatus(clickedUserId, selectedValue);
-                            location.reload();
                         });
                     }
 
                     var divElement8 = document.createElement('div');
                     divElement8.setAttribute('onchange', 'people-button');
                     const userId = localStorage.getItem('userId');
-                    if(res.data[i].blocked!=1 && res.data[i].status!='instructor' && res.data[i].userId != userId){
+
+                    if(res.data[i].status!='instructor' && res.data[i].userId != userId){
                         var buttonBlock = document.createElement('button');
-                        buttonBlock.setAttribute('class','follow-button');
-                        buttonBlock.addEventListener("click", function(event) {
-                            const parentDiv = event.target.parentElement;
-                            const grandparentDiv = parentDiv.parentElement;
-                            const grandgrandparentDiv = grandparentDiv.parentElement;
-                            const roleDiv = grandgrandparentDiv.querySelector('.people-role');
-                            const clickedUserId = roleDiv.querySelector('.user-id').innerText;
-                            blockPeople(clickedUserId);
-                            location.reload();
-                        });
                         var divBlock = document.createElement('div');
-                        divBlock.setAttribute('class', 'course-text');
-                        divBlock.innerHTML = 'Block';
+                        divBlock.setAttribute('class', 'block-text');
+                        if(res.data[i].blocked==0){
+                            buttonBlock.setAttribute('class','block-button');
+                            divBlock.innerHTML = 'Block';
+                            buttonBlock.addEventListener("click", function(event) {
+                                const parentDiv = event.target.parentElement;
+                                const grandparentDiv = parentDiv.parentElement;
+                                const grandgrandparentDiv = grandparentDiv.parentElement;
+                                const roleDiv = grandgrandparentDiv.querySelector('.people-role');
+                                const clickedUserId = roleDiv.querySelector('.user-id').innerText;
+                                blockPeople(clickedUserId, 1);
+                            });
+                        }else{
+                            buttonBlock.setAttribute('class','unblock-button');
+                            divBlock.innerHTML = 'Unblock';
+                            buttonBlock.addEventListener("click", function(event) {
+                                const parentDiv = event.target.parentElement;
+                                const grandparentDiv = parentDiv.parentElement;
+                                const grandgrandparentDiv = grandparentDiv.parentElement;
+                                const roleDiv = grandgrandparentDiv.querySelector('.people-role');
+                                const clickedUserId = roleDiv.querySelector('.user-id').innerText;
+                                blockPeople(clickedUserId, 0);
+                            });
+                        }
                         buttonBlock.appendChild(divBlock);
                         divElement8.appendChild(buttonBlock);
                     }
@@ -439,31 +462,42 @@ function changeStatus(clickedUserId, status){
         }
         axios.post(`/api/changeUserStatus`, changeStatusData)
             .then(res => {
-                if(res && res.data && res.data.success) {
+                if(res && res.data) {
                     alert("Role successfully changed!");
+                    location.reload();
                 }
             });
     }
 }
 
-function blockPeople(clickedUserId){
+function blockPeople(clickedUserId, blocked){
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     subject = urlParams.get('sj');
     courseNumber = urlParams.get('cn');
-    
-    const userAnswer = askYesNoQuestion(`Do you want to block the person?`);
+    var message = "";
+    if(blocked==1){
+        message = `Do you want to block the person?`;
+        message2 = `Successfully blocked!`;
+    }else{
+        message = `Do you want to unblock the person?`;
+        message2 = `Successfully unblocked!`;
+    }
+
+    const userAnswer = askYesNoQuestion(message);
     if (userAnswer) {
         const changeStatusData = {
             clickedUserId: clickedUserId,
+            blocked: blocked,
             subject: subject,
             courseNumber: courseNumber,
             userId : localStorage.getItem('userId')
         }
         axios.post(`/api/blockPeople`, changeStatusData)
             .then(res => {
-                if(res && res.data && res.data.success) {
-                    alert("Successfully blocked!");
+                if(res && res.data) {
+                    alert(message2);
+                    location.reload();
                 }
             });
     }
@@ -824,7 +858,7 @@ function getGroupData() {
 
             axios.get(`/api/getGroupMembers/${groupId}?userId=${userId}`)
             .then(res => {
-                console.log(res.data);
+                // console.log(res.data);
                 if(res && res.data) {
                     var divMembers = document.getElementById('memberList');
                     for(var i=0; i < res.data.length; i++){

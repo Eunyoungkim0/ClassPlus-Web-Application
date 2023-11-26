@@ -666,7 +666,7 @@ app.post('/api/getPermission/', async(req, res) => {
             throw error;
         }
         const courseId = results[0].courseId;
-        const secondsql = `SELECT count(*) as count FROM courses_enrollment WHERE userId = ${userId} AND courseId = ${courseId} AND year = '${currentYear}' AND semester = 'fall'`;
+        const secondsql = `SELECT status, blocked FROM courses_enrollment WHERE userId = ${userId} AND courseId = ${courseId} AND year = '${currentYear}' AND semester = 'fall'`;
 
         connection.query(secondsql, function(error, results, fields){
             if(error) {
@@ -674,13 +674,17 @@ app.post('/api/getPermission/', async(req, res) => {
                 res.status(500).json({ error: 'Internal Server Error' });
                 throw error;
             }
-            if(results[0].count == 1){
+            if(results.length > 0){
                 res.json({
-                    enrolled: true
+                    enrolled: true,
+                    blocked: results[0].blocked,
+                    status: results[0].status
                 });
             }else{
                 res.json({
-                    enrolled: false
+                    enrolled: false,
+                    blocked: null,
+                    status: null
                 });
             }
         });
@@ -744,7 +748,7 @@ app.post('/api/changeUserStatus', async(req, res) => {
 });
 
 app.post('/api/blockPeople', async(req, res) => {
-    const { clickedUserId, subject, courseNumber, userId } = req.body;
+    const { clickedUserId, blocked, subject, courseNumber, userId } = req.body;
 
     var selectSQL = `SELECT courseId FROM courses WHERE subject='${subject}' AND courseNumber='${courseNumber}';`;
 
@@ -754,7 +758,7 @@ app.post('/api/blockPeople', async(req, res) => {
             throw error;
         }
         const courseId = results[0].courseId;
-        const updateSQL = `UPDATE courses_enrollment SET blocked=1, blockedby=${userId} WHERE userId=${clickedUserId} AND courseId=${courseId} AND year='${currentYear}' AND semester='fall' ;`;
+        const updateSQL = `UPDATE courses_enrollment SET blocked=${blocked}, blockedby=${userId} WHERE userId=${clickedUserId} AND courseId=${courseId} AND year='${currentYear}' AND semester='fall' ;`;
 
         connection.query(updateSQL, function(error, results, fields){
             if(error) {
