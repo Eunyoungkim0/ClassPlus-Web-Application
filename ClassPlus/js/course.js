@@ -355,6 +355,9 @@ function getCoursePeople(){
                     divUserId.hidden = true;
                     var selectElement = document.createElement('select');
                     selectElement.setAttribute('class', 'people-select');
+                    if(localStorage.getItem('instructor')!= 1){
+                        selectElement.disabled = true;
+                    }
                     var optionElement1 = document.createElement('option');
                     optionElement1.value = 'student';
                     optionElement1.innerHTML = 'student';
@@ -385,8 +388,8 @@ function getCoursePeople(){
 
                     var divElement8 = document.createElement('div');
                     divElement8.setAttribute('onchange', 'people-button');
-
-                    if(res.data[i].blocked!=1 && res.data[i].status!='instructor'){
+                    const userId = localStorage.getItem('userId');
+                    if(res.data[i].blocked!=1 && res.data[i].status!='instructor' && res.data[i].userId != userId){
                         var buttonBlock = document.createElement('button');
                         buttonBlock.setAttribute('class','follow-button');
                         buttonBlock.addEventListener("click", function(event) {
