@@ -1,10 +1,10 @@
 # ClassPlus
 
 ### :bell:TO-DO List for Sprint4
-  - [ ] Allow read and write to class sessions for instructor members 
-  - [ ] TA should be able to join any group under the same course they are working with
+  - [x] Allow read and write to class sessions for instructor members 
+  - [x] TA should be able to join any group under the same course they are working with
   - [ ] Moderators should be able to remove posts/study sets/groups from the list.
-  - [ ] Moderators should be able to block anyone.
+  - [x] Moderators should be able to block anyone.
   - [ ] Implement an onboarding tutorial screen to guide new users of website features.
 ---
 
