@@ -770,6 +770,29 @@ app.post('/api/blockPeople', async(req, res) => {
     });
 });
 
+app.post('/api/blockActivities', async(req, res) => {
+    const { clickedActivityId, blocked, subject, courseNumber, userId } = req.body;
+
+    var selectSQL = `SELECT courseId FROM courses WHERE subject='${subject}' AND courseNumber='${courseNumber}';`;
+
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+        const updateSQL = `UPDATE course_activities SET blocked=${blocked}, blockedby=${userId} WHERE activityId=${clickedActivityId} AND courseId=${courseId} AND year='${currentYear}' AND semester='fall' ;`;
+
+        connection.query(updateSQL, function(error, results, fields){
+            if(error) {
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json(results);
+        });
+    });
+});
+
 app.post('/api/checkStatus', async(req, res) => {
     const { subject, courseNumber, userId } = req.body;
 

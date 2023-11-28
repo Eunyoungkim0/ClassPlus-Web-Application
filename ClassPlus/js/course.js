@@ -506,6 +506,39 @@ function blockPeople(clickedUserId, blocked){
     }
 }
 
+function blockActivities(clickedActivityId, blocked){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+    var message = "";
+    if(blocked==1){
+        message = `Do you want to block this?`;
+        message2 = `Successfully blocked!`;
+    }else{
+        message = `Do you want to unblock this?`;
+        message2 = `Successfully unblocked!`;
+    }
+
+    const userAnswer = askYesNoQuestion(message);
+    if (userAnswer) {
+        const changeStatusData = {
+            clickedActivityId: clickedActivityId,
+            blocked: blocked,
+            subject: subject,
+            courseNumber: courseNumber,
+            activityId : localStorage.getItem('activityId')
+        }
+        axios.post(`/api/blockPeople`, changeStatusData)
+            .then(res => {
+                if(res && res.data) {
+                    alert(message2);
+                    location.reload();
+                }
+            });
+    }
+}
+
 
 // This function executes in the course homepage.
 function loadCourseHomepage(currentPagePath){
@@ -752,6 +785,7 @@ function getPostData() {
                     document.getElementById('date').innerHTML = date;
                     const postUpdate = formatDateString(res.data[0].postUpdate);
                     document.getElementById('postUpdate').innerHTML = postUpdate;
+                    
                 }else if(currentPagePath == 'course_post_edit.html'){
                     document.getElementById('title').value = res.data[0].title;
                     document.getElementById('content').value = res.data[0].content;
@@ -1117,6 +1151,33 @@ function editStudySet() {
             });
     }
 }
+
+function setBlockButton() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+    
+    const checkData = {
+        subject: subject,
+        courseNumber: courseNumber,
+        userId : localStorage.getItem('userId')
+    }
+    axios.post(`/api/checkStatus`, checkData)
+        .then(res => {
+            if(res && res.data) {
+                const peopleMenu = document.getElementById('course_People.html');
+                if(peopleMenu != null){
+                    if(res.data.status=="instructor" || res.data.status=="TA"){
+                        peopleMenu.hidden=false;
+                    }else{
+                        peopleMenu.hidden=true;
+                    }
+                }
+            }
+        });
+}
+
 
 function gotoGroupPage() {
     // Get the query string from the URL
