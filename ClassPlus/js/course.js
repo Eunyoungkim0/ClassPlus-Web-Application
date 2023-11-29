@@ -311,22 +311,7 @@ function loadCourseGroups(data) {
     });   
 }
 
-function loadActivityBlockButton(){
-    axios.post(`/api/profile/:userId`, data)
-    .then(res => {
-        if(res && res.data) {
-            if(){
-                var divElement3 = document.createElement('div');
-                divElement3.setAttribute('class', 'post-username');
-                divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);
-            }else{
 
-            }
-        }else{
-
-        }
-    });
-}
 
 function getCoursePeople(){
     const queryString = window.location.search;
