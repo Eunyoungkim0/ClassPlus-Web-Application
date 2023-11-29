@@ -2,7 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const path = require('path');
 
-const PORT = process.env.port || 3000;
+const PORT = process.env.port || 8080;
 const app = express();
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
