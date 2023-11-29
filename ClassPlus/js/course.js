@@ -311,6 +311,23 @@ function loadCourseGroups(data) {
     });   
 }
 
+function loadActivityBlockButton(){
+    axios.post(`/api/profile/:userId`, data)
+    .then(res => {
+        if(res && res.data) {
+            if(){
+                var divElement3 = document.createElement('div');
+                divElement3.setAttribute('class', 'post-username');
+                divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);
+            }else{
+
+            }
+        }else{
+
+        }
+    });
+}
+
 function getCoursePeople(){
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -529,7 +546,7 @@ function blockActivities(clickedActivityId, blocked){
             courseNumber: courseNumber,
             activityId : localStorage.getItem('activityId')
         }
-        axios.post(`/api/blockPeople`, changeStatusData)
+        axios.post(`/api/blockPost`, changeStatusData)
             .then(res => {
                 if(res && res.data) {
                     alert(message2);
@@ -785,7 +802,6 @@ function getPostData() {
                     document.getElementById('date').innerHTML = date;
                     const postUpdate = formatDateString(res.data[0].postUpdate);
                     document.getElementById('postUpdate').innerHTML = postUpdate;
-                    
                 }else if(currentPagePath == 'course_post_edit.html'){
                     document.getElementById('title').value = res.data[0].title;
                     document.getElementById('content').value = res.data[0].content;
@@ -1151,33 +1167,6 @@ function editStudySet() {
             });
     }
 }
-
-function setBlockButton() {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    subject = urlParams.get('sj');
-    courseNumber = urlParams.get('cn');
-    
-    const checkData = {
-        subject: subject,
-        courseNumber: courseNumber,
-        userId : localStorage.getItem('userId')
-    }
-    axios.post(`/api/checkStatus`, checkData)
-        .then(res => {
-            if(res && res.data) {
-                const peopleMenu = document.getElementById('course_People.html');
-                if(peopleMenu != null){
-                    if(res.data.status=="instructor" || res.data.status=="TA"){
-                        peopleMenu.hidden=false;
-                    }else{
-                        peopleMenu.hidden=true;
-                    }
-                }
-            }
-        });
-}
-
 
 function gotoGroupPage() {
     // Get the query string from the URL

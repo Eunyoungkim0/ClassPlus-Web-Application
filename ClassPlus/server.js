@@ -436,6 +436,7 @@ app.post('/api/getCourseGroups/', async(req, res) => {
 
 app.post('/api/getPost/:activityId', async(req, res) => {
     const activityId = req.params.activityId;
+    const userId = req.params.userId;
     const updateSQL = `UPDATE courses_activity SET views = views + 1 WHERE activityId = ${activityId}`;
     connection.query(updateSQL, function(error, results, fields){
         if(error) {
