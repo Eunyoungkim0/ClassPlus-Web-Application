@@ -211,27 +211,29 @@ function loadCoursePosts(data) {
                 document.getElementById('divForPost').innerHTML = "There is no post in this class yet.";
             }else{
                 for(var i=0; i < res.data.length; i++){
-                    var divElement1 = document.createElement('div');
-                    divElement1.setAttribute('class', 'post-frame');
-                    divElement1.setAttribute('onclick', `loadPost('Post', ${res.data[i].activityId})`);
+                    if((res.data[i].blocked == 1 && res.data[i].blockedby == userId) || res.data[i].blocked != 1){
+                        var divElement1 = document.createElement('div');
+                        divElement1.setAttribute('class', 'post-frame');
+                        divElement1.setAttribute('onclick', `loadPost('Post', ${res.data[i].activityId})`);
 
-                    var divElement2 = document.createElement('div');
-                    divElement2.setAttribute('class', 'post-title');
-                    divElement2.innerHTML = "[" + res.data[i].subCategory + "] " + res.data[i].title;
-                    var divElement3 = document.createElement('div');
-                    divElement3.setAttribute('class', 'post-username');
-                    divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);
-                    var divElement4 = document.createElement('div');
-                    divElement4.setAttribute('class', 'post-time');
-                    var fullDate = res.data[i].date;
-                    const dateObj = new Date(fullDate);
-                    const formattedDate = dateObj.toLocaleDateString();
-                    divElement4.innerHTML = formattedDate;
-                    
-                    document.getElementById('divForPost').appendChild(divElement1);
-                    divElement1.appendChild(divElement2);
-                    divElement1.appendChild(divElement3);
-                    divElement1.appendChild(divElement4);
+                        var divElement2 = document.createElement('div');
+                        divElement2.setAttribute('class', 'post-title');
+                        divElement2.innerHTML = "[" + res.data[i].subCategory + "] " + res.data[i].title;
+                        var divElement3 = document.createElement('div');
+                        divElement3.setAttribute('class', 'post-username');
+                        divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);
+                        var divElement4 = document.createElement('div');
+                        divElement4.setAttribute('class', 'post-time');
+                        var fullDate = res.data[i].date;
+                        const dateObj = new Date(fullDate);
+                        const formattedDate = dateObj.toLocaleDateString();
+                        divElement4.innerHTML = formattedDate;
+                        
+                        document.getElementById('divForPost').appendChild(divElement1);
+                        divElement1.appendChild(divElement2);
+                        divElement1.appendChild(divElement3);
+                        divElement1.appendChild(divElement4);
+                    }
                 }
             }
         }
@@ -246,27 +248,29 @@ function loadCourseStudySets(data) {
                 document.getElementById('divForStudySet').innerHTML = "There is no study set in this class yet.";
             }else{
                 for(var i=0; i < res.data.length; i++){
-                    var divElement1 = document.createElement('div');
-                    divElement1.setAttribute('class', 'post-frame');
-                    divElement1.setAttribute('onclick', `loadPost('StudySet', ${res.data[i].activityId})`);
+                    if((res.data[i].blocked == 1 && res.data[i].blockedby == userId) || res.data[i].blocked != 1){
+                        var divElement1 = document.createElement('div');
+                        divElement1.setAttribute('class', 'post-frame');
+                        divElement1.setAttribute('onclick', `loadPost('StudySet', ${res.data[i].activityId})`);
 
-                    var divElement2 = document.createElement('div');
-                    divElement2.setAttribute('class', 'post-title');
-                    divElement2.innerHTML = res.data[i].title;
-                    var divElement3 = document.createElement('div');
-                    divElement3.setAttribute('class', 'post-username');
-                    divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);
-                    var divElement4 = document.createElement('div');
-                    divElement4.setAttribute('class', 'post-time');
-                    var fullDate = res.data[i].date;
-                    const dateObj = new Date(fullDate);
-                    const formattedDate = dateObj.toLocaleDateString();
-                    divElement4.innerHTML = formattedDate;
-                    
-                    document.getElementById('divForStudySet').appendChild(divElement1);
-                    divElement1.appendChild(divElement2);
-                    divElement1.appendChild(divElement3);
-                    divElement1.appendChild(divElement4);
+                        var divElement2 = document.createElement('div');
+                        divElement2.setAttribute('class', 'post-title');
+                        divElement2.innerHTML = res.data[i].title;
+                        var divElement3 = document.createElement('div');
+                        divElement3.setAttribute('class', 'post-username');
+                        divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);
+                        var divElement4 = document.createElement('div');
+                        divElement4.setAttribute('class', 'post-time');
+                        var fullDate = res.data[i].date;
+                        const dateObj = new Date(fullDate);
+                        const formattedDate = dateObj.toLocaleDateString();
+                        divElement4.innerHTML = formattedDate;
+                        
+                        document.getElementById('divForStudySet').appendChild(divElement1);
+                        divElement1.appendChild(divElement2);
+                        divElement1.appendChild(divElement3);
+                        divElement1.appendChild(divElement4);
+                    }
                 }
             }
         }
@@ -281,37 +285,37 @@ function loadCourseGroups(data) {
                 document.getElementById('divForGroup').innerHTML = "There is no group in this class yet.";
             }else{
                 for(var i=0; i < res.data.length; i++){
-                    var divElement1 = document.createElement('div');
-                    divElement1.setAttribute('class', 'group-frame');
-                    divElement1.setAttribute('onclick', `loadPost('Group', ${res.data[i].groupId})`);
+                    if((res.data[i].blocked == 1 && res.data[i].blockedby == userId) || res.data[i].blocked != 1){
+                        var divElement1 = document.createElement('div');
+                        divElement1.setAttribute('class', 'group-frame');
+                        divElement1.setAttribute('onclick', `loadPost('Group', ${res.data[i].groupId})`);
 
-                    var divElement2 = document.createElement('div');
-                    divElement2.setAttribute('class', 'group-title');
-                    divElement2.innerHTML = res.data[i].groupName;
+                        var divElement2 = document.createElement('div');
+                        divElement2.setAttribute('class', 'group-title');
+                        divElement2.innerHTML = res.data[i].groupName;
 
-                    var divElement3 = document.createElement('div');
-                    divElement3.setAttribute('class', 'group-description');
-                    divElement3.innerHTML = res.data[i].description;
-                    var divElement4 = document.createElement('div');
-                    divElement4.setAttribute('class', 'group-course');
-                    divElement4.innerHTML = res.data[i].subject + res.data[i].courseNumber +" : " + res.data[i].title;
+                        var divElement3 = document.createElement('div');
+                        divElement3.setAttribute('class', 'group-description');
+                        divElement3.innerHTML = res.data[i].description;
+                        var divElement4 = document.createElement('div');
+                        divElement4.setAttribute('class', 'group-course');
+                        divElement4.innerHTML = res.data[i].subject + res.data[i].courseNumber +" : " + res.data[i].title;
 
-                    var divElement5 = document.createElement('div');
-                    divElement5.setAttribute('class', 'group-member');
-                    divElement5.innerHTML = res.data[i].member + " people are in this group.";
-                    
-                    document.getElementById('divForGroup').appendChild(divElement1);
-                    divElement1.appendChild(divElement2);
-                    divElement1.appendChild(divElement3);
-                    divElement1.appendChild(divElement4);
-                    divElement1.appendChild(divElement5);
+                        var divElement5 = document.createElement('div');
+                        divElement5.setAttribute('class', 'group-member');
+                        divElement5.innerHTML = res.data[i].member + " people are in this group.";
+                        
+                        document.getElementById('divForGroup').appendChild(divElement1);
+                        divElement1.appendChild(divElement2);
+                        divElement1.appendChild(divElement3);
+                        divElement1.appendChild(divElement4);
+                        divElement1.appendChild(divElement5);
+                    }
                 }
             }
         }
     });   
 }
-
-
 
 function getCoursePeople(){
     const queryString = window.location.search;
@@ -531,7 +535,7 @@ function blockActivities(clickedActivityId, blocked){
             courseNumber: courseNumber,
             activityId : localStorage.getItem('activityId')
         }
-        axios.post(`/api/blockPost`, changeStatusData)
+        axios.post(`/api/blockActivities`, changeStatusData)
             .then(res => {
                 if(res && res.data) {
                     alert(message2);
@@ -540,7 +544,6 @@ function blockActivities(clickedActivityId, blocked){
             });
     }
 }
-
 
 // This function executes in the course homepage.
 function loadCourseHomepage(currentPagePath){
@@ -775,6 +778,8 @@ function getPostData() {
     axios.post(`/api/getPost/${activityId}`)
         .then(res => {
             if(res && res.data) {
+                isBlocked = res.data[0].blocked;
+                whoBlocked = res.data[0].blockedby;
                 if(currentPagePath == 'course_post_view.html'){
                     var writerId = res.data[0].userId;
                     if(writerId == userId && btnEdit != null) btnEdit.hidden = false;
@@ -793,6 +798,43 @@ function getPostData() {
                 }
             }
         });
+}
+
+function setBlockButton() {
+    userId = localStorage.getItem('userId')
+    activityId = urlParams.get('ai');
+    subject = urlParams.get('sj');
+    courseNumber = urlParams.get('cn');
+    isInstructor = localStorage.getItem('instructor');
+    isTa = localStorage.getItem('TA');
+    isBlocked = localStorage.getItem('isBlocked');
+    whoBlocked = localStorage.getItem('whoBlocked');
+
+    const blockButton = document.getElementById('buttonForBlock');
+
+    if (isInstructor == 1) {
+        var buttonBlock = document.createElement('button');
+        var divBlock = document.createElement('div');
+        divBlock.setAttribute('class', 'block-text');
+        if(isBlocked!=1){
+            buttonBlock.setAttribute('class','block-button');
+            divBlock.innerHTML = 'Block';
+            blockButton.addEventListener("click", function () {
+                blockActivities(activityId, 1);
+            });
+        }else if(isBlocked==1 && whoBlocked == userId){
+            buttonBlock.setAttribute('class','unblock-button');
+            divBlock.innerHTML = 'Unblock';
+            blockButton.addEventListener("click", function () {
+                blockActivities(activityId, 0);
+            });
+        }
+        location.reload();
+    } else {
+        if (blockButton) {
+            blockButton.style.display = 'none';
+        }
+    }
 }
 
 function getStudySetData() {
