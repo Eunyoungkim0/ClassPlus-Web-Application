@@ -405,7 +405,7 @@ app.post('/api/getCourseGroups/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title, count(*) as member
+        var sql2 = `SELECT g.groupId, g.groupName, g.description, g.blocked, g.blockedby, c.courseId, c.subject, c.courseNumber, c.title, count(*) as member
         FROM studygroups g, courses c, studygroups_member gm
        WHERE g.courseId = c.courseId
          AND g.courseId = ${courseId}
@@ -477,6 +477,8 @@ app.post('/api/getStudySet/:activityId', async(req, res) => {
             const title = results[0].title;
             const postDate = results[0].date;
             const postUpdate = results[0].postUpdate;
+            const blocked = results[0].blocked;
+            const blockedby = results[0].blockedby;
 
             const studysetSQL = `SELECT * FROM studysets WHERE activityId = ${activityId};`;
             connection.query(studysetSQL, function(error, results, fields){
@@ -492,6 +494,8 @@ app.post('/api/getStudySet/:activityId', async(req, res) => {
                     views: views,
                     postDate: postDate,
                     postUpdate: postUpdate,
+                    blocked: blocked,
+                    blockedby: blockedby,
                     results: results
                 });
             });
@@ -792,6 +796,29 @@ app.post('/api/blockActivities', async(req, res) => {
     });
 });
 
+app.post('/api/blockGroups', async(req, res) => {
+    const { groupId, blocked, subject, courseNumber, userId } = req.body;
+
+    var selectSQL = `SELECT courseId FROM courses WHERE subject='${subject}' AND courseNumber='${courseNumber}';`;
+
+    connection.query(selectSQL, function(error, results, fields){
+        if(error) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            throw error;
+        }
+        const courseId = results[0].courseId;
+        const updateSQL = `UPDATE studygroups SET blocked=${blocked}, blockedby=${userId} WHERE groupId=${groupId} AND courseId=${courseId} AND year='${currentYear}' AND semester='fall' ;`;
+
+        connection.query(updateSQL, function(error, results, fields){
+            if(error) {
+                res.status(500).json({ error: 'Internal Server Error' });
+                throw error;
+            }
+            res.json(results);
+        });
+    });
+});
+
 app.post('/api/checkStatus', async(req, res) => {
     const { subject, courseNumber, userId } = req.body;
 
@@ -830,8 +857,8 @@ app.post('/api/checkStatus', async(req, res) => {
 // API end points FOR GROUP
 app.get('/api/getMyGroup/:userId', async(req, res) => {
     const userId = req.params.userId;
-    var sql = `SELECT m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title, count(*) as members `;
-    sql += `FROM (SELECT gm.groupId, g.groupName, g.description, gm.courseId FROM studygroups_member gm, studygroups g WHERE gm.userId = ${userId} AND gm.groupId = g.groupId AND g.year='${currentYear}' AND g.semester='fall') AS m, `;
+    var sql = `SELECT m.groupId, m.groupName, m.description, m.blocked, m.blockedby, m.courseId, c.subject, c.courseNumber, c.title, count(*) as members `;
+    sql += `FROM (SELECT gm.groupId, g.groupName, g.description, g.blocked, g.blockedby, gm.courseId FROM studygroups_member gm, studygroups g WHERE gm.userId = ${userId} AND gm.groupId = g.groupId AND g.year='${currentYear}' AND g.semester='fall') AS m, `;
     sql += `courses c, studygroups_member gm `;
     sql += `WHERE m.courseId = c.courseId AND m.groupId = gm.groupId `;
     sql += `GROUP BY m.groupId, m.groupName, m.description, m.courseId, c.subject, c.courseNumber, c.title `;
@@ -853,7 +880,7 @@ app.post('/api/getGroup/:groupId', async(req, res) => {
     const sql = `SELECT a.*,
     (CASE WHEN gm2.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIJoined,
     (CASE WHEN e.userId IS NOT NULL THEN 1 ELSE 0 END) AS amIEnrolled
-FROM (SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as members
+FROM (SELECT g.groupId, g.groupName, g.description, g.courseId, g.blocked, g.blockedby, c.subject, c.courseNumber, c.title, count(*) as members
   FROM studygroups_member gm, studygroups g, courses c 
   WHERE g.year = '${currentYear}' AND g.semester = 'fall'
   AND gm.groupId = g.groupId AND g.courseId = c.courseId
@@ -891,7 +918,7 @@ app.post('/api/getSearchedGroups/', async(req, res) => {
     let selectSQL = `
         SELECT * 
             FROM
-        (SELECT g.groupId, g.groupName, g.description, g.courseId, c.subject, c.courseNumber, c.title, count(*) as member
+        (SELECT g.groupId, g.groupName, g.description, g.courseId, g.blocked, g.blockedby, c.subject, c.courseNumber, c.title, count(*) as member
         FROM studygroups g
         JOIN courses c ON g.courseId = c.courseId
         JOIN studygroups_member gm ON g.courseId = gm.courseId AND g.groupId = gm.groupId

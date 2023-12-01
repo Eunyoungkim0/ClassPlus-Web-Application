@@ -242,6 +242,7 @@ function loadCoursePosts(data) {
 }
 
 function loadCourseStudySets(data) {
+    userId = localStorage.getItem('userId');
     axios.post(`/api/getCourseStudySets`, data)
     .then(res => {
         if(res && res.data) {
@@ -858,6 +859,10 @@ function getStudySetData() {
     axios.post(`/api/getStudySet/${activityId}`)
         .then(res => {
             if(res && res.data) {
+                isBlocked = res.data.blocked;
+                whoBlocked = res.data.blockedby;
+                setBlockButton(isBlocked, whoBlocked);
+
                 if(currentPagePath == 'course_study_set_view.html'){
                     var writerId = res.data.userId;
                     if(writerId == userId && btnEdit != null) btnEdit.hidden = false;
