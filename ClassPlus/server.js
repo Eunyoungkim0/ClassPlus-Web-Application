@@ -353,9 +353,8 @@ app.post('/api/getCoursePosts/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT a.activityId, a.subCategory, a.title, a.date, a.views, u.firstName, u.lastName FROM courses_activity a, users u 
+        var sql2 = `SELECT a.activityId, a.subCategory, a.title, a.date, a.views, a.blocked, a.blockedby, u.firstName, u.lastName FROM courses_activity a, users u 
         WHERE a.category = 'Post' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
-        AND a.blocked!=1 
         ORDER BY a.date DESC`;
         if(limit > 0){
             sql2 += ` LIMIT ${limit};`;
@@ -380,9 +379,8 @@ app.post('/api/getCourseStudySets/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT a.activityId, a.title, a.date, a.views, u.firstName, u.lastName FROM courses_activity a, users u 
+        var sql2 = `SELECT a.activityId, a.title, a.date, a.views, a.blocked, a.blockedby, u.firstName, u.lastName FROM courses_activity a, users u 
         WHERE a.category = 'Study set' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
-        AND a.blocked!=1 
         ORDER BY a.date DESC`;
         if(limit > 0){
             sql2 += ` LIMIT ${limit};`;
@@ -782,7 +780,7 @@ app.post('/api/blockActivities', async(req, res) => {
             throw error;
         }
         const courseId = results[0].courseId;
-        const updateSQL = `UPDATE course_activities SET blocked=${blocked}, blockedby=${userId} WHERE activityId=${clickedActivityId} AND courseId=${courseId} AND year='${currentYear}' AND semester='fall' ;`;
+        const updateSQL = `UPDATE courses_activity SET blocked=${blocked}, blockedby=${userId} WHERE activityId=${clickedActivityId} AND courseId=${courseId} AND year='${currentYear}' AND semester='fall' ;`;
 
         connection.query(updateSQL, function(error, results, fields){
             if(error) {

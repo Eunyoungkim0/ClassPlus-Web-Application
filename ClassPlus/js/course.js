@@ -204,6 +204,7 @@ function classInfo(data) {
 
 
 function loadCoursePosts(data) {
+    userId = localStorage.getItem('userId');
     axios.post(`/api/getCoursePosts`, data)
     .then(res => {
         if(res && res.data) {
@@ -533,7 +534,7 @@ function blockActivities(clickedActivityId, blocked){
             blocked: blocked,
             subject: subject,
             courseNumber: courseNumber,
-            activityId : localStorage.getItem('activityId')
+            userId : localStorage.getItem('userId')
         }
         axios.post(`/api/blockActivities`, changeStatusData)
             .then(res => {
@@ -780,6 +781,8 @@ function getPostData() {
             if(res && res.data) {
                 isBlocked = res.data[0].blocked;
                 whoBlocked = res.data[0].blockedby;
+                setBlockButton(isBlocked, whoBlocked);
+                
                 if(currentPagePath == 'course_post_view.html'){
                     var writerId = res.data[0].userId;
                     if(writerId == userId && btnEdit != null) btnEdit.hidden = false;
@@ -800,41 +803,44 @@ function getPostData() {
         });
 }
 
-function setBlockButton() {
-    userId = localStorage.getItem('userId')
-    activityId = urlParams.get('ai');
+function setBlockButton(isBlocked, whoBlocked) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
     subject = urlParams.get('sj');
     courseNumber = urlParams.get('cn');
-    isInstructor = localStorage.getItem('instructor');
-    isTa = localStorage.getItem('TA');
-    isBlocked = localStorage.getItem('isBlocked');
-    whoBlocked = localStorage.getItem('whoBlocked');
-
-    const blockButton = document.getElementById('buttonForBlock');
-
-    if (isInstructor == 1) {
-        var buttonBlock = document.createElement('button');
-        var divBlock = document.createElement('div');
-        divBlock.setAttribute('class', 'block-text');
-        if(isBlocked!=1){
-            buttonBlock.setAttribute('class','block-button');
-            divBlock.innerHTML = 'Block';
-            blockButton.addEventListener("click", function () {
-                blockActivities(activityId, 1);
-            });
-        }else if(isBlocked==1 && whoBlocked == userId){
-            buttonBlock.setAttribute('class','unblock-button');
-            divBlock.innerHTML = 'Unblock';
-            blockButton.addEventListener("click", function () {
-                blockActivities(activityId, 0);
-            });
-        }
-        location.reload();
-    } else {
-        if (blockButton) {
-            blockButton.style.display = 'none';
-        }
+    activityId = urlParams.get('ai');
+    
+    const checkData = {
+        subject: subject,
+        courseNumber: courseNumber,
+        userId : localStorage.getItem('userId')
     }
+    axios.post(`/api/checkStatus`, checkData)
+        .then(res => {
+            if(res && res.data) {
+                const buttonForBlock = document.getElementById('buttonForBlock');
+                if(buttonForBlock != null){
+                    if(res.data.status=="instructor" || res.data.status=="TA" || userId == whoBlocked){
+                        buttonForBlock.hidden=false;
+                        if(isBlocked!=1){
+                            buttonForBlock.setAttribute('class','block-button block-text');
+                            buttonForBlock.innerHTML = 'Block';
+                            buttonForBlock.addEventListener("click", function(event) {
+                                blockActivities(activityId, 1);
+                            });
+                        }else{
+                            buttonForBlock.setAttribute('class','unblock-button block-text');
+                            buttonForBlock.innerHTML = 'Unblock';
+                            buttonForBlock.addEventListener("click", function(event) {
+                                blockActivities(activityId, 0);
+                            });
+                        }
+                    }else{
+                        buttonForBlock.hidden=true;
+                    }
+                }
+            }
+        });
 }
 
 function getStudySetData() {
