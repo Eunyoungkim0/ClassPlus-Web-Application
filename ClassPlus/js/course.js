@@ -168,6 +168,18 @@ function amIEnrolled(data) {
                     if(btnStudySet != null) btnStudySet.hidden = true;
                     if(btnGroup != null) btnGroup.hidden = true;
                 }
+
+                if(res.data.status == 'TA'){
+                    const divForTA = document.getElementById('isTA');
+                    if(divForTA != null){
+                        const imgTA = document.createElement('img');
+                        imgTA.setAttribute('src', '../images/ta.png');
+                        imgTA.setAttribute('height', 40);
+                        divForTA.appendChild(imgTA);
+                        divForTA.setAttribute('style', 'background-color: black; border-radius: 10px;');
+                        divForTA.hidden = false;
+                    }
+                }
             }
       });
 }
@@ -207,6 +219,7 @@ function loadCoursePosts(data) {
     userId = localStorage.getItem('userId');
     axios.post(`/api/getCoursePosts`, data)
     .then(res => {
+        // console.log(res.data);
         if(res && res.data) {
             if(res.data.length == 0){
                 document.getElementById('divForPost').innerHTML = "There is no post in this class yet.";
@@ -234,6 +247,9 @@ function loadCoursePosts(data) {
                         divElement1.appendChild(divElement2);
                         divElement1.appendChild(divElement3);
                         divElement1.appendChild(divElement4);
+                        if(res.data[i].blocked == 1){
+                            divElement1.setAttribute('style', 'color: red;');
+                        }
                     }
                 }
             }
@@ -272,6 +288,9 @@ function loadCourseStudySets(data) {
                         divElement1.appendChild(divElement2);
                         divElement1.appendChild(divElement3);
                         divElement1.appendChild(divElement4);
+                        if(res.data[i].blocked == 1){
+                            divElement1.setAttribute('style', 'color: red;');
+                        }
                     }
                 }
             }
