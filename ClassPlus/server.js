@@ -618,8 +618,9 @@ app.post('/api/saveClass/', async(req, res) => {
     if(instructor == 1){
         status = "instructor";
     }
-
-    connection.query(`SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}';`, function(error, results, fields){
+    const selectCourseId = `SELECT courseId FROM courses WHERE subject = '${subject}' AND courseNumber = '${courseNumber}';`;
+    connection.query(selectCourseId, function(error, results, fields){
+        // console.log(selectCourseId);
         if(error) {
             // Handle the error by sending an error response
             res.status(500).json({ error: 'Internal Server Error' });
@@ -627,8 +628,10 @@ app.post('/api/saveClass/', async(req, res) => {
         }
         const courseId = results[0].courseId;
 
-        connection.query(`SELECT count(*) as count FROM courses_enrollment WHERE userId = ${userId} AND courseId = ${courseId} AND year = '${currentYear}' AND semester = 'fall'`, function(error, results, fields){
+        const countCourseEnrollment = `SELECT count(*) as count FROM courses_enrollment WHERE userId = ${userId} AND courseId = ${courseId} AND year = '${currentYear}' AND semester = 'fall'`;
+        connection.query(countCourseEnrollment, function(error, results, fields){
             if(error) {
+                // console.log(countCourseEnrollment);
                 // Handle the error by sending an error response
                 res.status(500).json({ error: 'Internal Server Error' });
                 throw error;
@@ -642,6 +645,7 @@ app.post('/api/saveClass/', async(req, res) => {
                 const sql = `INSERT INTO courses_enrollment (userId, courseId, year, semester, status) VALUES (${userId}, ${courseId}, '${currentYear}', 'fall', '${status}')`;
         
                 connection.query(sql, function(error, results, fields){
+                    // console.log(sql);
                     if(error) {
                         // Handle the error by sending an error response
                         res.status(500).json({ error: 'Internal Server Error' });

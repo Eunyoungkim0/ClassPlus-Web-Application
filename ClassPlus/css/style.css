@@ -278,6 +278,7 @@ body {
 .picture {
     width: 60px;
     height: 60px;
+    border-radius: 40px;
 }
 
 #memberList {

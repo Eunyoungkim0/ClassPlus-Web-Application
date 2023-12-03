@@ -93,10 +93,6 @@
     width: 15%;
 }
 
-.picture {
-    width: 60px;
-    height: 60px;
-}
 
 .name {
     width: 60%;
@@ -112,6 +108,7 @@
     height: 270px;
     align-items:center;
     background: transparent;
+    border-radius: 200px;
 }
 
 .profile-select {

@@ -191,7 +191,15 @@ function amIEnrolled(data) {
 
 // This function executes when a user clicks enroll button.
 function navigateToEnroll() {
-    axios.post(`/api/saveClass`, data)
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const enrollData = {
+        userId: localStorage.getItem('userId'), 
+        subject: urlParams.get('sj'),
+        courseNumber: urlParams.get('cn'),
+        instructor: localStorage.getItem('instructor')
+    }
+    axios.post(`/api/saveClass`, enrollData)
     .then(res => {
         if(res && res.data && res.data.success) {
             const message = "Successfully enrolled in " + subject + " " + courseNumber;
