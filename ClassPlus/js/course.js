@@ -169,16 +169,20 @@ function amIEnrolled(data) {
                     if(btnGroup != null) btnGroup.hidden = true;
                 }
 
-                if(res.data.status == 'TA'){
-                    const divForTA = document.getElementById('isTA');
-                    if(divForTA != null){
-                        const imgTA = document.createElement('img');
-                        imgTA.setAttribute('src', '../images/ta.png');
-                        imgTA.setAttribute('height', 40);
-                        divForTA.appendChild(imgTA);
-                        divForTA.setAttribute('style', 'background-color: black; border-radius: 10px;');
-                        divForTA.hidden = false;
+                if(res.data.status == 'TA' || res.data.status == 'instructor'){
+                    if(res.data.status == 'TA'){
+                        const divForTA = document.getElementById('isTA');
+                        if(divForTA != null){
+                            const imgTA = document.createElement('img');
+                            imgTA.setAttribute('src', '../images/ta.png');
+                            imgTA.setAttribute('height', 40);
+                            divForTA.appendChild(imgTA);
+                            divForTA.setAttribute('style', 'background-color: black; border-radius: 10px;');
+                            divForTA.hidden = false;
+                        }
                     }
+
+
                 }
             }
       });
@@ -216,7 +220,7 @@ function classInfo(data) {
 
 
 function loadCoursePosts(data) {
-    userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     axios.post(`/api/getCoursePosts`, data)
     .then(res => {
         // console.log(res.data);
@@ -258,7 +262,7 @@ function loadCoursePosts(data) {
 }
 
 function loadCourseStudySets(data) {
-    userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     axios.post(`/api/getCourseStudySets`, data)
     .then(res => {
         if(res && res.data) {
@@ -299,6 +303,7 @@ function loadCourseStudySets(data) {
 }
 
 function loadCourseGroups(data) {
+    const userId = localStorage.getItem('userId');
     axios.post(`/api/getCourseGroups`, data)
     .then(res => {
         if(res && res.data) {
@@ -331,6 +336,9 @@ function loadCourseGroups(data) {
                         divElement1.appendChild(divElement3);
                         divElement1.appendChild(divElement4);
                         divElement1.appendChild(divElement5);
+                        if(res.data[i].blocked == 1){
+                            divElement1.setAttribute('style', 'color:red;');
+                        }
                     }
                 }
             }
@@ -826,14 +834,15 @@ function getPostData() {
 function setBlockButton(isBlocked, whoBlocked) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    subject = urlParams.get('sj');
-    courseNumber = urlParams.get('cn');
-    activityId = urlParams.get('ai');
+    const subject = urlParams.get('sj');
+    const courseNumber = urlParams.get('cn');
+    const activityId = urlParams.get('ai');
+    const userId = localStorage.getItem('userId');
     
     const checkData = {
         subject: subject,
         courseNumber: courseNumber,
-        userId : localStorage.getItem('userId')
+        userId : userId
     }
     axios.post(`/api/checkStatus`, checkData)
         .then(res => {
@@ -859,6 +868,59 @@ function setBlockButton(isBlocked, whoBlocked) {
                         buttonForBlock.hidden=true;
                     }
                 }
+            }
+        });
+}
+
+function setGroupBlockButton(isBlocked, whoBlocked) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const groupId = urlParams.get('gi');
+    const userId = localStorage.getItem('userId');
+
+    data = {
+        userId: userId,
+        groupId: groupId
+    };
+
+    axios.post(`/api/getGroupInfo`, data)
+        .then(res => {
+            if (res && res.data) {
+                const subject = res.data[0].subject;
+                const courseNumber = res.data[0].courseNumber;
+
+                const checkData = {
+                    subject: subject,
+                    courseNumber: courseNumber,
+                    userId: userId
+                };
+
+                axios.post(`/api/checkStatus`, checkData)
+                    .then(res => {
+                        if (res && res.data) {
+                            const buttonForBlock = document.getElementById('buttonForBlock');
+                            if (buttonForBlock != null) {
+                                if (res.data.status == "instructor" || res.data.status == "TA" || userId == whoBlocked) {
+                                    buttonForBlock.hidden = false;
+                                    if (isBlocked != 1) {
+                                        buttonForBlock.setAttribute('class', 'block-button block-text');
+                                        buttonForBlock.innerHTML = 'Block';
+                                        buttonForBlock.addEventListener("click", function (event) {
+                                            blockGroup(subject, courseNumber, groupId, 1);
+                                        });
+                                    } else {
+                                        buttonForBlock.setAttribute('class', 'unblock-button block-text');
+                                        buttonForBlock.innerHTML = 'Unblock';
+                                        buttonForBlock.addEventListener("click", function (event) {
+                                            blockGroup(subject, courseNumber, groupId, 0);
+                                        });
+                                    }
+                                } else {
+                                    buttonForBlock.hidden = true;
+                                }
+                            }
+                        }
+                    });
             }
         });
 }
@@ -950,9 +1012,14 @@ function getGroupData() {
     btnGroup.hidden = true;
     axios.post(`/api/getGroup/${groupId}?userId=${userId}`)
     .then(res => {
+        console.log(res.data);
         if(res && res.data) {
             const amIJoined = res.data[0].amIJoined;
             const amIEnrolled = res.data[0].amIEnrolled;
+            isBlocked = res.data[0].blocked;
+            whoBlocked = res.data[0].blockedby;
+            setGroupBlockButton(isBlocked, whoBlocked);
+
             if(btnGroup != null && amIEnrolled == 1){
                 if(amIJoined == 0) {
                     btnGroup.hidden = false;
@@ -1015,6 +1082,49 @@ function getGroupData() {
             });
         }
     });
+}
+
+function blockGroup(subject, courseNumber, groupId, blocked){
+
+    userId = localStorage.getItem('userId');
+
+    data = {userId,
+        groupId};
+
+    axios.post(`/api/getGroupInfo`, data)
+        .then(res=>{
+            if(res && res.data){
+                subject = res.data[0].subject;
+                courseNumber = res.data[0].courseNumber;
+            }
+        });
+
+    var message = "";
+    if(blocked==1){
+        message = `Do you want to block this group?`;
+        message2 = `Successfully blocked!`;
+    }else{
+        message = `Do you want to unblock this group?`;
+        message2 = `Successfully unblocked!`;
+    }
+
+    const userAnswer = askYesNoQuestion(message);
+    if (userAnswer) {
+        const blockGroupData = {
+            groupId: groupId,
+            blocked: blocked,
+            subject: subject,
+            courseNumber: courseNumber,
+            userId : userId
+        }
+        axios.post(`/api/blockGroups`, blockGroupData)
+            .then(res => {
+                if(res && res.data) {
+                    alert(message2);
+                    location.reload();
+                }
+            });
+    }
 }
 
 function loadNextMeeting(groupId) {

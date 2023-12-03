@@ -412,7 +412,6 @@ app.post('/api/getCourseGroups/', async(req, res) => {
          AND g.courseId = gm.courseId
          AND g.groupId = gm.groupId
          AND g.year = '${currentYear}' AND g.semester = 'fall'
-         AND g.blocked!=1 
        GROUP BY g.groupId, g.groupName, g.description, c.courseId, c.subject, c.courseNumber, c.title
        ORDER BY member DESC`;
         if(limit > 0){

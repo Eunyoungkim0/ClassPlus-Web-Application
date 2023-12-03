@@ -640,10 +640,10 @@ function blockGroup(subject, courseNumber, groupId, blocked){
 
     var message = "";
     if(blocked==1){
-        message = `Do you want to block this?`;
+        message = `Do you want to block this group?`;
         message2 = `Successfully blocked!`;
     }else{
-        message = `Do you want to unblock this?`;
+        message = `Do you want to unblock this group?`;
         message2 = `Successfully unblocked!`;
     }
 
@@ -669,17 +669,16 @@ function blockGroup(subject, courseNumber, groupId, blocked){
 function setBlockButton(isBlocked, whoBlocked) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    coursename = document.getElementById('coursename').value;
-    groupId = urlParams.get('gi');
-    userId = localStorage.getItem('userId');
+    const groupId = urlParams.get('gi');
+    const userId = localStorage.getItem('userId');
 
     data = {
-        userId,
-        groupId
+        userId: userId,
+        groupId: groupId
     };
 
-    console.log(isBlocked);
-    console.log(whoBlocked);
+    // console.log(isBlocked);
+    // console.log(whoBlocked);
 
     axios.post(`/api/getGroupInfo`, data)
         .then(res => {
