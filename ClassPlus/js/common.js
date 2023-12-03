@@ -295,6 +295,51 @@ function addLocation(location="", isSelected=0) {
     }
 }
 
+function help() {
+    const currentPagePath = window.location.pathname.substring(1);
+    const page = currentPagePath.split('.');
+
+    const navBar = document.getElementById('navbar');
+    const divTutorialFrame = document.createElement('div');
+    divTutorialFrame.setAttribute('class', 'tutorial-frame');
+    divTutorialFrame.setAttribute('id', 'tutorial-frame');
+    const divTutorial = document.createElement('div');
+    divTutorial.setAttribute('class', 'tutorial');
+    const divClose = document.createElement('div');
+    divClose.setAttribute('class', 'tutorial-close');
+    const imgClose = document.createElement('img');
+    imgClose.setAttribute('src', '../images/delete.png');
+    imgClose.setAttribute('width', '40');
+    imgClose.setAttribute('style', 'cursor: pointer;');
+    imgClose.setAttribute('onclick', 'deleteTutorial()');
+    divTutorialFrame.appendChild(divTutorial);
+    divTutorial.appendChild(divClose);
+    divClose.appendChild(imgClose);
+    const divImgFrame = document.createElement('div');
+    divImgFrame.setAttribute('class', 'page-image');
+    const imgTutorial = document.createElement('img');
+
+    if(currentPagePath == "index.html"){
+        const userId = localStorage.getItem('userId');
+        if(userId){
+            imgTutorial.setAttribute('src', '../images/help/index-logout.jpg');
+        } else {
+            imgTutorial.setAttribute('src', '../images/help/index-login.jpg');
+        }
+    }else{
+        imgTutorial.setAttribute('src', `../images/help/${page[0]}.jpg`);
+    }
+    divImgFrame.appendChild(imgTutorial);
+    imgTutorial.setAttribute('style', 'width: 90%; border: 1px #004F34 solid; border-radius: 10px; box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;');
+    divTutorial.appendChild(divImgFrame);
+    navBar.insertAdjacentElement('afterend', divTutorialFrame);
+}
+
+function deleteTutorial() {
+    const divTutorial = document.getElementById('tutorial-frame');
+    divTutorial.remove();
+}
+
 // When the page loads, this function executes.
 function onLoad() {
     const userId = localStorage.getItem('userId');

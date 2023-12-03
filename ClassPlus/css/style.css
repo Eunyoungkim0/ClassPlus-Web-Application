@@ -495,10 +495,60 @@ body {
     font-weight: bold;
 }
 
+.help-mark {
+    background-color: white;
+    margin-left: 5px;
+    border-radius: 20px;
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .invisible {
     visibility: hidden;
 }
 
 .visible {
     visibility: visible;
+}
+
+.tutorial-frame{
+    margin: 0;
+    width: 100%;
+    height: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    z-index: 999999;
+}
+
+.tutorial {
+    border: 3px #004F34 solid;
+    border-radius: 5px;
+    width: 80%;
+    height: 90%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    text-align: center;
+}
+
+.tutorial-close {
+    width: 100%;
+    height: 40px;
+    align-items: right;
+    justify-content: right;
+    text-align: right;
+}
+
+.page-image {
+    padding-top: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
