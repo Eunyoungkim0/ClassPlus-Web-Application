@@ -5,7 +5,7 @@
   - [x] TA should be able to join any group under the same course they are working with
   - [x] Moderators should be able to remove posts/study sets/groups from the list.
   - [x] Moderators should be able to block anyone.
-  - [ ] Implement an onboarding tutorial screen to guide new users of website features.
+  - [x] Implement an onboarding tutorial screen to guide new users of website features.
 ---
 
 ### :pushpin: Git Command
