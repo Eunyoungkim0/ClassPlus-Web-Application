@@ -31,6 +31,19 @@ function validationCheck(){
       document.getElementById('email').focus();
       return false;
   }
+  const email = document.getElementById('email').value;
+  axios.get(`/api/emailcheck/${email}`)
+          .then(res => {
+              if(res && res.data) {
+                  if(res.data.emailExist){
+                    alert("This UNCC email already exists.");
+                    document.getElementById('email').focus();
+                    return false;
+                  }
+              }
+            });
+
+
   if(document.getElementById('major').value == ""){
       alert("Please enter your major");
       document.getElementById('major').focus();

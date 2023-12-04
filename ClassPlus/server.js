@@ -47,6 +47,29 @@ app.get('/api/checkLogin/:currentPagePath', async(req, res) => {
     });
 });
 
+app.get('/api/emailcheck/:email', async(req, res) => {
+    const email = req.params.email;
+    
+    const selectEmail = `SELECT count(*) as count FROM users WHERE email = '${email}';`;
+    connection.query(selectEmail, function(error, results, fields){
+        if (error) throw error;
+
+        const email_count = results[0].count;
+        if(email_count == 0){
+            res.json({
+                success: true,
+                emailExist: false
+            });
+        }else{
+            res.json({
+                success: true,
+                emailExist: true
+            });
+        }
+    });
+});
+
+
 app.post('/api/signup', async(req, res) => {
     const { firstName, lastName, userPassword, unccId, email, major, minor, isStudent, isInstructor } = req.body;
 

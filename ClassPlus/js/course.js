@@ -436,9 +436,10 @@ function getCoursePeople(){
                         optionElement3.hidden = true;
                         selectElement.addEventListener("change", function(event) {
                             const selectedValue = event.target.value;
+                            const originalValue = res.data[i].status;
                             const parentDiv = event.target.parentElement;
                             const clickedUserId = parentDiv.getElementsByClassName('user-id')[0].innerText;
-                            changeStatus(clickedUserId, selectedValue);
+                            changeStatus(clickedUserId, selectedValue, originalValue);
                         });
                     }
 
@@ -513,6 +514,8 @@ function changeStatus(clickedUserId, status){
                     location.reload();
                 }
             });
+    }else{
+
     }
 }
 

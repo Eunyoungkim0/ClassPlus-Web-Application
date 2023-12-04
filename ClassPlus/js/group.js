@@ -132,6 +132,7 @@ function searchGroups() {
     const subject = document.getElementById('subjectSelect').value;
     const courseNumber = document.getElementById('classSelect').value;
     const groupName = document.getElementById('searchGroupName').value;
+    const userId = localStorage.getItem('userId');
 
     data = {
         subject : subject,
@@ -146,8 +147,7 @@ function searchGroups() {
             if(res.data.length == 0){
                 document.getElementById('divForGroup').innerHTML = "There is no group with this information.";
             }else{
-                if((res.data[i].blocked == 1 && res.data[i].blockedby == userId) || res.data[i].blocked != 1){
-                    // console.log(res.data);
+                if(res.data.length > 0){
                     const divForGroup = document.getElementById('divForGroup');
                     while (divForGroup.firstChild) {
                         divForGroup.removeChild(divForGroup.firstChild);
@@ -186,46 +186,48 @@ function searchGroups() {
                     divRowFrame.appendChild(divMember);
 
                     for (var i = 0; i < res.data.length; i++) {
-                        const rsSubject = res.data[i].subject;
-                        const rsCourseNumber = res.data[i].courseNumber;
-                        const rsTitle = res.data[i].title;
-                        const rsGroupName = res.data[i].groupName;
-                        const rsDescription = res.data[i].description;
-                        const rsMember = res.data[i].member;
-
-                        const divListFrame = document.createElement('div');
-                        divListFrame.setAttribute('class', 'result-frame');
-                        const divRowFrame = document.createElement('div');
-                        divRowFrame.setAttribute('class', 'list-row-frame');
-                        divRowFrame.setAttribute('onclick', `gotoGroup('${res.data[i].groupId}')`);
-                        divRowFrame.setAttribute('style', 'cursor: pointer;');
-                        const divSubject = document.createElement('div');
-                        divSubject.innerHTML = rsSubject;
-                        divSubject.setAttribute('class', 'list-subject')
-                        const divCourseNumber = document.createElement('div');
-                        divCourseNumber.innerHTML = rsCourseNumber;
-                        divCourseNumber.setAttribute('class', 'list-coursenumber')
-                        const divTitle = document.createElement('div');
-                        divTitle.innerHTML = rsTitle;
-                        divTitle.setAttribute('class', 'list-title');
-                        const divGroupName = document.createElement('div');
-                        divGroupName.innerHTML = rsGroupName;
-                        divGroupName.setAttribute('class', 'list-groupname');
-                        const divDescription = document.createElement('div');
-                        divDescription.innerHTML = rsDescription;
-                        divDescription.setAttribute('class', 'list-description');
-                        const divMember = document.createElement('div');
-                        divMember.innerHTML = rsMember;
-                        divMember.setAttribute('class', 'list-member');
-
-                        divForGroup.appendChild(divListFrame);
-                        divListFrame.appendChild(divRowFrame);
-                        divRowFrame.appendChild(divSubject);
-                        divRowFrame.appendChild(divCourseNumber);
-                        divRowFrame.appendChild(divTitle);
-                        divRowFrame.appendChild(divGroupName);
-                        divRowFrame.appendChild(divDescription);
-                        divRowFrame.appendChild(divMember);
+                        if((res.data[i].blocked == 1 && res.data[i].blockedby == userId) || res.data[i].blocked != 1){
+                            const rsSubject = res.data[i].subject;
+                            const rsCourseNumber = res.data[i].courseNumber;
+                            const rsTitle = res.data[i].title;
+                            const rsGroupName = res.data[i].groupName;
+                            const rsDescription = res.data[i].description;
+                            const rsMember = res.data[i].member;
+    
+                            const divListFrame = document.createElement('div');
+                            divListFrame.setAttribute('class', 'result-frame');
+                            const divRowFrame = document.createElement('div');
+                            divRowFrame.setAttribute('class', 'list-row-frame');
+                            divRowFrame.setAttribute('onclick', `gotoGroup('${res.data[i].groupId}')`);
+                            divRowFrame.setAttribute('style', 'cursor: pointer;');
+                            const divSubject = document.createElement('div');
+                            divSubject.innerHTML = rsSubject;
+                            divSubject.setAttribute('class', 'list-subject')
+                            const divCourseNumber = document.createElement('div');
+                            divCourseNumber.innerHTML = rsCourseNumber;
+                            divCourseNumber.setAttribute('class', 'list-coursenumber')
+                            const divTitle = document.createElement('div');
+                            divTitle.innerHTML = rsTitle;
+                            divTitle.setAttribute('class', 'list-title');
+                            const divGroupName = document.createElement('div');
+                            divGroupName.innerHTML = rsGroupName;
+                            divGroupName.setAttribute('class', 'list-groupname');
+                            const divDescription = document.createElement('div');
+                            divDescription.innerHTML = rsDescription;
+                            divDescription.setAttribute('class', 'list-description');
+                            const divMember = document.createElement('div');
+                            divMember.innerHTML = rsMember;
+                            divMember.setAttribute('class', 'list-member');
+    
+                            divForGroup.appendChild(divListFrame);
+                            divListFrame.appendChild(divRowFrame);
+                            divRowFrame.appendChild(divSubject);
+                            divRowFrame.appendChild(divCourseNumber);
+                            divRowFrame.appendChild(divTitle);
+                            divRowFrame.appendChild(divGroupName);
+                            divRowFrame.appendChild(divDescription);
+                            divRowFrame.appendChild(divMember);
+                        }
                     }
                 }else{
                     document.getElementById('divForGroup').innerHTML = "There is no group with this information.";

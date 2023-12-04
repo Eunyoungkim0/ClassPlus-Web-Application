@@ -522,7 +522,7 @@ body {
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.7);
     position: absolute;
-    z-index: 999999;
+    z-index: 9999;
 }
 
 .tutorial {
@@ -530,7 +530,8 @@ body {
     border-radius: 5px;
     width: 80%;
     height: auto;
-    margin: 1%;
+    top: 5%;
+    position: absolute;
     background-color: white;
     display: flex;
     flex-direction: column;
