@@ -322,7 +322,7 @@ function help() {
         divImgFrame.setAttribute('class', 'page-image');
         const imgTutorial = document.createElement('img');
     
-        if(currentPagePath == "index.html"){
+        if(currentPagePath == "index.html" || currentPagePath == "") {
             const userId = localStorage.getItem('userId');
             if(userId){
                 imgTutorial.setAttribute('src', '../images/help/index-logout.jpg');
