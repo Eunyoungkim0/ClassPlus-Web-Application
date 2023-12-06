@@ -231,7 +231,6 @@ function loadCoursePosts(data) {
     const userId = localStorage.getItem('userId');
     axios.post(`/api/getCoursePosts`, data)
     .then(res => {
-        // console.log(res.data);
         if(res && res.data) {
             if(res.data.length == 0){
                 document.getElementById('divForPost').innerHTML = "There is no post in this class yet.";
@@ -245,6 +244,11 @@ function loadCoursePosts(data) {
                         var divElement2 = document.createElement('div');
                         divElement2.setAttribute('class', 'post-title');
                         divElement2.innerHTML = "[" + res.data[i].subCategory + "] " + res.data[i].title;
+                        if(res.data[i].status == 'instructor'){
+                            divElement2.innerHTML += "<img src='../images/instructor.png' height='21' style='margin-left:10px;'>";
+                        }else if(res.data[i].status == 'TA'){
+                            divElement2.innerHTML += "<img src='../images/ta.png'  height='21' style='margin-left:10px;'>";
+                        }
                         var divElement3 = document.createElement('div');
                         divElement3.setAttribute('class', 'post-username');
                         divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);
@@ -286,6 +290,11 @@ function loadCourseStudySets(data) {
                         var divElement2 = document.createElement('div');
                         divElement2.setAttribute('class', 'post-title');
                         divElement2.innerHTML = res.data[i].title;
+                        if(res.data[i].status == 'instructor'){
+                            divElement2.innerHTML += "<img src='../images/instructor.png' height='21' style='margin-left:10px;'>";
+                        }else if(res.data[i].status == 'TA'){
+                            divElement2.innerHTML += "<img src='../images/ta.png'  height='21' style='margin-left:10px;'>";
+                        }
                         var divElement3 = document.createElement('div');
                         divElement3.setAttribute('class', 'post-username');
                         divElement3.innerHTML = res.data[i].firstName + " " + res.data[i].lastName.charAt(0);

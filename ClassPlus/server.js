@@ -376,8 +376,8 @@ app.post('/api/getCoursePosts/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT a.activityId, a.subCategory, a.title, a.date, a.views, a.blocked, a.blockedby, u.firstName, u.lastName FROM courses_activity a, users u 
-        WHERE a.category = 'Post' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
+        var sql2 = `SELECT a.activityId, a.subCategory, a.title, a.date, a.views, a.blocked, a.blockedby, u.firstName, u.lastName, e.status FROM courses_activity a, users u, courses_enrollment e 
+        WHERE a.category = 'Post' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall' AND a.userId = e.userId AND a.courseId = e.courseId AND a.year = e.year AND a.semester = e.semester
         ORDER BY a.date DESC`;
         if(limit > 0){
             sql2 += ` LIMIT ${limit};`;
@@ -402,8 +402,8 @@ app.post('/api/getCourseStudySets/', async(req, res) => {
     connection.query(sql, function(error, results, fields){
         if (error) throw error;
         const courseId = results[0].courseId;
-        var sql2 = `SELECT a.activityId, a.title, a.date, a.views, a.blocked, a.blockedby, u.firstName, u.lastName FROM courses_activity a, users u 
-        WHERE a.category = 'Study set' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall'
+        var sql2 = `SELECT a.activityId, a.title, a.date, a.views, a.blocked, a.blockedby, u.firstName, u.lastName, e.status FROM courses_activity a, users u, courses_enrollment e 
+        WHERE a.category = 'Study set' AND a.userId = u.userId AND a.courseId = ${courseId} AND a.year = '${currentYear}' AND a.semester = 'fall' AND a.userId = e.userId AND a.courseId = e.courseId AND a.year = e.year AND a.semester = e.semester
         ORDER BY a.date DESC`;
         if(limit > 0){
             sql2 += ` LIMIT ${limit};`;
