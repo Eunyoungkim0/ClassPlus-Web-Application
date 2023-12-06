@@ -429,17 +429,19 @@ function getCoursePeople(){
                     selectElement.appendChild(optionElement2);
                     selectElement.appendChild(optionElement3);
                     divElement7.appendChild(divUserId);
-                    selectElement.value = res.data[i].status;
+                    const status = res.data[i].status
+                    selectElement.value = status;
                     if(selectElement.value == 'instructor'){
                         selectElement.disabled = true;
                     }else{
                         optionElement3.hidden = true;
                         selectElement.addEventListener("change", function(event) {
                             const selectedValue = event.target.value;
-                            const originalValue = res.data[i].status;
+                            const targetElement = event.target;
+                            const originalValue = status;
                             const parentDiv = event.target.parentElement;
                             const clickedUserId = parentDiv.getElementsByClassName('user-id')[0].innerText;
-                            changeStatus(clickedUserId, selectedValue, originalValue);
+                            changeStatus(clickedUserId, selectedValue, targetElement, originalValue);
                         });
                     }
 
@@ -492,7 +494,7 @@ function getCoursePeople(){
     });   
 }
 
-function changeStatus(clickedUserId, status){
+function changeStatus(clickedUserId, status, targetElement, originalValue){
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     subject = urlParams.get('sj');
@@ -515,7 +517,7 @@ function changeStatus(clickedUserId, status){
                 }
             });
     }else{
-
+        targetElement.value = originalValue;
     }
 }
 
